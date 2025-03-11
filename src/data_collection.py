@@ -720,7 +720,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Everton': 530.0,
         'Leeds': 480.0,
         'Sunderland': 450.0,
-        'Fulham': 310.0,
+        'Fulham': 440.0,
         'Ipswich': 360.0,
         'Coventry': 320.0,
         'Hull': 280.0
