@@ -506,11 +506,21 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Brighton', 'Player': 'Billy Gilmour', 'TransferType': 'Out', 'OtherClub': 'Napoli', 'Fee_M_Euros': 14.0, 'Position': 'Midfielder', 'Importance': 0.11},
 
         # Fulham
-        {'Team': 'Fulham', 'Player': 'Emile Smith Rowe', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Fulham', 'Player': 'Benjamin Lecomte', 'TransferType': 'In', 'OtherClub': 'Montpellier', 'Fee_M_Euros': 5.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
         {'Team': 'Fulham', 'Player': 'Joachim Andersen', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.14},
-        {'Team': 'Fulham', 'Player': 'Sander Berge', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Fulham', 'Player': 'Jorge Cuenca', 'TransferType': 'In', 'OtherClub': 'Villarreal', 'Fee_M_Euros': 6.7, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Fulham', 'Player': 'Sander Berge', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Fulham', 'Player': 'Shea Charles', 'TransferType': 'In', 'OtherClub': 'Southampton', 'Fee_M_Euros': 12.0, 'Position': 'Midfielder', 'Importance': 0.11},
+        {'Team': 'Fulham', 'Player': 'Hugo Larsson', 'TransferType': 'In', 'OtherClub': 'Eintracht Frankfurt', 'Fee_M_Euros': 25.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Fulham', 'Player': 'Emile Smith Rowe', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Fulham', 'Player': 'Ryan Sessegnon', 'TransferType': 'In', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.11},
+        {'Team': 'Fulham', 'Player': 'Gonzalo García', 'TransferType': 'In', 'OtherClub': 'Real Madrid', 'Fee_M_Euros': 10.0, 'Position': 'Forward', 'Importance': 0.11},
+        {'Team': 'Fulham', 'Player': 'Kevin', 'TransferType': 'In', 'OtherClub': 'Shakhtar', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Fulham', 'Player': 'Oscar Bobb', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.14},
         {'Team': 'Fulham', 'Player': 'Joao Palhinha', 'TransferType': 'Out', 'OtherClub': 'Bayern Munich', 'Fee_M_Euros': 51.0, 'Position': 'Midfielder', 'Importance': 0.18},
         {'Team': 'Fulham', 'Player': 'Tosin Adarabioyo', 'TransferType': 'Out', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Fulham', 'Player': 'Harry Wilson', 'TransferType': 'Out', 'OtherClub': 'Leeds', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Fulham', 'Player': 'Issa Diop', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.12},
 
         # Bournemouth
         {'Team': 'Bournemouth', 'Player': 'Djordje Petrović', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 25.0, 'Position': 'Goalkeeper', 'Importance': 0.13},
