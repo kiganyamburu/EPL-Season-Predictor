@@ -108,10 +108,13 @@ class DixonColesModel:
             mask_11 = (home_goals == 1) & (away_goals == 1)
             adj[mask_11] = 1.0 - rho
             
+            # Clip adjustment factor to prevent flat gradients or negative values
+            adj = np.clip(adj, 0.01, 10.0)
+            
             # Compute Poisson log-likelihoods: log_pmf = -mu + k * log(mu) - log(k!)
             log_p_home = -lmbda + home_goals * np.log(lmbda) - log_fact_home
             log_p_away = -mu + away_goals * np.log(mu) - log_fact_away
-            log_adj = np.log(np.clip(adj, 1e-9, None))
+            log_adj = np.log(adj)
             
             log_probs = log_p_home + log_p_away + log_adj
             
@@ -132,7 +135,7 @@ class DixonColesModel:
         
         # Perform optimization
         print("Optimizing Dixon-Coles parameters...")
-        res = minimize(negative_log_likelihood, init_params, bounds=bounds, method='L-BFGS-B')
+        res = minimize(negative_log_likelihood, init_params, bounds=bounds, method='L-BFGS-B', tol=1e-3)
         
         if res.success:
             print("Optimization successful!")
