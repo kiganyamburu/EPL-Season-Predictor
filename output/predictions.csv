@@ -1,381 +1,381 @@
 MatchDay,Date,HomeTeam,AwayTeam,HomeWin%,Draw%,AwayWin%,MostLikelyScore
-1,2026-08-21,Arsenal,Coventry,35.62,26.19,38.19,1-1
-1,2026-08-22,Hull,Man United,28.61,24.76,46.63,0-0
-1,2026-08-22,Everton,Crystal Palace,32.53,30.46,37.01,1-1
-1,2026-08-22,Ipswich,Sunderland,41.8,27.33,30.86,1-1
-1,2026-08-22,Nott'm Forest,Leeds,32.38,28.84,38.78,1-1
-1,2026-08-22,Brentford,Tottenham,38.01,26.15,35.83,1-1
-1,2026-08-23,Man City,Bournemouth,37.7,21.76,40.53,1-1
-1,2026-08-23,Newcastle,Liverpool,35.75,23.68,40.57,1-1
-1,2026-08-23,Brighton,Aston Villa,34.71,28.16,37.13,1-1
-1,2026-08-24,Fulham,Chelsea,35.93,28.42,35.65,1-1
-2,2026-08-28,Crystal Palace,Man City,41.78,26.23,31.98,1-1
-2,2026-08-29,Bournemouth,Everton,36.48,27.73,35.79,1-1
-2,2026-08-29,Tottenham,Newcastle,39.24,28.1,32.66,1-1
-2,2026-08-29,Coventry,Hull,34.86,26.78,38.37,1-1
-2,2026-08-29,Liverpool,Nott'm Forest,41.53,23.34,35.13,1-1
-2,2026-08-30,Man United,Ipswich,37.91,16.82,45.27,3-0
-2,2026-08-30,Sunderland,Fulham,32.5,29.98,37.52,1-1
-2,2026-08-30,Chelsea,Brighton,32.41,27.14,40.45,1-1
-2,2026-08-30,Leeds,Brentford,36.52,28.13,35.36,1-1
-2,2026-08-31,Aston Villa,Arsenal,27.53,30.93,41.54,0-0
-3,2026-09-04,Ipswich,Liverpool,47.82,15.32,36.86,1-2
-3,2026-09-05,Nott'm Forest,Tottenham,37.19,26.86,35.95,1-1
-3,2026-09-05,Newcastle,Bournemouth,34.68,27.66,37.66,1-1
-3,2026-09-05,Man City,Coventry,56.41,20.01,23.58,1-1
-3,2026-09-05,Hull,Aston Villa,26.05,26.18,47.77,0-0
-3,2026-09-05,Brighton,Leeds,32.89,28.13,38.97,1-1
-3,2026-09-05,Brentford,Sunderland,32.15,28.37,39.48,1-1
-3,2026-09-05,Fulham,Crystal Palace,33.22,29.58,37.19,1-1
-3,2026-09-06,Everton,Man United,34.59,27.3,38.11,1-1
-3,2026-09-06,Arsenal,Chelsea,43.13,31.5,25.37,0-0
-4,2026-09-12,Tottenham,Everton,33.8,29.17,37.03,1-1
-4,2026-09-12,Bournemouth,Brentford,35.0,27.34,37.66,1-1
-4,2026-09-12,Aston Villa,Nott'm Forest,38.87,27.75,33.39,1-1
-4,2026-09-12,Chelsea,Hull,38.7,27.97,33.33,0-0
-4,2026-09-12,Crystal Palace,Ipswich,37.64,21.59,40.76,2-0
-4,2026-09-12,Liverpool,Fulham,39.88,22.97,37.15,1-1
-4,2026-09-12,Sunderland,Arsenal,26.04,36.1,37.86,0-0
-4,2026-09-13,Coventry,Brighton,27.06,29.1,43.85,1-1
-4,2026-09-13,Man United,Man City,44.07,26.74,29.19,1-1
-4,2026-09-14,Leeds,Newcastle,36.68,28.03,35.29,1-1
-5,2026-09-18,Brentford,Chelsea,34.71,27.65,37.64,1-1
-5,2026-09-19,Tottenham,Aston Villa,34.75,26.23,39.03,1-1
-5,2026-09-19,Nott'm Forest,Coventry,46.12,26.21,27.67,1-1
-5,2026-09-19,Man City,Sunderland,40.19,18.68,41.13,2-0
-5,2026-09-19,Leeds,Crystal Palace,30.93,28.5,40.57,1-1
-5,2026-09-19,Newcastle,Hull,38.81,27.52,33.67,0-0
-5,2026-09-19,Everton,Ipswich,38.53,20.93,40.54,2-0
-5,2026-09-19,Brighton,Arsenal,26.91,32.28,40.81,0-0
-5,2026-09-20,Fulham,Man United,35.65,26.54,37.81,1-1
-5,2026-09-20,Bournemouth,Liverpool,37.74,25.41,36.85,1-1
-6,2026-10-10,Sunderland,Brighton,35.64,30.23,34.13,1-1
-6,2026-10-10,Man United,Tottenham,42.0,21.38,36.62,1-1
-6,2026-10-10,Liverpool,Man City,39.99,25.48,34.53,1-1
-6,2026-10-10,Ipswich,Fulham,41.44,26.9,31.67,1-1
-6,2026-10-10,Hull,Everton,29.26,29.79,40.95,0-0
-6,2026-10-10,Coventry,Newcastle,28.86,28.67,42.47,1-1
-6,2026-10-10,Chelsea,Bournemouth,33.77,27.47,38.76,1-1
-6,2026-10-10,Aston Villa,Brentford,38.9,26.67,34.43,1-1
-6,2026-10-10,Arsenal,Leeds,34.91,30.21,34.88,0-0
-6,2026-10-10,Crystal Palace,Nott'm Forest,35.73,29.27,35.0,1-1
-7,2026-10-17,Man City,Ipswich,42.23,8.19,49.58,4-0
-7,2026-10-17,Tottenham,Coventry,41.7,29.4,28.9,1-1
-7,2026-10-17,Nott'm Forest,Arsenal,25.49,34.4,40.11,0-0
-7,2026-10-17,Newcastle,Aston Villa,31.66,25.12,43.22,1-1
-7,2026-10-17,Leeds,Man United,35.65,25.96,38.4,1-1
-7,2026-10-17,Bournemouth,Sunderland,37.21,28.35,34.44,1-1
-7,2026-10-17,Everton,Chelsea,36.79,29.38,33.83,1-1
-7,2026-10-17,Brighton,Crystal Palace,31.3,28.27,40.42,1-1
-7,2026-10-17,Brentford,Liverpool,39.08,25.9,35.02,1-1
-7,2026-10-17,Fulham,Hull,38.53,31.06,30.41,0-0
-8,2026-10-24,Ipswich,Nott'm Forest,44.31,25.65,30.04,1-1
-8,2026-10-24,Sunderland,Leeds,34.28,30.32,35.39,1-1
-8,2026-10-24,Man United,Bournemouth,33.42,26.76,39.82,1-1
-8,2026-10-24,Liverpool,Brighton,40.95,23.95,35.1,1-1
-8,2026-10-24,Hull,Brentford,26.03,27.75,46.22,0-0
-8,2026-10-24,Arsenal,Everton,38.81,33.45,27.75,0-0
-8,2026-10-24,Coventry,Fulham,29.51,29.26,41.22,1-1
-8,2026-10-24,Chelsea,Tottenham,37.65,26.1,36.25,1-1
-8,2026-10-24,Aston Villa,Man City,42.1,24.74,33.16,1-1
-8,2026-10-24,Crystal Palace,Newcastle,38.33,28.67,33.0,1-1
-9,2026-10-31,Tottenham,Crystal Palace,32.92,28.7,38.38,1-1
-9,2026-10-31,Newcastle,Everton,30.81,27.98,41.21,1-1
-9,2026-10-31,Man City,Brighton,41.5,18.83,39.67,2-0
-9,2026-10-31,Liverpool,Arsenal,31.36,28.38,40.25,0-0
-9,2026-10-31,Hull,Ipswich,32.16,23.94,43.9,1-0
-9,2026-10-31,Chelsea,Man United,34.02,24.83,41.15,1-1
-9,2026-10-31,Brentford,Nott'm Forest,34.25,27.8,37.95,1-1
-9,2026-10-31,Aston Villa,Fulham,36.18,27.19,36.63,1-1
-9,2026-10-31,Bournemouth,Leeds,38.0,27.43,34.56,1-1
-9,2026-10-31,Coventry,Sunderland,30.27,29.17,40.56,1-1
-10,2026-11-07,Leeds,Tottenham,35.06,27.43,37.5,1-1
-10,2026-11-07,Sunderland,Chelsea,36.75,29.6,33.65,1-1
-10,2026-11-07,Nott'm Forest,Man City,43.35,25.13,31.51,1-1
-10,2026-11-07,Man United,Aston Villa,33.85,26.73,39.42,1-1
-10,2026-11-07,Ipswich,Bournemouth,43.47,20.38,36.15,1-2
-10,2026-11-07,Brighton,Brentford,34.19,28.19,37.62,1-1
-10,2026-11-07,Everton,Coventry,46.12,26.21,27.67,1-1
-10,2026-11-07,Crystal Palace,Liverpool,38.0,25.66,36.34,1-1
-10,2026-11-07,Fulham,Newcastle,36.17,28.01,35.82,1-1
-10,2026-11-07,Arsenal,Hull,24.11,35.9,39.99,0-0
-11,2026-11-21,Tottenham,Ipswich,33.15,22.16,44.69,2-1
-11,2026-11-21,Newcastle,Arsenal,27.7,30.64,41.66,0-0
-11,2026-11-21,Man City,Fulham,41.0,17.74,41.26,2-0
-11,2026-11-21,Liverpool,Man United,39.51,23.13,37.36,1-1
-11,2026-11-21,Hull,Brighton,26.46,28.93,44.6,0-0
-11,2026-11-21,Chelsea,Leeds,32.61,27.41,39.99,1-1
-11,2026-11-21,Brentford,Everton,32.23,28.16,39.61,1-1
-11,2026-11-21,Aston Villa,Sunderland,35.68,28.71,35.61,1-1
-11,2026-11-21,Bournemouth,Nott'm Forest,38.62,27.52,33.86,1-1
-11,2026-11-21,Coventry,Crystal Palace,29.91,28.85,41.24,1-1
-12,2026-11-28,Leeds,Coventry,45.38,26.9,27.73,1-1
-12,2026-11-28,Sunderland,Tottenham,35.29,28.61,36.1,1-1
-12,2026-11-28,Nott'm Forest,Chelsea,34.75,28.43,36.82,1-1
-12,2026-11-28,Man United,Brentford,37.66,26.05,36.28,1-1
-12,2026-11-28,Ipswich,Aston Villa,43.02,19.01,37.96,1-2
-12,2026-11-28,Fulham,Bournemouth,37.4,29.66,32.94,1-1
-12,2026-11-28,Everton,Liverpool,38.22,25.57,36.21,1-1
-12,2026-11-28,Crystal Palace,Hull,39.31,31.38,29.31,0-0
-12,2026-11-28,Brighton,Newcastle,35.58,27.53,36.89,1-1
-12,2026-11-28,Arsenal,Man City,43.86,28.15,27.99,0-0
-13,2026-12-02,Tottenham,Fulham,35.05,29.41,35.54,1-1
-13,2026-12-02,Newcastle,Man United,33.08,24.78,42.13,1-1
-13,2026-12-02,Man City,Leeds,40.43,17.81,41.76,2-0
-13,2026-12-02,Liverpool,Sunderland,38.9,23.93,37.17,1-1
-13,2026-12-02,Hull,Nott'm Forest,30.31,29.05,40.65,0-0
-13,2026-12-02,Coventry,Ipswich,37.11,28.35,34.54,1-1
-13,2026-12-02,Chelsea,Crystal Palace,31.03,27.51,41.46,1-1
-13,2026-12-02,Brentford,Arsenal,27.12,31.38,41.5,0-0
-13,2026-12-02,Aston Villa,Everton,36.79,27.9,35.31,1-1
-13,2026-12-02,Bournemouth,Brighton,34.78,27.84,37.38,1-1
-14,2026-12-05,Nott'm Forest,Brighton,34.12,28.82,37.06,1-1
-14,2026-12-05,Newcastle,Sunderland,31.63,27.77,40.6,1-1
-14,2026-12-05,Man United,Coventry,49.17,26.7,24.13,1-1
-14,2026-12-05,Leeds,Ipswich,36.22,19.86,43.93,2-0
-14,2026-12-05,Tottenham,Arsenal,26.24,29.66,44.1,0-0
-14,2026-12-05,Chelsea,Liverpool,38.57,25.97,35.46,1-1
-14,2026-12-05,Brentford,Man City,42.22,24.78,32.99,1-1
-14,2026-12-05,Aston Villa,Crystal Palace,36.89,26.72,36.39,1-1
-14,2026-12-05,Bournemouth,Hull,38.76,29.88,31.36,0-0
-14,2026-12-05,Everton,Fulham,32.42,29.69,37.89,1-1
-15,2026-12-12,Sunderland,Nott'm Forest,34.44,29.69,35.87,1-1
-15,2026-12-12,Man City,Chelsea,41.93,18.36,39.71,1-1
-15,2026-12-12,Liverpool,Leeds,38.95,23.37,37.67,1-1
-15,2026-12-12,Ipswich,Newcastle,46.14,23.18,30.68,1-2
-15,2026-12-12,Hull,Tottenham,29.31,27.61,43.08,0-0
-15,2026-12-12,Fulham,Brentford,35.55,28.34,36.11,1-1
-15,2026-12-12,Crystal Palace,Man United,36.24,26.81,36.96,1-1
-15,2026-12-12,Coventry,Aston Villa,26.12,25.39,48.48,1-1
-15,2026-12-12,Brighton,Everton,32.15,28.86,38.98,1-1
-15,2026-12-12,Arsenal,Bournemouth,46.51,27.03,26.46,0-0
-16,2026-12-19,Nott'm Forest,Everton,31.54,29.62,38.84,1-1
-16,2026-12-19,Man City,Hull,38.39,26.48,35.13,1-0
-16,2026-12-19,Liverpool,Tottenham,40.83,20.34,38.83,2-1
-16,2026-12-19,Leeds,Fulham,32.9,29.23,37.87,1-1
-16,2026-12-19,Sunderland,Crystal Palace,32.53,30.7,36.77,1-1
-16,2026-12-19,Brighton,Ipswich,36.36,18.74,44.89,2-0
-16,2026-12-19,Brentford,Newcastle,34.88,27.26,37.86,1-1
-16,2026-12-19,Arsenal,Man United,47.97,26.87,25.16,0-0
-16,2026-12-19,Bournemouth,Coventry,47.1,26.42,26.48,1-1
-16,2026-12-19,Chelsea,Aston Villa,34.42,27.51,38.06,1-1
-17,2026-12-26,Newcastle,Man City,41.0,24.91,34.08,1-1
-17,2026-12-26,Man United,Nott'm Forest,38.7,26.53,34.78,1-1
-17,2026-12-26,Ipswich,Brentford,41.99,23.58,34.42,1-2
-17,2026-12-26,Hull,Liverpool,29.42,23.91,46.67,0-0
-17,2026-12-26,Tottenham,Bournemouth,34.01,26.3,39.69,1-1
-17,2026-12-26,Everton,Sunderland,33.19,31.15,35.66,1-1
-17,2026-12-26,Crystal Palace,Arsenal,27.22,35.48,37.3,0-0
-17,2026-12-26,Coventry,Chelsea,26.06,29.67,44.27,1-1
-17,2026-12-26,Aston Villa,Leeds,38.41,26.66,34.93,1-1
-17,2026-12-26,Fulham,Brighton,36.01,29.41,34.58,1-1
-18,2026-12-30,Tottenham,Brighton,35.12,26.83,38.06,1-1
-18,2026-12-30,Newcastle,Nott'm Forest,33.05,27.76,39.18,1-1
-18,2026-12-30,Man United,Sunderland,36.7,26.77,36.53,1-1
-18,2026-12-30,Ipswich,Chelsea,42.94,24.58,32.47,1-2
-18,2026-12-30,Hull,Leeds,29.49,28.47,42.04,0-0
-18,2026-12-30,Fulham,Arsenal,26.7,35.14,38.16,0-0
-18,2026-12-30,Crystal Palace,Bournemouth,34.63,27.31,38.05,1-1
-18,2026-12-30,Coventry,Brentford,25.59,28.72,45.68,1-1
-18,2026-12-30,Aston Villa,Liverpool,37.14,25.43,37.43,1-1
-18,2026-12-30,Everton,Man City,44.48,25.44,30.08,1-1
-19,2027-01-02,Liverpool,Coventry,49.48,26.68,23.84,1-1
-19,2027-01-02,Nott'm Forest,Fulham,30.59,28.39,41.02,1-1
-19,2027-01-02,Man City,Tottenham,40.81,16.47,42.72,2-0
-19,2027-01-02,Leeds,Everton,31.65,28.95,39.4,1-1
-19,2027-01-02,Sunderland,Hull,39.09,31.28,29.64,0-0
-19,2027-01-02,Brighton,Man United,34.39,25.4,40.21,1-1
-19,2027-01-02,Brentford,Crystal Palace,31.35,27.56,41.08,1-1
-19,2027-01-02,Arsenal,Ipswich,26.87,30.33,42.8,1-0
-19,2027-01-02,Bournemouth,Aston Villa,33.63,26.95,39.42,1-1
-19,2027-01-02,Chelsea,Newcastle,34.44,27.27,38.3,1-1
-20,2027-01-06,Sunderland,Liverpool,36.36,26.38,37.26,1-1
-20,2027-01-06,Nott'm Forest,Hull,37.77,29.69,32.54,0-0
-20,2027-01-06,Man United,Newcastle,39.9,25.71,34.39,1-1
-20,2027-01-06,Leeds,Man City,40.62,26.17,33.22,1-1
-20,2027-01-06,Ipswich,Coventry,34.34,29.28,36.38,1-1
-20,2027-01-06,Fulham,Tottenham,39.33,27.94,32.73,1-1
-20,2027-01-06,Everton,Aston Villa,34.05,27.55,38.4,1-1
-20,2027-01-06,Crystal Palace,Chelsea,38.51,28.86,32.63,1-1
-20,2027-01-06,Brighton,Bournemouth,34.56,27.91,37.54,1-1
-20,2027-01-06,Arsenal,Brentford,42.88,31.41,25.71,0-0
-21,2027-01-16,Newcastle,Fulham,31.09,27.65,41.26,1-1
-21,2027-01-16,Man City,Nott'm Forest,41.32,18.75,39.93,2-0
-21,2027-01-16,Liverpool,Crystal Palace,37.67,23.26,39.06,1-1
-21,2027-01-16,Hull,Arsenal,20.62,34.9,44.48,0-0
-21,2027-01-16,Tottenham,Leeds,34.88,28.33,36.79,1-1
-21,2027-01-16,Chelsea,Sunderland,31.81,28.33,39.85,1-1
-21,2027-01-16,Brentford,Brighton,32.93,27.21,39.86,1-1
-21,2027-01-16,Aston Villa,Man United,36.1,26.36,37.54,1-1
-21,2027-01-16,Bournemouth,Ipswich,37.05,17.99,44.96,3-0
-21,2027-01-16,Coventry,Everton,30.27,29.17,40.56,1-1
-22,2027-01-23,Nott'm Forest,Bournemouth,34.77,28.62,36.61,1-1
-22,2027-01-23,Man United,Liverpool,37.78,25.46,36.76,1-1
-22,2027-01-23,Leeds,Chelsea,36.91,28.22,34.87,1-1
-22,2027-01-23,Ipswich,Hull,41.45,29.32,29.23,0-0
-22,2027-01-23,Sunderland,Coventry,45.08,26.79,28.13,1-1
-22,2027-01-23,Everton,Brentford,36.42,29.31,34.28,1-1
-22,2027-01-23,Crystal Palace,Tottenham,36.63,28.41,34.96,1-1
-22,2027-01-23,Brighton,Man City,41.8,25.41,32.78,1-1
-22,2027-01-23,Arsenal,Newcastle,43.64,30.93,25.44,0-0
-22,2027-01-23,Fulham,Aston Villa,34.41,27.01,38.58,1-1
-23,2027-01-30,Tottenham,Sunderland,33.67,29.38,36.95,1-1
-23,2027-01-30,Newcastle,Brighton,33.37,27.35,39.28,1-1
-23,2027-01-30,Man City,Arsenal,39.01,24.32,36.67,1-0
-23,2027-01-30,Liverpool,Everton,39.75,23.24,37.01,1-1
-23,2027-01-30,Hull,Crystal Palace,28.25,29.13,42.62,0-0
-23,2027-01-30,Coventry,Leeds,29.68,28.74,41.58,1-1
-23,2027-01-30,Brentford,Man United,34.49,24.78,40.72,1-1
-23,2027-01-30,Aston Villa,Ipswich,37.51,18.48,44.01,3-0
-23,2027-01-30,Bournemouth,Fulham,36.69,27.43,35.88,1-1
-23,2027-01-30,Chelsea,Nott'm Forest,33.85,27.8,38.35,1-1
-24,2027-02-06,Leeds,Bournemouth,33.4,26.53,40.07,1-1
-24,2027-02-06,Sunderland,Aston Villa,32.24,28.4,39.36,1-1
-24,2027-02-06,Nott'm Forest,Brentford,34.37,28.31,37.32,1-1
-24,2027-02-06,Man United,Chelsea,38.85,26.65,34.5,1-1
-24,2027-02-06,Ipswich,Tottenham,42.78,24.87,32.34,1-1
-24,2027-02-06,Fulham,Man City,43.04,25.69,31.27,1-1
-24,2027-02-06,Everton,Newcastle,36.25,28.42,35.33,1-1
-24,2027-02-06,Crystal Palace,Coventry,45.38,26.9,27.73,1-1
-24,2027-02-06,Brighton,Hull,37.0,29.67,33.33,0-0
-24,2027-02-06,Arsenal,Liverpool,50.82,25.63,23.56,0-0
-25,2027-02-10,Tottenham,Man City,42.15,24.03,33.82,1-1
-25,2027-02-10,Newcastle,Chelsea,33.18,26.44,40.38,1-1
-25,2027-02-10,Man United,Brighton,37.51,26.55,35.93,1-1
-25,2027-02-10,Ipswich,Arsenal,33.99,27.76,38.25,0-0
-25,2027-02-10,Hull,Sunderland,29.12,30.04,40.85,0-0
-25,2027-02-10,Everton,Leeds,34.3,30.1,35.61,1-1
-25,2027-02-10,Crystal Palace,Brentford,38.13,28.8,33.07,1-1
-25,2027-02-10,Coventry,Liverpool,26.51,24.01,49.47,1-1
-25,2027-02-10,Aston Villa,Bournemouth,33.64,27.63,38.74,1-1
-25,2027-02-10,Fulham,Nott'm Forest,35.63,29.92,34.45,1-1
-26,2027-02-20,Liverpool,Hull,39.95,28.16,31.89,1-0
-26,2027-02-20,Sunderland,Everton,32.04,30.28,37.67,1-1
-26,2027-02-20,Nott'm Forest,Man United,33.84,26.09,40.07,1-1
-26,2027-02-20,Man City,Newcastle,43.01,17.35,39.63,2-1
-26,2027-02-20,Leeds,Aston Villa,33.08,26.86,40.07,1-1
-26,2027-02-20,Bournemouth,Crystal Palace,36.42,27.54,36.04,1-1
-26,2027-02-20,Brighton,Tottenham,37.72,27.03,35.25,1-1
-26,2027-02-20,Brentford,Coventry,46.44,26.21,27.35,1-1
-26,2027-02-20,Arsenal,Fulham,39.94,32.93,27.13,0-0
-26,2027-02-20,Chelsea,Ipswich,36.45,17.7,45.85,3-0
-27,2027-02-27,Ipswich,Brighton,42.89,24.74,32.37,1-1
-27,2027-02-27,Tottenham,Liverpool,39.28,24.17,36.55,1-1
-27,2027-02-27,Newcastle,Brentford,32.78,26.3,40.92,1-1
-27,2027-02-27,Man United,Arsenal,27.26,29.82,42.92,0-0
-27,2027-02-27,Hull,Man City,36.05,23.84,40.11,0-0
-27,2027-02-27,Aston Villa,Chelsea,39.28,26.83,33.89,1-1
-27,2027-02-27,Everton,Nott'm Forest,34.58,29.54,35.88,1-1
-27,2027-02-27,Crystal Palace,Sunderland,33.02,30.17,36.82,1-1
-27,2027-02-27,Coventry,Bournemouth,26.52,25.73,47.76,1-1
-27,2027-02-27,Fulham,Leeds,35.0,29.25,35.75,1-1
-28,2027-03-03,Sunderland,Man United,34.52,27.52,37.96,1-1
-28,2027-03-03,Nott'm Forest,Newcastle,34.04,27.4,38.56,1-1
-28,2027-03-03,Man City,Everton,40.19,18.46,41.35,2-0
-28,2027-03-03,Liverpool,Aston Villa,36.95,23.51,39.54,1-1
-28,2027-03-03,Leeds,Hull,38.38,30.37,31.25,0-0
-28,2027-03-03,Brighton,Fulham,32.2,28.43,39.37,1-1
-28,2027-03-03,Brentford,Ipswich,36.6,17.83,45.56,3-0
-28,2027-03-03,Arsenal,Crystal Palace,33.54,30.7,35.76,0-0
-28,2027-03-03,Bournemouth,Tottenham,42.62,23.02,34.36,1-1
-28,2027-03-03,Chelsea,Coventry,46.44,26.21,27.35,1-1
-29,2027-03-13,Liverpool,Ipswich,36.76,15.7,47.54,3-0
-29,2027-03-13,Sunderland,Brentford,35.97,29.71,34.32,1-1
-29,2027-03-13,Man United,Everton,36.76,26.57,36.68,1-1
-29,2027-03-13,Tottenham,Nott'm Forest,36.48,28.56,34.96,1-1
-29,2027-03-13,Leeds,Brighton,35.72,28.86,35.42,1-1
-29,2027-03-13,Chelsea,Arsenal,26.86,31.38,41.77,0-0
-29,2027-03-13,Coventry,Man City,27.43,23.17,49.41,1-1
-29,2027-03-13,Aston Villa,Hull,39.99,30.88,29.13,0-0
-29,2027-03-13,Bournemouth,Newcastle,40.06,26.59,33.35,1-1
-29,2027-03-13,Crystal Palace,Fulham,33.56,29.58,36.86,1-1
-30,2027-03-20,Nott'm Forest,Aston Villa,32.36,26.54,41.1,1-1
-30,2027-03-20,Newcastle,Leeds,32.42,26.86,40.72,1-1
-30,2027-03-20,Man City,Man United,40.73,20.83,38.45,1-1
-30,2027-03-20,Ipswich,Crystal Palace,40.65,26.64,32.71,1-1
-30,2027-03-20,Hull,Chelsea,27.92,28.28,43.8,0-0
-30,2027-03-20,Everton,Tottenham,39.16,28.25,32.59,1-1
-30,2027-03-20,Brighton,Coventry,45.65,26.77,27.58,1-1
-30,2027-03-20,Brentford,Bournemouth,34.2,27.46,38.33,1-1
-30,2027-03-20,Arsenal,Sunderland,33.53,31.57,34.89,0-0
-30,2027-03-20,Fulham,Liverpool,38.64,25.07,36.29,1-1
-31,2027-04-10,Liverpool,Newcastle,42.7,22.49,34.81,1-1
-31,2027-04-10,Tottenham,Brentford,34.75,25.8,39.44,1-1
-31,2027-04-10,Sunderland,Ipswich,36.9,21.59,41.51,2-0
-31,2027-04-10,Man United,Hull,40.32,29.44,30.23,0-0
-31,2027-04-10,Leeds,Nott'm Forest,34.21,28.53,37.25,1-1
-31,2027-04-10,Bournemouth,Man City,41.74,25.01,33.25,1-1
-31,2027-04-10,Coventry,Arsenal,28.34,25.33,46.33,1-1
-31,2027-04-10,Chelsea,Fulham,31.09,28.09,40.82,1-1
-31,2027-04-10,Aston Villa,Brighton,35.83,28.73,35.44,1-1
-31,2027-04-10,Crystal Palace,Everton,33.05,29.88,37.07,1-1
-32,2027-04-17,Ipswich,Man United,45.65,16.98,37.36,1-2
-32,2027-04-17,Nott'm Forest,Liverpool,36.41,24.9,38.69,1-1
-32,2027-04-17,Newcastle,Tottenham,36.84,25.28,37.88,1-1
-32,2027-04-17,Man City,Crystal Palace,39.66,17.59,42.76,2-0
-32,2027-04-17,Hull,Coventry,36.7,23.84,39.46,1-1
-32,2027-04-17,Arsenal,Aston Villa,47.71,27.29,24.99,0-0
-32,2027-04-17,Everton,Bournemouth,33.81,27.46,38.73,1-1
-32,2027-04-17,Brighton,Chelsea,34.57,28.32,37.11,1-1
-32,2027-04-17,Brentford,Leeds,32.98,27.44,39.58,1-1
-32,2027-04-17,Fulham,Sunderland,33.07,30.68,36.24,1-1
-33,2027-04-24,Tottenham,Hull,36.99,31.42,31.59,0-0
-33,2027-04-24,Nott'm Forest,Sunderland,31.45,29.83,38.72,1-1
-33,2027-04-24,Newcastle,Ipswich,36.32,17.26,46.42,3-0
-33,2027-04-24,Man United,Crystal Palace,35.92,25.88,38.19,1-1
-33,2027-04-24,Leeds,Liverpool,37.34,24.98,37.68,1-1
-33,2027-04-24,Chelsea,Man City,41.68,24.97,33.36,1-1
-33,2027-04-24,Brentford,Fulham,31.44,28.13,40.43,1-1
-33,2027-04-24,Aston Villa,Coventry,48.18,27.39,24.43,1-1
-33,2027-04-24,Bournemouth,Arsenal,27.89,31.13,40.97,0-0
-33,2027-04-24,Everton,Brighton,36.08,29.82,34.1,1-1
-34,2027-05-01,Ipswich,Leeds,43.22,25.23,31.55,1-1
-34,2027-05-01,Man City,Brentford,41.67,18.09,40.24,2-1
-34,2027-05-01,Liverpool,Chelsea,42.63,22.88,34.49,1-1
-34,2027-05-01,Sunderland,Newcastle,36.21,28.64,35.15,1-1
-34,2027-05-01,Hull,Bournemouth,25.93,26.52,47.55,0-0
-34,2027-05-01,Coventry,Man United,27.71,23.88,48.41,1-1
-34,2027-05-01,Crystal Palace,Aston Villa,33.67,27.81,38.51,1-1
-34,2027-05-01,Brighton,Nott'm Forest,34.31,28.61,37.09,1-1
-34,2027-05-01,Arsenal,Tottenham,36.95,29.17,33.88,0-0
-34,2027-05-01,Fulham,Everton,33.19,30.47,36.34,1-1
-35,2027-05-08,Tottenham,Chelsea,35.17,25.87,38.96,1-1
-35,2027-05-08,Nott'm Forest,Crystal Palace,30.75,29.03,40.22,1-1
-35,2027-05-08,Newcastle,Coventry,46.41,26.2,27.39,1-1
-35,2027-05-08,Man City,Liverpool,42.04,20.9,37.06,1-1
-35,2027-05-08,Leeds,Arsenal,26.79,34.4,38.81,0-0
-35,2027-05-08,Fulham,Ipswich,37.78,20.89,41.33,2-0
-35,2027-05-08,Everton,Hull,39.91,30.67,29.42,0-0
-35,2027-05-08,Brighton,Sunderland,32.07,29.07,38.86,1-1
-35,2027-05-08,Brentford,Aston Villa,34.86,27.5,37.64,1-1
-35,2027-05-08,Bournemouth,Man United,36.76,26.47,36.77,1-1
-36,2027-05-15,Man United,Leeds,37.34,25.9,36.76,1-1
-36,2027-05-15,Sunderland,Bournemouth,33.34,27.83,38.82,1-1
-36,2027-05-15,Ipswich,Man City,52.65,13.12,34.23,0-3
-36,2027-05-15,Hull,Fulham,28.64,29.43,41.93,0-0
-36,2027-05-15,Liverpool,Brentford,42.26,22.68,35.06,1-1
-36,2027-05-15,Coventry,Tottenham,30.09,28.59,41.32,1-1
-36,2027-05-15,Chelsea,Everton,31.71,28.0,40.29,1-1
-36,2027-05-15,Aston Villa,Newcastle,39.43,26.43,34.14,1-1
-36,2027-05-15,Arsenal,Nott'm Forest,40.67,32.73,26.61,0-0
-36,2027-05-15,Crystal Palace,Brighton,37.27,29.55,33.19,1-1
-37,2027-05-23,Tottenham,Man United,36.47,25.59,37.95,1-1
-37,2027-05-23,Nott'm Forest,Ipswich,37.2,18.8,44.0,2-0
-37,2027-05-23,Man City,Aston Villa,39.34,21.25,39.41,1-1
-37,2027-05-23,Leeds,Sunderland,31.64,29.23,39.12,1-1
-37,2027-05-23,Newcastle,Crystal Palace,30.82,26.94,42.24,1-1
-37,2027-05-23,Everton,Arsenal,26.1,35.85,38.06,0-0
-37,2027-05-23,Brighton,Liverpool,38.85,26.53,34.62,1-1
-37,2027-05-23,Brentford,Hull,38.96,28.0,33.05,0-0
-37,2027-05-23,Bournemouth,Chelsea,36.47,28.18,35.35,1-1
-37,2027-05-23,Fulham,Coventry,45.62,26.76,27.62,1-1
-38,2027-05-30,Man United,Fulham,36.89,26.3,36.81,1-1
-38,2027-05-30,Arsenal,Brighton,41.61,32.58,25.81,0-0
-38,2027-05-30,Aston Villa,Tottenham,42.09,22.76,35.15,1-1
-38,2027-05-30,Chelsea,Brentford,32.73,26.71,40.56,1-1
-38,2027-05-30,Coventry,Nott'm Forest,29.51,29.26,41.22,1-1
-38,2027-05-30,Crystal Palace,Leeds,34.23,29.08,36.69,1-1
-38,2027-05-30,Hull,Newcastle,31.06,27.23,41.71,0-0
-38,2027-05-30,Ipswich,Everton,42.1,27.08,30.82,1-1
-38,2027-05-30,Liverpool,Bournemouth,37.64,23.94,38.42,1-1
-38,2027-05-30,Sunderland,Man City,40.46,27.03,32.51,1-1
+1,2026-08-21,Arsenal,Coventry,56.99,19.52,23.49,1-1
+1,2026-08-22,Hull,Man United,32.25,31.18,36.57,0-0
+1,2026-08-22,Everton,Crystal Palace,32.25,30.39,37.36,1-1
+1,2026-08-22,Ipswich,Sunderland,43.39,26.93,29.69,1-1
+1,2026-08-22,Nott'm Forest,Leeds,32.56,29.12,38.31,1-1
+1,2026-08-22,Brentford,Tottenham,37.42,26.86,35.72,1-1
+1,2026-08-23,Man City,Bournemouth,35.67,20.9,43.43,1-1
+1,2026-08-23,Newcastle,Liverpool,35.7,25.09,39.21,1-1
+1,2026-08-23,Brighton,Aston Villa,35.35,27.74,36.91,1-1
+1,2026-08-24,Fulham,Chelsea,35.98,28.0,36.02,1-1
+2,2026-08-28,Crystal Palace,Man City,36.81,27.57,35.62,1-1
+2,2026-08-29,Bournemouth,Everton,36.59,27.99,35.43,1-1
+2,2026-08-29,Tottenham,Newcastle,40.1,27.57,32.33,1-1
+2,2026-08-29,Coventry,Hull,35.26,27.02,37.72,1-1
+2,2026-08-29,Liverpool,Nott'm Forest,42.62,23.94,33.44,1-1
+2,2026-08-30,Man United,Ipswich,39.6,14.67,45.74,3-0
+2,2026-08-30,Sunderland,Fulham,33.65,30.4,35.95,1-1
+2,2026-08-30,Chelsea,Brighton,33.06,27.78,39.16,1-1
+2,2026-08-30,Leeds,Brentford,36.7,27.91,35.39,1-1
+2,2026-08-31,Aston Villa,Arsenal,40.13,26.87,33.0,1-1
+3,2026-09-04,Ipswich,Liverpool,50.44,15.09,34.47,0-2
+3,2026-09-05,Nott'm Forest,Tottenham,37.16,27.04,35.8,1-1
+3,2026-09-05,Newcastle,Bournemouth,37.86,26.82,35.33,1-1
+3,2026-09-05,Man City,Coventry,55.53,19.36,25.11,1-1
+3,2026-09-05,Hull,Aston Villa,31.44,32.17,36.39,0-0
+3,2026-09-05,Brighton,Leeds,33.17,28.51,38.31,1-1
+3,2026-09-05,Brentford,Sunderland,31.77,28.37,39.87,1-1
+3,2026-09-05,Fulham,Crystal Palace,33.08,29.61,37.31,1-1
+3,2026-09-06,Everton,Man United,34.89,27.4,37.71,1-1
+3,2026-09-06,Arsenal,Chelsea,42.61,19.7,37.69,1-1
+4,2026-09-12,Tottenham,Everton,35.13,29.41,35.46,1-1
+4,2026-09-12,Bournemouth,Brentford,35.18,26.67,38.15,1-1
+4,2026-09-12,Aston Villa,Nott'm Forest,39.0,27.76,33.24,1-1
+4,2026-09-12,Chelsea,Hull,32.27,35.17,32.55,0-0
+4,2026-09-12,Crystal Palace,Ipswich,36.28,20.88,42.84,2-0
+4,2026-09-12,Liverpool,Fulham,41.05,24.04,34.91,1-1
+4,2026-09-12,Sunderland,Arsenal,39.02,27.51,33.47,1-1
+4,2026-09-13,Coventry,Brighton,26.76,28.85,44.39,1-1
+4,2026-09-13,Man United,Man City,43.69,26.99,29.32,1-1
+4,2026-09-14,Leeds,Newcastle,37.61,27.47,34.92,1-1
+5,2026-09-18,Brentford,Chelsea,34.93,27.1,37.97,1-1
+5,2026-09-19,Tottenham,Aston Villa,35.79,26.07,38.15,1-1
+5,2026-09-19,Nott'm Forest,Coventry,48.57,24.11,27.32,1-1
+5,2026-09-19,Man City,Sunderland,38.02,18.79,43.19,2-0
+5,2026-09-19,Leeds,Crystal Palace,32.22,28.75,39.03,1-1
+5,2026-09-19,Newcastle,Hull,30.53,35.13,34.34,0-0
+5,2026-09-19,Everton,Ipswich,38.24,18.76,43.0,2-0
+5,2026-09-19,Brighton,Arsenal,39.6,27.41,32.99,1-1
+5,2026-09-20,Fulham,Man United,34.92,27.06,38.02,1-1
+5,2026-09-20,Bournemouth,Liverpool,37.51,26.32,36.16,1-1
+6,2026-10-10,Sunderland,Brighton,36.43,30.45,33.12,1-1
+6,2026-10-10,Man United,Tottenham,45.01,19.85,35.15,1-1
+6,2026-10-10,Liverpool,Man City,43.28,24.83,31.89,1-1
+6,2026-10-10,Ipswich,Fulham,44.1,26.33,29.57,1-1
+6,2026-10-10,Hull,Everton,32.58,39.2,28.21,0-0
+6,2026-10-10,Coventry,Newcastle,29.52,28.23,42.25,1-1
+6,2026-10-10,Chelsea,Bournemouth,34.81,27.29,37.9,1-1
+6,2026-10-10,Aston Villa,Brentford,39.22,25.98,34.8,1-1
+6,2026-10-10,Arsenal,Leeds,40.98,20.04,38.98,2-0
+6,2026-10-10,Crystal Palace,Nott'm Forest,35.65,29.47,34.88,1-1
+7,2026-10-17,Man City,Ipswich,41.29,7.64,51.07,3-0
+7,2026-10-17,Tottenham,Coventry,42.58,28.8,28.62,1-1
+7,2026-10-17,Nott'm Forest,Arsenal,36.79,27.5,35.72,1-1
+7,2026-10-17,Newcastle,Aston Villa,34.49,24.73,40.78,1-1
+7,2026-10-17,Leeds,Man United,35.64,26.35,38.01,1-1
+7,2026-10-17,Bournemouth,Sunderland,36.58,28.3,35.12,1-1
+7,2026-10-17,Everton,Chelsea,36.81,28.88,34.31,1-1
+7,2026-10-17,Brighton,Crystal Palace,31.6,28.46,39.93,1-1
+7,2026-10-17,Brentford,Liverpool,39.05,26.64,34.3,1-1
+7,2026-10-17,Fulham,Hull,31.37,38.53,30.1,0-0
+8,2026-10-24,Ipswich,Nott'm Forest,45.95,24.94,29.11,0-2
+8,2026-10-24,Sunderland,Leeds,34.77,30.6,34.64,1-1
+8,2026-10-24,Man United,Bournemouth,41.56,23.5,34.94,1-1
+8,2026-10-24,Liverpool,Brighton,41.86,24.72,33.41,1-1
+8,2026-10-24,Hull,Brentford,31.83,34.09,34.08,0-0
+8,2026-10-24,Arsenal,Everton,39.81,20.89,39.31,2-0
+8,2026-10-24,Coventry,Fulham,29.49,29.31,41.2,1-1
+8,2026-10-24,Chelsea,Tottenham,37.32,26.61,36.07,1-1
+8,2026-10-24,Aston Villa,Man City,39.65,25.6,34.75,1-1
+8,2026-10-24,Crystal Palace,Newcastle,38.26,28.19,33.56,1-1
+9,2026-10-31,Tottenham,Crystal Palace,34.19,28.95,36.85,1-1
+9,2026-10-31,Newcastle,Everton,33.86,28.1,38.03,1-1
+9,2026-10-31,Man City,Brighton,39.26,18.86,41.88,1-1
+9,2026-10-31,Liverpool,Arsenal,47.07,24.98,27.94,1-1
+9,2026-10-31,Hull,Ipswich,36.37,39.84,23.79,0-0
+9,2026-10-31,Chelsea,Man United,34.19,25.46,40.34,1-1
+9,2026-10-31,Brentford,Nott'm Forest,34.34,28.03,37.64,1-1
+9,2026-10-31,Aston Villa,Fulham,36.48,27.52,36.01,1-1
+9,2026-10-31,Bournemouth,Leeds,38.08,27.71,34.21,1-1
+9,2026-10-31,Coventry,Sunderland,30.03,29.11,40.87,1-1
+10,2026-11-07,Leeds,Tottenham,34.55,28.12,37.33,1-1
+10,2026-11-07,Sunderland,Chelsea,37.79,29.01,33.2,1-1
+10,2026-11-07,Nott'm Forest,Man City,40.57,25.87,33.55,1-1
+10,2026-11-07,Man United,Aston Villa,41.8,23.48,34.72,1-1
+10,2026-11-07,Ipswich,Bournemouth,47.3,18.81,33.89,0-2
+10,2026-11-07,Brighton,Brentford,34.39,27.36,38.25,1-1
+10,2026-11-07,Everton,Coventry,47.71,24.63,27.66,1-1
+10,2026-11-07,Crystal Palace,Liverpool,40.83,25.58,33.6,1-1
+10,2026-11-07,Fulham,Newcastle,36.14,27.63,36.23,1-1
+10,2026-11-07,Arsenal,Hull,35.73,31.7,32.57,0-0
+11,2026-11-21,Tottenham,Ipswich,33.1,22.01,44.89,2-0
+11,2026-11-21,Newcastle,Arsenal,41.02,26.26,32.72,1-1
+11,2026-11-21,Man City,Fulham,38.56,18.34,43.11,2-0
+11,2026-11-21,Liverpool,Man United,45.99,21.74,32.27,1-1
+11,2026-11-21,Hull,Brighton,30.02,35.51,34.47,0-0
+11,2026-11-21,Chelsea,Leeds,32.99,28.01,38.99,1-1
+11,2026-11-21,Brentford,Everton,32.68,28.48,38.84,1-1
+11,2026-11-21,Aston Villa,Sunderland,35.24,28.7,36.06,1-1
+11,2026-11-21,Bournemouth,Nott'm Forest,38.46,27.43,34.11,1-1
+11,2026-11-21,Coventry,Crystal Palace,30.03,29.11,40.87,1-1
+12,2026-11-28,Leeds,Coventry,45.91,26.26,27.83,1-1
+12,2026-11-28,Sunderland,Tottenham,34.78,29.25,35.96,1-1
+12,2026-11-28,Nott'm Forest,Chelsea,35.45,27.9,36.65,1-1
+12,2026-11-28,Man United,Brentford,44.08,23.08,32.83,1-1
+12,2026-11-28,Ipswich,Aston Villa,46.39,17.72,35.89,0-2
+12,2026-11-28,Fulham,Bournemouth,37.22,28.89,33.89,1-1
+12,2026-11-28,Everton,Liverpool,38.22,26.63,35.15,1-1
+12,2026-11-28,Crystal Palace,Hull,31.69,38.84,29.47,0-0
+12,2026-11-28,Brighton,Newcastle,35.73,26.77,37.5,1-1
+12,2026-11-28,Arsenal,Man City,37.44,28.38,34.18,1-1
+13,2026-12-02,Tottenham,Fulham,36.28,29.67,34.04,1-1
+13,2026-12-02,Newcastle,Man United,34.09,25.21,40.7,1-1
+13,2026-12-02,Man City,Leeds,38.15,17.98,43.87,2-0
+13,2026-12-02,Liverpool,Sunderland,39.3,24.57,36.13,1-1
+13,2026-12-02,Hull,Nott'm Forest,33.94,35.88,30.18,0-0
+13,2026-12-02,Coventry,Ipswich,37.06,28.39,34.55,1-1
+13,2026-12-02,Chelsea,Crystal Palace,31.43,27.95,40.63,1-1
+13,2026-12-02,Brentford,Arsenal,40.22,26.74,33.03,1-1
+13,2026-12-02,Aston Villa,Everton,37.16,28.29,34.56,1-1
+13,2026-12-02,Bournemouth,Brighton,34.67,28.01,37.32,1-1
+14,2026-12-05,Nott'm Forest,Brighton,34.57,29.11,36.32,1-1
+14,2026-12-05,Newcastle,Sunderland,35.05,26.91,38.04,1-1
+14,2026-12-05,Man United,Coventry,52.02,24.01,23.96,1-1
+14,2026-12-05,Leeds,Ipswich,36.15,19.36,44.49,2-0
+14,2026-12-05,Tottenham,Arsenal,41.39,20.5,38.11,1-1
+14,2026-12-05,Chelsea,Liverpool,38.51,26.85,34.63,1-1
+14,2026-12-05,Brentford,Man City,38.15,26.05,35.8,1-1
+14,2026-12-05,Aston Villa,Crystal Palace,37.25,27.11,35.64,1-1
+14,2026-12-05,Bournemouth,Hull,31.93,37.09,30.97,0-0
+14,2026-12-05,Everton,Fulham,32.68,30.1,37.23,1-1
+15,2026-12-12,Sunderland,Nott'm Forest,35.31,29.83,34.86,1-1
+15,2026-12-12,Man City,Chelsea,39.77,18.06,42.17,1-1
+15,2026-12-12,Liverpool,Leeds,39.99,24.22,35.79,1-1
+15,2026-12-12,Ipswich,Newcastle,48.36,22.64,29.0,0-2
+15,2026-12-12,Hull,Tottenham,33.62,35.52,30.86,0-0
+15,2026-12-12,Fulham,Brentford,35.65,27.88,36.47,1-1
+15,2026-12-12,Crystal Palace,Man United,36.26,26.99,36.75,1-1
+15,2026-12-12,Coventry,Aston Villa,28.12,24.08,47.8,1-1
+15,2026-12-12,Brighton,Everton,32.45,29.09,38.46,1-1
+15,2026-12-12,Arsenal,Bournemouth,42.87,19.7,37.43,1-1
+16,2026-12-19,Nott'm Forest,Everton,31.87,29.71,38.42,1-1
+16,2026-12-19,Man City,Hull,34.09,29.69,36.22,0-0
+16,2026-12-19,Liverpool,Tottenham,43.51,19.49,37.01,1-1
+16,2026-12-19,Leeds,Fulham,34.16,29.48,36.37,1-1
+16,2026-12-19,Sunderland,Crystal Palace,33.11,30.68,36.21,1-1
+16,2026-12-19,Brighton,Ipswich,36.82,16.64,46.54,2-0
+16,2026-12-19,Brentford,Newcastle,35.05,26.73,38.22,1-1
+16,2026-12-19,Arsenal,Man United,39.7,23.21,37.09,1-1
+16,2026-12-19,Bournemouth,Coventry,47.9,25.04,27.06,1-1
+16,2026-12-19,Chelsea,Aston Villa,35.21,27.29,37.5,1-1
+17,2026-12-26,Newcastle,Man City,37.06,26.19,36.74,1-1
+17,2026-12-26,Man United,Nott'm Forest,41.94,25.1,32.96,1-1
+17,2026-12-26,Ipswich,Brentford,45.41,22.66,31.94,0-2
+17,2026-12-26,Hull,Liverpool,36.45,29.19,34.36,0-0
+17,2026-12-26,Tottenham,Bournemouth,35.33,26.14,38.53,1-1
+17,2026-12-26,Everton,Sunderland,32.15,30.89,36.96,1-1
+17,2026-12-26,Crystal Palace,Arsenal,39.65,26.8,33.55,1-1
+17,2026-12-26,Coventry,Chelsea,27.52,28.93,43.55,1-1
+17,2026-12-26,Aston Villa,Leeds,38.7,27.02,34.28,1-1
+17,2026-12-26,Fulham,Brighton,35.88,29.77,34.35,1-1
+18,2026-12-30,Tottenham,Brighton,35.44,26.91,37.65,1-1
+18,2026-12-30,Newcastle,Nott'm Forest,35.7,27.66,36.64,1-1
+18,2026-12-30,Man United,Sunderland,39.36,25.33,35.31,1-1
+18,2026-12-30,Ipswich,Chelsea,46.03,23.7,30.27,0-2
+18,2026-12-30,Hull,Leeds,34.35,36.39,29.27,0-0
+18,2026-12-30,Fulham,Arsenal,38.55,27.35,34.1,1-1
+18,2026-12-30,Crystal Palace,Bournemouth,35.48,27.03,37.49,1-1
+18,2026-12-30,Coventry,Brentford,27.29,27.95,44.75,1-1
+18,2026-12-30,Aston Villa,Liverpool,37.22,26.34,36.44,1-1
+18,2026-12-30,Everton,Man City,41.8,26.23,31.97,1-1
+19,2027-01-02,Liverpool,Coventry,51.42,25.03,23.55,1-1
+19,2027-01-02,Nott'm Forest,Fulham,31.43,28.91,39.65,1-1
+19,2027-01-02,Man City,Tottenham,39.31,16.74,43.95,2-0
+19,2027-01-02,Leeds,Everton,33.0,29.19,37.81,1-1
+19,2027-01-02,Sunderland,Hull,25.84,42.74,31.42,0-0
+19,2027-01-02,Brighton,Man United,34.39,25.87,39.74,1-1
+19,2027-01-02,Brentford,Crystal Palace,31.8,27.85,40.34,1-1
+19,2027-01-02,Arsenal,Ipswich,43.04,7.95,49.01,3-0
+19,2027-01-02,Bournemouth,Aston Villa,34.22,26.76,39.02,1-1
+19,2027-01-02,Chelsea,Newcastle,34.68,26.69,38.63,1-1
+20,2027-01-06,Sunderland,Liverpool,40.48,26.17,33.35,1-1
+20,2027-01-06,Nott'm Forest,Hull,32.95,36.32,30.72,0-0
+20,2027-01-06,Man United,Newcastle,43.45,23.61,32.94,1-1
+20,2027-01-06,Leeds,Man City,36.39,27.15,36.47,1-1
+20,2027-01-06,Ipswich,Coventry,34.32,29.33,36.35,1-1
+20,2027-01-06,Fulham,Tottenham,38.13,28.1,33.77,1-1
+20,2027-01-06,Everton,Aston Villa,34.61,27.3,38.09,1-1
+20,2027-01-06,Crystal Palace,Chelsea,37.67,28.74,33.59,1-1
+20,2027-01-06,Brighton,Bournemouth,34.57,27.92,37.52,1-1
+20,2027-01-06,Arsenal,Brentford,42.38,19.41,38.21,2-0
+21,2027-01-16,Newcastle,Fulham,34.13,27.68,38.18,1-1
+21,2027-01-16,Man City,Nott'm Forest,39.03,18.75,42.21,1-1
+21,2027-01-16,Liverpool,Crystal Palace,38.8,24.31,36.89,1-1
+21,2027-01-16,Hull,Arsenal,33.26,30.09,36.66,0-0
+21,2027-01-16,Tottenham,Leeds,35.36,28.45,36.19,1-1
+21,2027-01-16,Chelsea,Sunderland,31.4,28.47,40.14,1-1
+21,2027-01-16,Brentford,Brighton,33.5,27.92,38.58,1-1
+21,2027-01-16,Aston Villa,Man United,36.38,27.02,36.6,1-1
+21,2027-01-16,Bournemouth,Ipswich,36.71,16.6,46.69,2-0
+21,2027-01-16,Coventry,Everton,30.03,29.11,40.87,1-1
+22,2027-01-23,Nott'm Forest,Bournemouth,35.77,28.19,36.04,1-1
+22,2027-01-23,Man United,Liverpool,38.65,25.15,36.19,1-1
+22,2027-01-23,Leeds,Chelsea,37.04,28.02,34.94,1-1
+22,2027-01-23,Ipswich,Hull,25.27,42.28,32.46,0-0
+22,2027-01-23,Sunderland,Coventry,46.7,25.15,28.15,1-1
+22,2027-01-23,Everton,Brentford,36.49,28.77,34.74,1-1
+22,2027-01-23,Crystal Palace,Tottenham,35.22,29.02,35.76,1-1
+22,2027-01-23,Brighton,Man City,41.57,25.34,33.09,1-1
+22,2027-01-23,Arsenal,Newcastle,42.57,19.27,38.16,1-1
+22,2027-01-23,Fulham,Aston Villa,34.69,26.93,38.38,1-1
+23,2027-01-30,Tottenham,Sunderland,34.07,29.45,36.48,1-1
+23,2027-01-30,Newcastle,Brighton,36.52,27.7,35.78,1-1
+23,2027-01-30,Man City,Arsenal,42.8,24.87,32.33,1-1
+23,2027-01-30,Liverpool,Everton,40.9,24.35,34.75,1-1
+23,2027-01-30,Hull,Crystal Palace,33.06,37.61,29.33,0-0
+23,2027-01-30,Coventry,Leeds,30.03,29.11,40.87,1-1
+23,2027-01-30,Brentford,Man United,34.6,25.47,39.93,1-1
+23,2027-01-30,Aston Villa,Ipswich,38.3,16.81,44.89,2-0
+23,2027-01-30,Bournemouth,Fulham,36.79,27.67,35.54,1-1
+23,2027-01-30,Chelsea,Nott'm Forest,34.02,27.95,38.03,1-1
+24,2027-02-06,Leeds,Bournemouth,34.84,26.32,38.84,1-1
+24,2027-02-06,Sunderland,Aston Villa,34.34,27.85,37.81,1-1
+24,2027-02-06,Nott'm Forest,Brentford,35.11,27.76,37.13,1-1
+24,2027-02-06,Man United,Chelsea,44.65,23.34,32.01,1-1
+24,2027-02-06,Ipswich,Tottenham,44.25,24.7,31.05,1-1
+24,2027-02-06,Fulham,Man City,41.97,25.91,32.12,1-1
+24,2027-02-06,Everton,Newcastle,36.13,27.97,35.9,1-1
+24,2027-02-06,Crystal Palace,Coventry,45.06,26.84,28.11,1-1
+24,2027-02-06,Brighton,Hull,32.29,36.01,31.7,0-0
+24,2027-02-06,Arsenal,Liverpool,37.5,25.34,37.15,1-1
+25,2027-02-10,Tottenham,Man City,38.11,25.49,36.41,1-1
+25,2027-02-10,Newcastle,Chelsea,36.61,26.04,37.35,1-1
+25,2027-02-10,Man United,Brighton,43.56,24.29,32.15,1-1
+25,2027-02-10,Ipswich,Arsenal,51.33,13.28,35.39,0-2
+25,2027-02-10,Hull,Sunderland,32.42,38.4,29.17,0-0
+25,2027-02-10,Everton,Leeds,33.85,30.34,35.8,1-1
+25,2027-02-10,Crystal Palace,Brentford,37.33,28.65,34.01,1-1
+25,2027-02-10,Coventry,Liverpool,28.2,23.8,48.0,1-1
+25,2027-02-10,Aston Villa,Bournemouth,34.16,27.1,38.74,1-1
+25,2027-02-10,Fulham,Nott'm Forest,35.04,29.77,35.19,1-1
+26,2027-02-20,Liverpool,Hull,31.27,36.32,32.41,0-0
+26,2027-02-20,Sunderland,Everton,33.27,30.67,36.05,1-1
+26,2027-02-20,Nott'm Forest,Man United,33.48,26.56,39.96,1-1
+26,2027-02-20,Man City,Newcastle,40.68,17.31,42.01,1-1
+26,2027-02-20,Leeds,Aston Villa,33.94,26.73,39.33,1-1
+26,2027-02-20,Bournemouth,Crystal Palace,36.61,27.79,35.61,1-1
+26,2027-02-20,Brighton,Tottenham,37.52,27.12,35.35,1-1
+26,2027-02-20,Brentford,Coventry,46.12,26.17,27.71,1-1
+26,2027-02-20,Arsenal,Fulham,40.52,20.44,39.04,2-0
+26,2027-02-20,Chelsea,Ipswich,36.63,16.04,47.32,2-0
+27,2027-02-27,Ipswich,Brighton,44.35,24.08,31.57,0-2
+27,2027-02-27,Tottenham,Liverpool,39.87,25.04,35.09,1-1
+27,2027-02-27,Newcastle,Brentford,36.26,25.88,37.86,1-1
+27,2027-02-27,Man United,Arsenal,46.23,24.22,29.55,1-1
+27,2027-02-27,Hull,Man City,32.52,29.19,38.29,0-0
+27,2027-02-27,Aston Villa,Chelsea,39.6,26.08,34.32,1-1
+27,2027-02-27,Everton,Nott'm Forest,34.49,29.74,35.78,1-1
+27,2027-02-27,Crystal Palace,Sunderland,32.7,30.14,37.16,1-1
+27,2027-02-27,Coventry,Bournemouth,28.54,24.34,47.11,1-1
+27,2027-02-27,Fulham,Leeds,34.7,29.54,35.76,1-1
+28,2027-03-03,Sunderland,Man United,35.91,27.44,36.64,1-1
+28,2027-03-03,Nott'm Forest,Newcastle,34.63,26.93,38.44,1-1
+28,2027-03-03,Man City,Everton,37.67,18.97,43.36,2-0
+28,2027-03-03,Liverpool,Aston Villa,44.15,21.53,34.32,1-1
+28,2027-03-03,Leeds,Hull,32.96,36.57,30.47,0-0
+28,2027-03-03,Brighton,Fulham,32.53,28.69,38.79,1-1
+28,2027-03-03,Brentford,Ipswich,35.26,17.54,47.2,2-0
+28,2027-03-03,Arsenal,Crystal Palace,40.43,20.2,39.37,2-0
+28,2027-03-03,Bournemouth,Tottenham,43.75,21.99,34.26,1-1
+28,2027-03-03,Chelsea,Coventry,47.8,24.53,27.68,1-1
+29,2027-03-13,Liverpool,Ipswich,38.39,14.36,47.25,3-0
+29,2027-03-13,Sunderland,Brentford,37.06,29.1,33.85,1-1
+29,2027-03-13,Man United,Everton,40.13,25.61,34.26,1-1
+29,2027-03-13,Tottenham,Nott'm Forest,37.24,28.78,33.98,1-1
+29,2027-03-13,Leeds,Brighton,36.48,29.11,34.41,1-1
+29,2027-03-13,Chelsea,Arsenal,39.68,27.06,33.26,1-1
+29,2027-03-13,Coventry,Man City,23.76,23.93,52.31,1-1
+29,2027-03-13,Aston Villa,Hull,33.75,37.55,28.7,0-0
+29,2027-03-13,Bournemouth,Newcastle,40.07,25.82,34.11,1-1
+29,2027-03-13,Crystal Palace,Fulham,33.96,29.76,36.28,1-1
+30,2027-03-20,Nott'm Forest,Aston Villa,33.23,26.37,40.4,1-1
+30,2027-03-20,Newcastle,Leeds,36.6,26.34,37.06,1-1
+30,2027-03-20,Man City,Man United,38.04,20.69,41.27,1-1
+30,2027-03-20,Ipswich,Crystal Palace,43.87,26.42,29.71,1-1
+30,2027-03-20,Hull,Chelsea,33.82,34.43,31.75,0-0
+30,2027-03-20,Everton,Tottenham,38.15,28.55,33.3,1-1
+30,2027-03-20,Brighton,Coventry,47.8,24.53,27.68,1-1
+30,2027-03-20,Brentford,Bournemouth,35.17,27.34,37.5,1-1
+30,2027-03-20,Arsenal,Sunderland,40.52,20.79,38.7,2-0
+30,2027-03-20,Fulham,Liverpool,38.35,26.27,35.38,1-1
+31,2027-04-10,Liverpool,Newcastle,44.04,22.51,33.45,1-1
+31,2027-04-10,Tottenham,Brentford,35.97,25.62,38.4,1-1
+31,2027-04-10,Sunderland,Ipswich,37.78,19.99,42.23,2-0
+31,2027-04-10,Man United,Hull,32.43,37.34,30.23,0-0
+31,2027-04-10,Leeds,Nott'm Forest,35.05,28.7,36.25,1-1
+31,2027-04-10,Bournemouth,Man City,41.57,25.04,33.39,1-1
+31,2027-04-10,Coventry,Arsenal,26.75,22.87,50.38,1-1
+31,2027-04-10,Chelsea,Fulham,31.48,28.58,39.93,1-1
+31,2027-04-10,Aston Villa,Brighton,35.69,28.77,35.54,1-1
+31,2027-04-10,Crystal Palace,Everton,33.58,30.03,36.39,1-1
+32,2027-04-17,Ipswich,Man United,46.85,16.92,36.23,0-2
+32,2027-04-17,Nott'm Forest,Liverpool,36.76,25.93,37.31,1-1
+32,2027-04-17,Newcastle,Tottenham,39.89,24.67,35.43,1-1
+32,2027-04-17,Man City,Crystal Palace,37.04,18.02,44.94,2-0
+32,2027-04-17,Hull,Coventry,37.01,23.25,39.74,1-1
+32,2027-04-17,Arsenal,Aston Villa,38.57,23.22,38.22,1-1
+32,2027-04-17,Everton,Bournemouth,34.28,27.33,38.39,1-1
+32,2027-04-17,Brighton,Chelsea,34.72,27.51,37.77,1-1
+32,2027-04-17,Brentford,Leeds,33.4,27.9,38.69,1-1
+32,2027-04-17,Fulham,Sunderland,32.11,30.51,37.39,1-1
+33,2027-04-24,Tottenham,Hull,32.21,37.34,30.45,0-0
+33,2027-04-24,Nott'm Forest,Sunderland,30.97,29.62,39.41,1-1
+33,2027-04-24,Newcastle,Ipswich,35.79,16.62,47.59,2-0
+33,2027-04-24,Man United,Crystal Palace,39.35,24.8,35.85,1-1
+33,2027-04-24,Leeds,Liverpool,40.21,25.01,34.78,1-1
+33,2027-04-24,Chelsea,Man City,41.7,24.95,33.35,1-1
+33,2027-04-24,Brentford,Fulham,31.88,28.47,39.65,1-1
+33,2027-04-24,Aston Villa,Coventry,49.81,25.57,24.62,1-1
+33,2027-04-24,Bournemouth,Arsenal,40.5,26.82,32.68,1-1
+33,2027-04-24,Everton,Brighton,35.88,30.12,33.99,1-1
+34,2027-05-01,Ipswich,Leeds,45.63,25.36,29.01,1-1
+34,2027-05-01,Man City,Brentford,39.51,17.78,42.71,1-1
+34,2027-05-01,Liverpool,Chelsea,44.01,22.9,33.09,1-1
+34,2027-05-01,Sunderland,Newcastle,37.14,28.1,34.76,1-1
+34,2027-05-01,Hull,Bournemouth,31.59,32.59,35.82,0-0
+34,2027-05-01,Coventry,Man United,27.83,24.01,48.15,1-1
+34,2027-05-01,Crystal Palace,Aston Villa,34.57,27.43,38.0,1-1
+34,2027-05-01,Brighton,Nott'm Forest,34.3,28.51,37.19,1-1
+34,2027-05-01,Arsenal,Tottenham,42.57,18.48,38.95,2-0
+34,2027-05-01,Fulham,Everton,33.04,30.53,36.43,1-1
+35,2027-05-08,Tottenham,Chelsea,36.34,25.71,37.95,1-1
+35,2027-05-08,Nott'm Forest,Crystal Palace,31.03,29.11,39.86,1-1
+35,2027-05-08,Newcastle,Coventry,47.36,25.42,27.22,1-1
+35,2027-05-08,Man City,Liverpool,33.75,23.25,43.0,1-1
+35,2027-05-08,Leeds,Arsenal,39.33,26.39,34.28,1-1
+35,2027-05-08,Fulham,Ipswich,37.36,18.68,43.97,2-0
+35,2027-05-08,Everton,Hull,31.92,38.87,29.21,0-0
+35,2027-05-08,Brighton,Sunderland,31.56,28.98,39.46,1-1
+35,2027-05-08,Brentford,Aston Villa,35.58,27.32,37.1,1-1
+35,2027-05-08,Bournemouth,Man United,36.76,27.1,36.14,1-1
+36,2027-05-15,Man United,Leeds,40.71,24.69,34.6,1-1
+36,2027-05-15,Sunderland,Bournemouth,35.18,27.48,37.34,1-1
+36,2027-05-15,Ipswich,Man City,48.89,13.83,37.28,0-3
+36,2027-05-15,Hull,Fulham,32.97,37.31,29.72,0-0
+36,2027-05-15,Liverpool,Brentford,43.63,22.74,33.63,1-1
+36,2027-05-15,Coventry,Tottenham,29.36,28.53,42.11,1-1
+36,2027-05-15,Chelsea,Everton,32.16,28.51,39.33,1-1
+36,2027-05-15,Aston Villa,Newcastle,39.7,25.71,34.59,1-1
+36,2027-05-15,Arsenal,Nott'm Forest,41.06,20.62,38.32,2-0
+36,2027-05-15,Crystal Palace,Brighton,37.08,29.85,33.07,1-1
+37,2027-05-23,Tottenham,Man United,36.61,25.95,37.43,1-1
+37,2027-05-23,Nott'm Forest,Ipswich,37.84,16.71,45.45,2-0
+37,2027-05-23,Man City,Aston Villa,37.24,20.47,42.29,1-1
+37,2027-05-23,Leeds,Sunderland,32.12,29.25,38.62,1-1
+37,2027-05-23,Newcastle,Crystal Palace,35.08,26.39,38.52,1-1
+37,2027-05-23,Everton,Arsenal,38.09,27.76,34.15,1-1
+37,2027-05-23,Brighton,Liverpool,38.61,27.26,34.12,1-1
+37,2027-05-23,Brentford,Hull,33.03,34.47,32.5,0-0
+37,2027-05-23,Bournemouth,Chelsea,36.55,27.44,36.01,1-1
+37,2027-05-23,Fulham,Coventry,46.93,25.03,28.04,1-1
+38,2027-05-30,Man United,Fulham,40.37,25.21,34.42,1-1
+38,2027-05-30,Arsenal,Brighton,41.73,20.72,37.55,2-0
+38,2027-05-30,Aston Villa,Tottenham,43.43,21.82,34.75,1-1
+38,2027-05-30,Chelsea,Brentford,33.64,26.52,39.84,1-1
+38,2027-05-30,Coventry,Nott'm Forest,29.2,29.05,41.76,1-1
+38,2027-05-30,Crystal Palace,Leeds,33.93,29.14,36.93,1-1
+38,2027-05-30,Hull,Newcastle,35.98,33.55,30.47,0-0
+38,2027-05-30,Ipswich,Everton,44.69,26.34,28.98,1-1
+38,2027-05-30,Liverpool,Bournemouth,44.44,21.66,33.9,1-1
+38,2027-05-30,Sunderland,Man City,38.14,27.61,34.26,1-1

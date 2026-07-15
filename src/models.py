@@ -61,12 +61,12 @@ class DixonColesModel:
         log_fact_away = gammaln(away_goals + 1)
         
         # Initial parameters: 
-        # attack parameters (first num_teams - 1 params, default 1.0)
+        # attack parameters (first num_teams params, default 1.0)
         # defense parameters (next num_teams params, default -1.0)
         # home advantage (1 param, default 0.25 in log-space)
         # rho (1 param, default 0.0)
         init_params = np.concatenate([
-            np.ones(num_teams - 1),   # Attack (free parameters, index 0 is fixed at 1.0)
+            np.ones(num_teams),       # Attack (all optimized freely)
             -np.ones(num_teams),      # Defense (log-defense, so negative is better defense)
             [0.25],                   # Log-Home Advantage
             [0.0]                     # Rho
@@ -74,12 +74,13 @@ class DixonColesModel:
         
         # Objective: Negative Log-Likelihood
         def negative_log_likelihood(params):
-            alpha = np.ones(num_teams)
-            alpha[1:] = params[:num_teams - 1]
-            
-            beta = np.exp(params[num_teams - 1 : 2*num_teams - 1]) # exponentiate to keep positive
-            gamma = np.exp(params[2*num_teams - 1])               # exponentiate to keep positive
+            alpha = params[:num_teams]
+            beta = np.exp(params[num_teams:2*num_teams]) # exponentiate to keep positive
+            gamma = np.exp(params[2*num_teams])          # exponentiate to keep positive
             rho = params[-1]
+            
+            # Constraint penalty: Mean of alpha should be 1.0
+            penalty = 10000.0 * (np.mean(alpha) - 1.0)**2
             
             # Dixon-Coles parameters for each match
             lmbda = alpha[home_idx] * beta[away_idx] * gamma
@@ -119,13 +120,13 @@ class DixonColesModel:
             log_probs = log_p_home + log_p_away + log_adj
             
             # Weighted negative log-likelihood
-            nll = -np.sum(weights * log_probs)
+            nll = -np.sum(weights * log_probs) + penalty
             return nll
             
         # Optimization bounds
         bounds = []
-        # attack bounds (free parameters)
-        bounds.extend([(0.1, 10.0) for _ in range(num_teams - 1)])
+        # attack bounds
+        bounds.extend([(0.1, 10.0) for _ in range(num_teams)])
         # defense bounds (log-space: -5 to 2)
         bounds.extend([(-5.0, 2.0) for _ in range(num_teams)])
         # log home advantage bounds
@@ -141,16 +142,15 @@ class DixonColesModel:
             print("Optimization successful!")
             # Extract parameters
             params = res.x
-            self.attack_params = np.ones(num_teams)
-            self.attack_params[1:] = params[:num_teams - 1]
+            self.attack_params = params[:num_teams]
             
             # Normalize attacks so they average to 1.0 exactly
             mean_attack = np.mean(self.attack_params)
             self.attack_params = self.attack_params / mean_attack
             
             # Adjust defense parameters for attack scaling
-            self.defense_params = np.exp(params[num_teams - 1 : 2*num_teams - 1]) * mean_attack
-            self.home_advantage = np.exp(params[2*num_teams - 1])
+            self.defense_params = np.exp(params[num_teams:2*num_teams]) * mean_attack
+            self.home_advantage = np.exp(params[2*num_teams])
             self.rho = params[-1]
             
             # Print average stats
