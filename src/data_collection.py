@@ -586,9 +586,18 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Leeds', 'Player': 'Crysencio Summerville', 'TransferType': 'Out', 'OtherClub': 'West Ham', 'Fee_M_Euros': 29.0, 'Position': 'Forward', 'Importance': 0.18},
 
         # Sunderland (Promoted)
-        {'Team': 'Sunderland', 'Player': 'Salis Abdul Samed', 'TransferType': 'In', 'OtherClub': 'Lens', 'Fee_M_Euros': 5.0, 'Position': 'Midfielder', 'Importance': 0.12},
-        {'Team': 'Sunderland', 'Player': 'Alan Browne', 'TransferType': 'In', 'OtherClub': 'Preston', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.12},
-        {'Team': 'Sunderland', 'Player': 'Milan Aleksic', 'TransferType': 'In', 'OtherClub': 'Radnicki', 'Fee_M_Euros': 3.7, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Sunderland', 'Player': 'Robin Roefs', 'TransferType': 'In', 'OtherClub': 'NEC Nijmegen', 'Fee_M_Euros': 6.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
+        {'Team': 'Sunderland', 'Player': 'Omar Alderete', 'TransferType': 'In', 'OtherClub': 'Getafe', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Sunderland', 'Player': 'Kevin Danso', 'TransferType': 'In', 'OtherClub': 'Lens', 'Fee_M_Euros': 22.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Sunderland', 'Player': 'Reinildo Mandava', 'TransferType': 'In', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Sunderland', 'Player': 'Thomas Meunier', 'TransferType': 'In', 'OtherClub': 'Lille', 'Fee_M_Euros': 5.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Sunderland', 'Player': 'Nordi Mukiele', 'TransferType': 'In', 'OtherClub': 'PSG', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Sunderland', 'Player': 'Enzo Le Fée', 'TransferType': 'In', 'OtherClub': 'Roma', 'Fee_M_Euros': 20.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Sunderland', 'Player': 'Noah Sadiki', 'TransferType': 'In', 'OtherClub': 'Union SG', 'Fee_M_Euros': 12.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Sunderland', 'Player': 'Granit Xhaka', 'TransferType': 'In', 'OtherClub': 'Bayer Leverkusen', 'Fee_M_Euros': 25.0, 'Position': 'Midfielder', 'Importance': 0.17},
+        {'Team': 'Sunderland', 'Player': 'Brian Brobbey', 'TransferType': 'In', 'OtherClub': 'Ajax', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Sunderland', 'Player': 'Wilson Isidor', 'TransferType': 'In', 'OtherClub': 'Zenit', 'Fee_M_Euros': 6.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Sunderland', 'Player': 'Nilson Angulo', 'TransferType': 'In', 'OtherClub': 'Anderlecht', 'Fee_M_Euros': 8.0, 'Position': 'Forward', 'Importance': 0.11},
         {'Team': 'Sunderland', 'Player': 'Jack Clarke', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.18},
 
         # Ipswich
