@@ -585,7 +585,7 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Leeds', 'Player': 'Georginio Rutter', 'TransferType': 'Out', 'OtherClub': 'Brighton', 'Fee_M_Euros': 47.0, 'Position': 'Forward', 'Importance': 0.16},
         {'Team': 'Leeds', 'Player': 'Crysencio Summerville', 'TransferType': 'Out', 'OtherClub': 'West Ham', 'Fee_M_Euros': 29.0, 'Position': 'Forward', 'Importance': 0.18},
 
-        # Sunderland (Promoted)
+        # Sunderland
         {'Team': 'Sunderland', 'Player': 'Robin Roefs', 'TransferType': 'In', 'OtherClub': 'NEC Nijmegen', 'Fee_M_Euros': 6.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
         {'Team': 'Sunderland', 'Player': 'Omar Alderete', 'TransferType': 'In', 'OtherClub': 'Getafe', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.12},
         {'Team': 'Sunderland', 'Player': 'Kevin Danso', 'TransferType': 'In', 'OtherClub': 'Lens', 'Fee_M_Euros': 22.0, 'Position': 'Defender', 'Importance': 0.14},
@@ -674,7 +674,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Crystal Palace': 490.0,
         'Everton': 530.0,
         'Leeds': 390.0,
-        'Sunderland': 375.0,
+        'Sunderland': 450.0,
         'Fulham': 310.0,
         'Ipswich': 360.0,
         'Coventry': 320.0,
