@@ -294,18 +294,18 @@ def save_squad_values(raw_dir='data/raw'):
     """Save squad market values from Transfermarkt for the 2026/27 season."""
     os.makedirs(raw_dir, exist_ok=True)
     squad_values = {
-        'Man City': 1440.0, # in Millions of Euros
-        'Arsenal': 1300.0,
-        'Chelsea': 1220.0,
-        'Liverpool': 979.5,
+        'Man City': 1400.0, # in Millions of Euros
+        'Arsenal': 1350.0,
+        'Chelsea': 1300.0,
+        'Liverpool': 880.0,
         'Tottenham': 880.5,
-        'Man United': 872.55,
+        'Man United': 900.0,
         'Brighton': 678.0,
         'Newcastle': 591.8,
         'Crystal Palace': 540.55,
         'Bournemouth': 537.88,
         'Brentford': 523.3,
-        'Aston Villa': 522.2,
+        'Aston Villa': 500.0,
         'Nott\'m Forest': 507.8,
         'Everton': 443.15,
         'Sunderland': 399.18,

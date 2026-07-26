@@ -9,11 +9,11 @@ This report compares the v2 feature upgrades (ON vs. OFF) against the v1 baselin
 | **1. Baseline (v1 Model)** | 1.0620 | 0.2137 | 43.42% |
 | **2. Time-weighted Decay (phi=0.003)** | 1.0935 | 0.2218 | 35.53% |
 | **3. Dynamic Elo Updates ON** | 1.0446 | 0.2093 | 46.58% |
-| **4. Promoted Handling ON** | 1.0625 | 0.2139 | 43.16% |
+| **4. Promoted Handling ON** | 1.0629 | 0.2140 | 43.16% |
 | **5. Injury Adjustments ON** | 1.0620 | 0.2137 | 43.42% |
 | **6. Rest Fatigue/Congestion ON** | 1.0570 | 0.2127 | 46.05% |
 | **7. Stateful Form Correlation ON** | 1.0986 | 0.2227 | 35.26% |
-| **8. Upgraded Ensemble (All ON)** | 1.1047 | 0.2243 | 32.63% |
+| **8. Upgraded Ensemble (All ON)** | 1.1049 | 0.2243 | 32.11% |
 | **9. Betting Market Implied Odds** | 1.0986 | 0.2222 | 45.00% |
 
 ---
