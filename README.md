@@ -67,6 +67,9 @@ Run the Streamlit application to view interactive standings, points and rank pro
 streamlit run app.py
 ```
 
+![Dashboard Preview](assets/dashboard_preview.png)
+
+
 ### 6. Run Gameweek Weekly Refresh
 Simulate a completed gameweek (e.g. Gameweek 1) using the automated emulator to move fixtures to completed matches with mock scores, capture prediction snapshots, and refresh all projected standings:
 ```bash
