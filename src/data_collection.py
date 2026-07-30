@@ -549,11 +549,22 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Brentford', 'Player': 'Christian Nørgaard', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 15.0, 'Position': 'Midfielder', 'Importance': 0.13},
 
         # Crystal Palace
+        {'Team': 'Crystal Palace', 'Player': 'Walter Benítez', 'TransferType': 'In', 'OtherClub': 'PSV', 'Fee_M_Euros': 6.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
+        {'Team': 'Crystal Palace', 'Player': 'Axel Disasi', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Crystal Palace', 'Player': 'Benjamin Chilwell', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 20.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Crystal Palace', 'Player': 'Oscar Mingueza', 'TransferType': 'In', 'OtherClub': 'Celta Vigo', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Crystal Palace', 'Player': 'Takehiro Tomiyasu', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Crystal Palace', 'Player': 'Quinten Timber', 'TransferType': 'In', 'OtherClub': 'Feyenoord', 'Fee_M_Euros': 28.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Crystal Palace', 'Player': 'Jørgen Strand Larsen', 'TransferType': 'In', 'OtherClub': 'Celta Vigo', 'Fee_M_Euros': 27.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Crystal Palace', 'Player': 'Ismaila Sarr', 'TransferType': 'In', 'OtherClub': 'Marseille', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Crystal Palace', 'Player': 'Dwight McNeil', 'TransferType': 'In', 'OtherClub': 'Everton', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.13},
         {'Team': 'Crystal Palace', 'Player': 'Eddie Nketiah', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.14},
-        {'Team': 'Crystal Palace', 'Player': 'Maxence Lacroix', 'TransferType': 'In', 'OtherClub': 'Wolfsburg', 'Fee_M_Euros': 21.0, 'Position': 'Defender', 'Importance': 0.14},
-        {'Team': 'Crystal Palace', 'Player': 'Ismaila Sarr', 'TransferType': 'In', 'OtherClub': 'Marseille', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Crystal Palace', 'Player': 'Evann Guessand', 'TransferType': 'In', 'OtherClub': 'Nice', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.11},
+        {'Team': 'Crystal Palace', 'Player': 'Yeremy Pino', 'TransferType': 'In', 'OtherClub': 'Villarreal', 'Fee_M_Euros': 32.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Crystal Palace', 'Player': 'Dario Osorio', 'TransferType': 'In', 'OtherClub': 'Midtjylland', 'Fee_M_Euros': 10.0, 'Position': 'Forward', 'Importance': 0.11},
         {'Team': 'Crystal Palace', 'Player': 'Michael Olise', 'TransferType': 'Out', 'OtherClub': 'Bayern Munich', 'Fee_M_Euros': 53.0, 'Position': 'Forward', 'Importance': 0.18},
         {'Team': 'Crystal Palace', 'Player': 'Joachim Andersen', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.15},
+        {'Team': 'Crystal Palace', 'Player': 'Marc Guéhi', 'TransferType': 'Out', 'OtherClub': 'Man City', 'Fee_M_Euros': 60.0, 'Position': 'Defender', 'Importance': 0.18},
 
         # Everton
         {'Team': 'Everton', 'Player': 'Jake O\'Brien', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 19.5, 'Position': 'Defender', 'Importance': 0.12},
@@ -685,7 +696,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Brentford': 600.0,
         'Aston Villa': 685.0,
         'Nott\'m Forest': 525.0,
-        'Crystal Palace': 490.0,
+        'Crystal Palace': 560.0,
         'Everton': 530.0,
         'Leeds': 480.0,
         'Sunderland': 450.0,
