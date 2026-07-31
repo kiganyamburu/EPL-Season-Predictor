@@ -582,9 +582,19 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Everton', 'Player': 'Ben Godfrey', 'TransferType': 'Out', 'OtherClub': 'Atalanta', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.10},
 
         # Nott'm Forest
-        {'Team': 'Nott\'m Forest', 'Player': 'Elliot Anderson', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 41.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Nott\'m Forest', 'Player': 'John Victor', 'TransferType': 'In', 'OtherClub': 'Botafogo', 'Fee_M_Euros': 8.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
+        {'Team': 'Nott\'m Forest', 'Player': 'Ousmane Diomande', 'TransferType': 'In', 'OtherClub': 'Sporting CP', 'Fee_M_Euros': 40.0, 'Position': 'Defender', 'Importance': 0.15},
         {'Team': 'Nott\'m Forest', 'Player': 'Nikola Milenkovic', 'TransferType': 'In', 'OtherClub': 'Fiorentina', 'Fee_M_Euros': 14.0, 'Position': 'Defender', 'Importance': 0.14},
-        {'Team': 'Nott\'m Forest', 'Player': 'Ramon Sosa', 'TransferType': 'In', 'OtherClub': 'Talleres', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Nott\'m Forest', 'Player': 'Daniel Muñoz', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Nott\'m Forest', 'Player': 'Luca Netz', 'TransferType': 'In', 'OtherClub': 'Borussia Monchengladbach', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Nott\'m Forest', 'Player': 'Nicolò Savona', 'TransferType': 'In', 'OtherClub': 'Juventus', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Nott\'m Forest', 'Player': 'Xaver Schlager', 'TransferType': 'In', 'OtherClub': 'RB Leipzig', 'Fee_M_Euros': 20.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Nott\'m Forest', 'Player': 'James McAtee', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 25.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Nott\'m Forest', 'Player': 'Igor Jesus', 'TransferType': 'In', 'OtherClub': 'Botafogo', 'Fee_M_Euros': 22.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Nott\'m Forest', 'Player': 'Arnaud Kalimuendo', 'TransferType': 'In', 'OtherClub': 'Rennes', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Nott\'m Forest', 'Player': 'Dan Ndoye', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Nott\'m Forest', 'Player': 'Anthony Elanga', 'TransferType': 'Out', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 45.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Nott\'m Forest', 'Player': 'Taiwo Awoniyi', 'TransferType': 'Out', 'OtherClub': 'Coventry', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.14},
         {'Team': 'Nott\'m Forest', 'Player': 'Moussa Niakhaté', 'TransferType': 'Out', 'OtherClub': 'Lyon', 'Fee_M_Euros': 32.0, 'Position': 'Defender', 'Importance': 0.12},
         {'Team': 'Nott\'m Forest', 'Player': 'Orel Mangala', 'TransferType': 'Out', 'OtherClub': 'Lyon', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.12},
 
