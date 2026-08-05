@@ -669,7 +669,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Fulham': 310.0,
         'Ipswich': 360.0,
         'Coventry': 320.0,
-        'Hull': 88.0
+        'Hull': 280.0
     }
     df = pd.DataFrame(list(squad_values.items()), columns=['Team', 'MarketValue_M_Euros'])
     path = os.path.join(raw_dir, "squad_values.csv")
