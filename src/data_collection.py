@@ -624,8 +624,20 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Coventry', 'Player': 'Callum O\'Hare', 'TransferType': 'Out', 'OtherClub': 'Sheffield United', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.14},
 
         # Hull (Promoted)
+        {'Team': 'Hull', 'Player': 'Jack Butland', 'TransferType': 'In', 'OtherClub': 'Rangers', 'Fee_M_Euros': 5.0, 'Position': 'Goalkeeper', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Konstantinos Tzolakis', 'TransferType': 'In', 'OtherClub': 'Olympiacos', 'Fee_M_Euros': 6.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
         {'Team': 'Hull', 'Player': 'Charlie Hughes', 'TransferType': 'In', 'OtherClub': 'Wigan', 'Fee_M_Euros': 4.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Ryan Giles', 'TransferType': 'In', 'OtherClub': 'Luton', 'Fee_M_Euros': 5.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Hull', 'Player': 'Brooke Norton-Cuffy', 'TransferType': 'In', 'OtherClub': 'Genoa', 'Fee_M_Euros': 2.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Hull', 'Player': 'Matthew Targett', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 6.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Lucas Gourna-Douath', 'TransferType': 'In', 'OtherClub': 'Salzburg', 'Fee_M_Euros': 12.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Hull', 'Player': 'Tim Iroegbunam', 'TransferType': 'In', 'OtherClub': 'Everton', 'Fee_M_Euros': 11.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Hull', 'Player': 'Hidemasa Morita', 'TransferType': 'In', 'OtherClub': 'Sporting CP', 'Fee_M_Euros': 14.0, 'Position': 'Midfielder', 'Importance': 0.15},
         {'Team': 'Hull', 'Player': 'Mohamed Belloumi', 'TransferType': 'In', 'OtherClub': 'Farense', 'Fee_M_Euros': 5.5, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Joe Gelhardt', 'TransferType': 'In', 'OtherClub': 'Leeds', 'Fee_M_Euros': 6.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Oliver McBurnie', 'TransferType': 'In', 'OtherClub': 'Las Palmas', 'Fee_M_Euros': 0.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Benjamin Tzolis', 'TransferType': 'In', 'OtherClub': 'Club Brugge', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Hull', 'Player': 'Mohamed-Ali Cho', 'TransferType': 'In', 'OtherClub': 'Nice', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.13},
         {'Team': 'Hull', 'Player': 'Jacob Greaves', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 21.5, 'Position': 'Defender', 'Importance': 0.16},
         {'Team': 'Hull', 'Player': 'Jaden Philogene', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.16}
     ]
