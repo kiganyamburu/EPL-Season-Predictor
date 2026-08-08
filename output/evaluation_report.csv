@@ -2,9 +2,9 @@ Configuration,Log-Loss,Brier Score,Accuracy
 1. Baseline (v1 Model),1.062,0.2137,43.42%
 2. Time-weighted Decay (phi=0.003),1.0935,0.2218,35.53%
 3. Dynamic Elo Updates ON,1.0446,0.2093,46.58%
-4. Promoted Handling ON,1.0628,0.2139,43.16%
+4. Promoted Handling ON,1.0629,0.214,42.89%
 5. Injury Adjustments ON,1.062,0.2137,43.42%
 6. Rest Fatigue/Congestion ON,1.057,0.2127,46.05%
 7. Stateful Form Correlation ON,1.0986,0.2227,35.26%
-8. Upgraded Ensemble (All ON),1.1042,0.2241,32.37%
+8. Upgraded Ensemble (All ON),1.1044,0.2241,32.37%
 9. Betting Market Implied Odds,1.0986,0.2222,45.00%
