@@ -294,26 +294,26 @@ def save_squad_values(raw_dir='data/raw'):
     """Save squad market values from Transfermarkt for the 2026/27 season."""
     os.makedirs(raw_dir, exist_ok=True)
     squad_values = {
-        'Man City': 1400.0, # in Millions of Euros
-        'Arsenal': 1350.0,
-        'Chelsea': 1300.0,
-        'Liverpool': 880.0,
-        'Tottenham': 880.5,
-        'Man United': 900.0,
-        'Brighton': 678.0,
-        'Newcastle': 591.8,
-        'Crystal Palace': 540.55,
-        'Bournemouth': 537.88,
-        'Brentford': 523.3,
-        'Aston Villa': 500.0,
-        'Nott\'m Forest': 507.8,
-        'Everton': 443.15,
-        'Sunderland': 399.18,
-        'Fulham': 356.2,
-        'Leeds': 353.8,
-        'Ipswich': 208.7,
-        'Coventry': 199.35,
-        'Hull': 66.15
+        'Man City': 1470.0, # in Millions of Euros
+        'Chelsea': 1410.0,
+        'Arsenal': 1410.0,
+        'Liverpool': 979.5,
+        'Tottenham': 920.5,
+        'Man United': 874.3,
+        'Brighton': 619.5,
+        'Bournemouth': 572.88,
+        'Newcastle': 567.8,
+        'Brentford': 565.4,
+        'Aston Villa': 536.0,
+        'Nott\'m Forest': 517.8,
+        'Crystal Palace': 504.7,
+        'Everton': 434.1,
+        'Leeds': 408.6,
+        'Sunderland': 383.18,
+        'Fulham': 301.3,
+        'Ipswich': 238.15,
+        'Coventry': 236.85,
+        'Hull': 95.9
     }
     df = pd.DataFrame(list(squad_values.items()), columns=['Team', 'MarketValue_M_Euros'])
     path = os.path.join(raw_dir, "squad_values.csv")
