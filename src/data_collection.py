@@ -592,12 +592,21 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Sunderland', 'Player': 'Jack Clarke', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.18},
 
         # Ipswich
-        {'Team': 'Ipswich', 'Player': 'Omari Hutchinson', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 23.5, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Ipswich', 'Player': 'Arijanet Muric', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 9.5, 'Position': 'Goalkeeper', 'Importance': 0.12},
+        {'Team': 'Ipswich', 'Player': 'Kjell Scherpen', 'TransferType': 'In', 'OtherClub': 'Brighton', 'Fee_M_Euros': 5.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
         {'Team': 'Ipswich', 'Player': 'Jacob Greaves', 'TransferType': 'In', 'OtherClub': 'Hull', 'Fee_M_Euros': 21.5, 'Position': 'Defender', 'Importance': 0.14},
-        {'Team': 'Ipswich', 'Player': 'Liam Delap', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 17.8, 'Position': 'Forward', 'Importance': 0.14},
-        {'Team': 'Ipswich', 'Player': 'Jack Clarke', 'TransferType': 'In', 'OtherClub': 'Sunderland', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.14},
-        {'Team': 'Ipswich', 'Player': 'Sammie Szmodics', 'TransferType': 'In', 'OtherClub': 'Blackburn', 'Fee_M_Euros': 10.6, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Ben Johnson', 'TransferType': 'In', 'OtherClub': 'West Ham', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Ipswich', 'Player': 'Issa Diop', 'TransferType': 'In', 'OtherClub': 'Fulham', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Ipswich', 'Player': 'Kalvin Phillips', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Ipswich', 'Player': 'Jens-Lys Cajuste', 'TransferType': 'In', 'OtherClub': 'Napoli', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Ipswich', 'Player': 'Omari Hutchinson', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 23.5, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Ipswich', 'Player': 'Jack Clarke', 'TransferType': 'In', 'OtherClub': 'Sunderland', 'Fee_M_Euros': 18.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Julio Enciso', 'TransferType': 'In', 'OtherClub': 'Brighton', 'Fee_M_Euros': 15.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Ipswich', 'Player': 'Abdul Fatawu', 'TransferType': 'In', 'OtherClub': 'Leicester', 'Fee_M_Euros': 17.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Ipswich', 'Player': 'Liam Delap', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 17.8, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Ipswich', 'Player': 'Daizen Maeda', 'TransferType': 'In', 'OtherClub': 'Celtic', 'Fee_M_Euros': 14.0, 'Position': 'Forward', 'Importance': 0.13},
         {'Team': 'Ipswich', 'Player': 'Vaclav Hladky', 'TransferType': 'Out', 'OtherClub': 'Burnley', 'Fee_M_Euros': 0.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
+        {'Team': 'Ipswich', 'Player': 'Luke Woolfenden', 'TransferType': 'Out', 'OtherClub': 'Coventry', 'Fee_M_Euros': 4.0, 'Position': 'Defender', 'Importance': 0.11},
 
         # Coventry (Promoted)
         {'Team': 'Coventry', 'Player': 'Daniel Bentley', 'TransferType': 'In', 'OtherClub': 'Wolves', 'Fee_M_Euros': 3.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
@@ -646,7 +655,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Leeds': 390.0,
         'Sunderland': 375.0,
         'Fulham': 310.0,
-        'Ipswich': 295.0,
+        'Ipswich': 360.0,
         'Coventry': 320.0,
         'Hull': 88.0
     }
