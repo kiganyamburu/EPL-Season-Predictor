@@ -600,9 +600,18 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Ipswich', 'Player': 'Vaclav Hladky', 'TransferType': 'Out', 'OtherClub': 'Burnley', 'Fee_M_Euros': 0.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
 
         # Coventry (Promoted)
+        {'Team': 'Coventry', 'Player': 'Daniel Bentley', 'TransferType': 'In', 'OtherClub': 'Wolves', 'Fee_M_Euros': 3.0, 'Position': 'Goalkeeper', 'Importance': 0.11},
+        {'Team': 'Coventry', 'Player': 'Aurèle Amenda', 'TransferType': 'In', 'OtherClub': 'Eintracht Frankfurt', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Coventry', 'Player': 'Kaine Kesler-Hayden', 'TransferType': 'In', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 5.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Coventry', 'Player': 'Ethan Pinnock', 'TransferType': 'In', 'OtherClub': 'Brentford', 'Fee_M_Euros': 8.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Coventry', 'Player': 'Luke Woolfenden', 'TransferType': 'In', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 4.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Coventry', 'Player': 'Matt Grimes', 'TransferType': 'In', 'OtherClub': 'Swansea', 'Fee_M_Euros': 6.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Coventry', 'Player': 'Gustavo Hamer', 'TransferType': 'In', 'OtherClub': 'Sheffield United', 'Fee_M_Euros': 15.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Coventry', 'Player': 'Frank Onyeka', 'TransferType': 'In', 'OtherClub': 'Brentford', 'Fee_M_Euros': 10.0, 'Position': 'Midfielder', 'Importance': 0.13},
         {'Team': 'Coventry', 'Player': 'Jack Rudoni', 'TransferType': 'In', 'OtherClub': 'Huddersfield', 'Fee_M_Euros': 6.0, 'Position': 'Midfielder', 'Importance': 0.14},
-        {'Team': 'Coventry', 'Player': 'Oliver Dovin', 'TransferType': 'In', 'OtherClub': 'Hammarby', 'Fee_M_Euros': 1.9, 'Position': 'Goalkeeper', 'Importance': 0.12},
-        {'Team': 'Coventry', 'Player': 'Brandon Thomas-Asante', 'TransferType': 'In', 'OtherClub': 'West Brom', 'Fee_M_Euros': 2.5, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Coventry', 'Player': 'Taiwo Awoniyi', 'TransferType': 'In', 'OtherClub': 'Nott\'m Forest', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Coventry', 'Player': 'Loum Tchaouna', 'TransferType': 'In', 'OtherClub': 'Lazio', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Coventry', 'Player': 'Brandon Thomas-Asante', 'TransferType': 'In', 'OtherClub': 'West Brom', 'Fee_M_Euros': 2.5, 'Position': 'Forward', 'Importance': 0.11},
         {'Team': 'Coventry', 'Player': 'Callum O\'Hare', 'TransferType': 'Out', 'OtherClub': 'Sheffield United', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.14},
 
         # Hull (Promoted)
@@ -638,7 +647,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Sunderland': 375.0,
         'Fulham': 310.0,
         'Ipswich': 295.0,
-        'Coventry': 240.0,
+        'Coventry': 320.0,
         'Hull': 88.0
     }
     df = pd.DataFrame(list(squad_values.items()), columns=['Team', 'MarketValue_M_Euros'])
