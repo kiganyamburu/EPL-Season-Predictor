@@ -705,7 +705,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Newcastle': 640.0,
         'Brentford': 600.0,
         'Aston Villa': 685.0,
-        'Nott\'m Forest': 525.0,
+        'Nott\'m Forest': 610.0,
         'Crystal Palace': 560.0,
         'Everton': 530.0,
         'Leeds': 480.0,
