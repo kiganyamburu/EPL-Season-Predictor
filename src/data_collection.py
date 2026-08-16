@@ -531,11 +531,22 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Bournemouth', 'Player': 'Dean Huijsen', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.11},
 
         # Brentford
+        {'Team': 'Brentford', 'Player': 'Caoimhín Kelleher', 'TransferType': 'In', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 18.0, 'Position': 'Goalkeeper', 'Importance': 0.13},
         {'Team': 'Brentford', 'Player': 'Igor Thiago', 'TransferType': 'In', 'OtherClub': 'Club Brugge', 'Fee_M_Euros': 33.0, 'Position': 'Forward', 'Importance': 0.14},
         {'Team': 'Brentford', 'Player': 'Fabio Carvalho', 'TransferType': 'In', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 27.0, 'Position': 'Midfielder', 'Importance': 0.14},
         {'Team': 'Brentford', 'Player': 'Sepp van den Berg', 'TransferType': 'In', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Brentford', 'Player': 'Michael Kayode', 'TransferType': 'In', 'OtherClub': 'Fiorentina', 'Fee_M_Euros': 18.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Brentford', 'Player': 'El Hadji Malick Diouf', 'TransferType': 'In', 'OtherClub': 'Slavia Prague', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Brentford', 'Player': 'Mamadou Sangaré', 'TransferType': 'In', 'OtherClub': 'Rapid Wien', 'Fee_M_Euros': 10.0, 'Position': 'Midfielder', 'Importance': 0.10},
+        {'Team': 'Brentford', 'Player': 'Antoni Milambo', 'TransferType': 'In', 'OtherClub': 'Feyenoord', 'Fee_M_Euros': 18.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Brentford', 'Player': 'Dango Ouattara', 'TransferType': 'In', 'OtherClub': 'Bournemouth', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Brentford', 'Player': 'Callum Wilson', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 10.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Brentford', 'Player': 'Jaidon Anthony', 'TransferType': 'In', 'OtherClub': 'Bournemouth', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.11},
         {'Team': 'Brentford', 'Player': 'Ivan Toney', 'TransferType': 'Out', 'OtherClub': 'Al-Ahli', 'Fee_M_Euros': 42.0, 'Position': 'Forward', 'Importance': 0.18},
         {'Team': 'Brentford', 'Player': 'David Raya', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 32.0, 'Position': 'Goalkeeper', 'Importance': 0.15},
+        {'Team': 'Brentford', 'Player': 'Yoane Wissa', 'TransferType': 'Out', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 35.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Brentford', 'Player': 'Bryan Mbeumo', 'TransferType': 'Out', 'OtherClub': 'Man United', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.18},
+        {'Team': 'Brentford', 'Player': 'Christian Nørgaard', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 15.0, 'Position': 'Midfielder', 'Importance': 0.13},
 
         # Crystal Palace
         {'Team': 'Crystal Palace', 'Player': 'Eddie Nketiah', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.14},
