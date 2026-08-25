@@ -575,7 +575,7 @@ def save_squad_values(raw_dir='data/raw'):
         'Tottenham': 1180.0,
         'Man United': 1150.0,
         'Brighton': 655.0,
-        'Bournemouth': 575.0,
+        'Bournemouth': 620.0,
         'Newcastle': 565.0,
         'Brentford': 560.0,
         'Aston Villa': 545.0,
