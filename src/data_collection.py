@@ -480,11 +480,22 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Fulham', 'Player': 'Tosin Adarabioyo', 'TransferType': 'Out', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
 
         # Bournemouth
+        {'Team': 'Bournemouth', 'Player': 'Djordje Petrović', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 25.0, 'Position': 'Goalkeeper', 'Importance': 0.13},
+        {'Team': 'Bournemouth', 'Player': 'Michele Di Gregorio', 'TransferType': 'In', 'OtherClub': 'Juventus', 'Fee_M_Euros': 18.0, 'Position': 'Goalkeeper', 'Importance': 0.12},
+        {'Team': 'Bournemouth', 'Player': 'Fraser Forster', 'TransferType': 'In', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 3.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
+        {'Team': 'Bournemouth', 'Player': 'Bafodé Diakité', 'TransferType': 'In', 'OtherClub': 'Lille', 'Fee_M_Euros': 22.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Bournemouth', 'Player': 'António Tavares', 'TransferType': 'In', 'OtherClub': 'Transferred', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.09},
+        {'Team': 'Bournemouth', 'Player': 'Juan Luis Sánchez', 'TransferType': 'In', 'OtherClub': 'Transferred', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Bournemouth', 'Player': 'Adrien Truffert', 'TransferType': 'In', 'OtherClub': 'Rennes', 'Fee_M_Euros': 20.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Bournemouth', 'Player': 'Amine Adli', 'TransferType': 'In', 'OtherClub': 'Bayer Leverkusen', 'Fee_M_Euros': 30.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Bournemouth', 'Player': 'Álvaro Rodríguez', 'TransferType': 'In', 'OtherClub': 'Real Madrid', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.12},
         {'Team': 'Bournemouth', 'Player': 'Evanilson', 'TransferType': 'In', 'OtherClub': 'FC Porto', 'Fee_M_Euros': 47.0, 'Position': 'Forward', 'Importance': 0.16},
-        {'Team': 'Bournemouth', 'Player': 'Dean Huijsen', 'TransferType': 'In', 'OtherClub': 'Juventus', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.12},
         {'Team': 'Bournemouth', 'Player': 'Julian Araujo', 'TransferType': 'In', 'OtherClub': 'Barcelona', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.10},
         {'Team': 'Bournemouth', 'Player': 'Dominic Solanke', 'TransferType': 'Out', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.18},
+        {'Team': 'Bournemouth', 'Player': 'Milos Kerkez', 'TransferType': 'Out', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 40.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Bournemouth', 'Player': 'Marcos Senesi', 'TransferType': 'Out', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.13},
         {'Team': 'Bournemouth', 'Player': 'Lloyd Kelly', 'TransferType': 'Out', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Bournemouth', 'Player': 'Dean Huijsen', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.11},
 
         # Brentford
         {'Team': 'Brentford', 'Player': 'Igor Thiago', 'TransferType': 'In', 'OtherClub': 'Club Brugge', 'Fee_M_Euros': 33.0, 'Position': 'Forward', 'Importance': 0.14},
