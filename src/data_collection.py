@@ -353,12 +353,32 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Liverpool', 'Player': 'Sepp van den Berg', 'TransferType': 'Out', 'OtherClub': 'Brentford', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.07},
 
         # Chelsea
+        {'Team': 'Chelsea', 'Player': 'Emiliano Martínez', 'TransferType': 'In', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 40.0, 'Position': 'Goalkeeper', 'Importance': 0.14},
+        {'Team': 'Chelsea', 'Player': 'Mike Penders', 'TransferType': 'In', 'OtherClub': 'Genk', 'Fee_M_Euros': 20.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
+        {'Team': 'Chelsea', 'Player': 'Maxence Lacroix', 'TransferType': 'In', 'OtherClub': 'Wolfsburg', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Chelsea', 'Player': 'Aaron Anselmino', 'TransferType': 'In', 'OtherClub': 'Boca Juniors', 'Fee_M_Euros': 18.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Chelsea', 'Player': 'Mamadou Sarr', 'TransferType': 'In', 'OtherClub': 'Strasbourg', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.08},
+        {'Team': 'Chelsea', 'Player': 'Jorrel Hato', 'TransferType': 'In', 'OtherClub': 'Ajax', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Chelsea', 'Player': 'Pep Chavarría', 'TransferType': 'In', 'OtherClub': 'Rayo Vallecano', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.08},
+        {'Team': 'Chelsea', 'Player': 'João Neves', 'TransferType': 'In', 'OtherClub': 'PSG', 'Fee_M_Euros': 70.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Jordan Henderson', 'TransferType': 'In', 'OtherClub': 'Ajax', 'Fee_M_Euros': 5.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Chelsea', 'Player': 'Andrey Santos', 'TransferType': 'In', 'OtherClub': 'Strasbourg', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.10},
+        {'Team': 'Chelsea', 'Player': 'Reggie Watson', 'TransferType': 'In', 'OtherClub': 'Chelsea Academy', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.05},
+        {'Team': 'Chelsea', 'Player': 'João Pedro', 'TransferType': 'In', 'OtherClub': 'Brighton', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Liam Delap', 'TransferType': 'In', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 35.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Chelsea', 'Player': 'Estêvão', 'TransferType': 'In', 'OtherClub': 'Palmeiras', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Alejandro Garnacho', 'TransferType': 'In', 'OtherClub': 'Man United', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Morgan Rogers', 'TransferType': 'In', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 50.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Chelsea', 'Player': 'Jamie Gittens', 'TransferType': 'In', 'OtherClub': 'Borussia Dortmund', 'Fee_M_Euros': 55.0, 'Position': 'Forward', 'Importance': 0.14},
         {'Team': 'Chelsea', 'Player': 'Pedro Neto', 'TransferType': 'In', 'OtherClub': 'Wolves', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
-        {'Team': 'Chelsea', 'Player': 'Joao Felix', 'TransferType': 'In', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 52.0, 'Position': 'Forward', 'Importance': 0.14},
-        {'Team': 'Chelsea', 'Player': 'Kiernan Dewsbury-Hall', 'TransferType': 'In', 'OtherClub': 'Leicester', 'Fee_M_Euros': 35.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Chelsea', 'Player': 'Joao Felix', 'TransferType': 'In', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 52.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Chelsea', 'Player': 'Enzo Fernández', 'TransferType': 'Out', 'OtherClub': 'Man City', 'Fee_M_Euros': 110.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Chelsea', 'Player': 'Noni Madueke', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 45.0, 'Position': 'Forward', 'Importance': 0.13},
         {'Team': 'Chelsea', 'Player': 'Conor Gallagher', 'TransferType': 'Out', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 42.0, 'Position': 'Midfielder', 'Importance': 0.15},
         {'Team': 'Chelsea', 'Player': 'Ian Maatsen', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 44.0, 'Position': 'Defender', 'Importance': 0.10},
         {'Team': 'Chelsea', 'Player': 'Romelu Lukaku', 'TransferType': 'Out', 'OtherClub': 'Napoli', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Chelsea', 'Player': 'Kepa Arrizabalaga', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 5.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
+        {'Team': 'Chelsea', 'Player': 'Omari Hutchinson', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 23.5, 'Position': 'Forward', 'Importance': 0.10},
 
         # Man United
         {'Team': 'Man United', 'Player': 'Leny Yoro', 'TransferType': 'In', 'OtherClub': 'Lille', 'Fee_M_Euros': 62.0, 'Position': 'Defender', 'Importance': 0.15},
@@ -484,7 +504,7 @@ def save_squad_values(raw_dir='data/raw'):
     squad_values = {
         'Arsenal': 1170.0, # in Millions of Euros (Transfermarkt official 2024/25)
         'Man City': 1340.0,
-        'Chelsea': 1425.0,
+        'Chelsea': 1485.0,
         'Liverpool': 990.0,
         'Tottenham': 945.0,
         'Man United': 910.0,
