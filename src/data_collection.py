@@ -324,10 +324,25 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Arsenal', 'Player': 'Mohamed Elneny', 'TransferType': 'Out', 'OtherClub': 'Al Jazira (Free)', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.04},
 
         # Man City
-        {'Team': 'Man City', 'Player': 'Savinho', 'TransferType': 'In', 'OtherClub': 'Troyes', 'Fee_M_Euros': 40.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Gianluigi Donnarumma', 'TransferType': 'In', 'OtherClub': 'PSG', 'Fee_M_Euros': 60.0, 'Position': 'Goalkeeper', 'Importance': 0.16},
+        {'Team': 'Man City', 'Player': 'James Trafford', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 20.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
+        {'Team': 'Man City', 'Player': 'Marc Guéhi', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 70.0, 'Position': 'Defender', 'Importance': 0.15},
+        {'Team': 'Man City', 'Player': 'Abdukodir Khusanov', 'TransferType': 'In', 'OtherClub': 'Lens', 'Fee_M_Euros': 35.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Rayan Aït-Nouri', 'TransferType': 'In', 'OtherClub': 'Wolves', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Man City', 'Player': 'Vitor Reis', 'TransferType': 'In', 'OtherClub': 'Palmeiras', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.11},
         {'Team': 'Man City', 'Player': 'Tijjani Reijnders', 'TransferType': 'In', 'OtherClub': 'AC Milan', 'Fee_M_Euros': 55.0, 'Position': 'Midfielder', 'Importance': 0.14},
-        {'Team': 'Man City', 'Player': 'Claudio Echeverri', 'TransferType': 'In', 'OtherClub': 'River Plate', 'Fee_M_Euros': 18.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Man City', 'Player': 'Nico González', 'TransferType': 'In', 'OtherClub': 'Porto', 'Fee_M_Euros': 40.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Enzo Fernández', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 110.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Man City', 'Player': 'Elliot Anderson', 'TransferType': 'In', 'OtherClub': 'Nott\'m Forest', 'Fee_M_Euros': 45.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Savinho', 'TransferType': 'In', 'OtherClub': 'Troyes', 'Fee_M_Euros': 40.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Man City', 'Player': 'Rayan Cherki', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 35.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Man City', 'Player': 'Iliman Ndiaye', 'TransferType': 'In', 'OtherClub': 'Everton', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Rodri', 'TransferType': 'Out', 'OtherClub': 'Barcelona', 'Fee_M_Euros': 90.0, 'Position': 'Midfielder', 'Importance': 0.18},
+        {'Team': 'Man City', 'Player': 'Ederson', 'TransferType': 'Out', 'OtherClub': 'Al-Ittihad', 'Fee_M_Euros': 40.0, 'Position': 'Goalkeeper', 'Importance': 0.15},
         {'Team': 'Man City', 'Player': 'Julian Alvarez', 'TransferType': 'Out', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 75.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Man City', 'Player': 'Jack Grealish', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 50.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Kevin De Bruyne', 'TransferType': 'Out', 'OtherClub': 'San Diego FC', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Man City', 'Player': 'Matheus Nunes', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 30.0, 'Position': 'Midfielder', 'Importance': 0.10},
         {'Team': 'Man City', 'Player': 'Joao Cancelo', 'TransferType': 'Out', 'OtherClub': 'Al-Hilal', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.10},
 
         # Liverpool
@@ -468,7 +483,7 @@ def save_squad_values(raw_dir='data/raw'):
     os.makedirs(raw_dir, exist_ok=True)
     squad_values = {
         'Arsenal': 1170.0, # in Millions of Euros (Transfermarkt official 2024/25)
-        'Man City': 1260.0,
+        'Man City': 1340.0,
         'Chelsea': 1425.0,
         'Liverpool': 990.0,
         'Tottenham': 945.0,
