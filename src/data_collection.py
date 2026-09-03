@@ -303,6 +303,7 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Arsenal', 'Player': 'Eberechi Eze', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 60.0, 'Position': 'Midfielder', 'Importance': 0.15},
         {'Team': 'Arsenal', 'Player': 'Martin Zubimendi', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 60.0, 'Position': 'Midfielder', 'Importance': 0.15},
         {'Team': 'Arsenal', 'Player': 'Bruno Guimaraes', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 85.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Arsenal', 'Player': 'Max Dowman', 'TransferType': 'In', 'OtherClub': 'Arsenal Academy', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.06},
         {'Team': 'Arsenal', 'Player': 'Viktor Gyokeres', 'TransferType': 'In', 'OtherClub': 'Sporting CP', 'Fee_M_Euros': 75.0, 'Position': 'Forward', 'Importance': 0.16},
         {'Team': 'Arsenal', 'Player': 'Christos Tzolis', 'TransferType': 'In', 'OtherClub': 'Club Brugge', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.10},
         {'Team': 'Arsenal', 'Player': 'Noni Madueke', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 45.0, 'Position': 'Forward', 'Importance': 0.12},
