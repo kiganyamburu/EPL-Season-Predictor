@@ -296,6 +296,9 @@ def save_transfers(raw_dir='data/raw'):
     transfers = [
         # Arsenal
         {'Team': 'Arsenal', 'Player': 'Riccardo Calafiori', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Arsenal', 'Player': 'Cristhian Mosquera', 'TransferType': 'In', 'OtherClub': 'Valencia', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Piero Hincapie', 'TransferType': 'In', 'OtherClub': 'Bayer Leverkusen', 'Fee_M_Euros': 50.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Arsenal', 'Player': 'Ezri Konsa', 'TransferType': 'In', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.14},
         {'Team': 'Arsenal', 'Player': 'Mikel Merino', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 32.0, 'Position': 'Midfielder', 'Importance': 0.12},
         {'Team': 'Arsenal', 'Player': 'Kepa Arrizabalaga', 'TransferType': 'In', 'OtherClub': 'Bournemouth / Chelsea', 'Fee_M_Euros': 5.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
         {'Team': 'Arsenal', 'Player': 'Illan Meslier', 'TransferType': 'In', 'OtherClub': 'Leeds', 'Fee_M_Euros': 15.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
