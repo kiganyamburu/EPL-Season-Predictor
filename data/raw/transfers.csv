@@ -1,7 +1,8 @@
 Team,Player,TransferType,OtherClub,Fee_M_Euros,Position,Importance
 Arsenal,Riccardo Calafiori,In,Bologna,45.0,Defender,0.14
 Arsenal,Mikel Merino,In,Real Sociedad,32.0,Midfielder,0.12
-Arsenal,Neto,In,Bournemouth (Loan),0.0,Goalkeeper,0.05
+Arsenal,Kepa Arrizabalaga,In,Bournemouth / Chelsea,5.0,Goalkeeper,0.08
+Arsenal,Illan Meslier,In,Leeds,15.0,Goalkeeper,0.08
 Arsenal,Raheem Sterling,Out,Chelsea (Loan Return),0.0,Forward,0.1
 Arsenal,Gabriel Jesus,Out,Transferred,50.0,Forward,0.12
 Arsenal,Leandro Trossard,Out,Transferred,35.0,Forward,0.12

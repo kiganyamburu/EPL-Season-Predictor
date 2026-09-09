@@ -13,7 +13,7 @@ This report compares the v2 feature upgrades (ON vs. OFF) against the v1 baselin
 | **5. Injury Adjustments ON** | 1.0627 | 0.2139 | 43.42% |
 | **6. Rest Fatigue/Congestion ON** | 1.0570 | 0.2127 | 45.26% |
 | **7. Stateful Form Correlation ON** | 1.0995 | 0.2229 | 35.26% |
-| **8. Upgraded Ensemble (All ON)** | 1.1034 | 0.2240 | 31.32% |
+| **8. Upgraded Ensemble (All ON)** | 1.1036 | 0.2241 | 31.32% |
 | **9. Betting Market Implied Odds** | 1.0986 | 0.2222 | 45.00% |
 
 ---
