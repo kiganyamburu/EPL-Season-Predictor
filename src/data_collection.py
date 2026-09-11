@@ -297,8 +297,11 @@ def save_transfers(raw_dir='data/raw'):
         # Arsenal
         {'Team': 'Arsenal', 'Player': 'Riccardo Calafiori', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.14},
         {'Team': 'Arsenal', 'Player': 'Mikel Merino', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 32.0, 'Position': 'Midfielder', 'Importance': 0.12},
-        {'Team': 'Arsenal', 'Player': 'Raheem Sterling', 'TransferType': 'In', 'OtherClub': 'Chelsea (Loan)', 'Fee_M_Euros': 0.0, 'Position': 'Forward', 'Importance': 0.10},
         {'Team': 'Arsenal', 'Player': 'Neto', 'TransferType': 'In', 'OtherClub': 'Bournemouth (Loan)', 'Fee_M_Euros': 0.0, 'Position': 'Goalkeeper', 'Importance': 0.05},
+        {'Team': 'Arsenal', 'Player': 'Raheem Sterling', 'TransferType': 'Out', 'OtherClub': 'Chelsea (Loan Return)', 'Fee_M_Euros': 0.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Arsenal', 'Player': 'Gabriel Jesus', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 50.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Leandro Trossard', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 35.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Gabriel Martinelli', 'TransferType': 'Out', 'OtherClub': 'Transferred', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
         {'Team': 'Arsenal', 'Player': 'Emile Smith Rowe', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.08},
         {'Team': 'Arsenal', 'Player': 'Eddie Nketiah', 'TransferType': 'Out', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.08},
         {'Team': 'Arsenal', 'Player': 'Aaron Ramsdale', 'TransferType': 'Out', 'OtherClub': 'Southampton', 'Fee_M_Euros': 21.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
