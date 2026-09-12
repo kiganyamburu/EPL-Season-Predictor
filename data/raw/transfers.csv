@@ -1,17 +1,15 @@
 Team,Player,TransferType,OtherClub,Fee_M_Euros,Position,Importance
-Arsenal,Viktor Gyökeres,In,Sporting CP,65.0,Forward,0.16
-Arsenal,Eberechi Eze,In,Crystal Palace,68.0,Midfielder,0.14
+Arsenal,Riccardo Calafiori,In,Bologna,45.0,Defender,0.14
 Arsenal,Mikel Merino,In,Real Sociedad,32.0,Midfielder,0.12
-Arsenal,Riccardo Calafiori,In,Bologna,45.0,Defender,0.12
-Arsenal,Thomas Partey,Out,Free Agent / Saudi Pro League,0.0,Midfielder,0.1
-Arsenal,Jorginho,Out,Flamengo,0.0,Midfielder,0.08
-Arsenal,Jakub Kiwior,Out,Juventus,18.0,Defender,0.08
-Arsenal,Oleksandr Zinchenko,Out,Inter Milan,20.0,Defender,0.08
-Arsenal,Fabio Vieira,Out,Porto,15.0,Midfielder,0.06
-Arsenal,Reiss Nelson,Out,Fulham,12.0,Forward,0.06
+Arsenal,Raheem Sterling,In,Chelsea (Loan),0.0,Forward,0.1
+Arsenal,Neto,In,Bournemouth (Loan),0.0,Goalkeeper,0.05
 Arsenal,Emile Smith Rowe,Out,Fulham,34.0,Midfielder,0.08
 Arsenal,Eddie Nketiah,Out,Crystal Palace,30.0,Forward,0.08
 Arsenal,Aaron Ramsdale,Out,Southampton,21.0,Goalkeeper,0.08
+Arsenal,Fabio Vieira,Out,Porto (Loan),0.0,Midfielder,0.06
+Arsenal,Reiss Nelson,Out,Fulham (Loan),0.0,Forward,0.06
+Arsenal,Albert Sambi Lokonga,Out,Sevilla (Loan),0.0,Midfielder,0.05
+Arsenal,Mohamed Elneny,Out,Al Jazira (Free),0.0,Midfielder,0.04
 Man City,Savinho,In,Troyes,40.0,Forward,0.12
 Man City,Tijjani Reijnders,In,AC Milan,55.0,Midfielder,0.14
 Man City,Claudio Echeverri,In,River Plate,18.0,Midfielder,0.08
