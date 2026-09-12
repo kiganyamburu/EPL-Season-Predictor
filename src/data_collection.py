@@ -296,8 +296,15 @@ def save_transfers(raw_dir='data/raw'):
     transfers = [
         # Arsenal
         {'Team': 'Arsenal', 'Player': 'Viktor Gyökeres', 'TransferType': 'In', 'OtherClub': 'Sporting CP', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Arsenal', 'Player': 'Eberechi Eze', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 68.0, 'Position': 'Midfielder', 'Importance': 0.14},
         {'Team': 'Arsenal', 'Player': 'Mikel Merino', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 32.0, 'Position': 'Midfielder', 'Importance': 0.12},
         {'Team': 'Arsenal', 'Player': 'Riccardo Calafiori', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Thomas Partey', 'TransferType': 'Out', 'OtherClub': 'Free Agent / Saudi Pro League', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.10},
+        {'Team': 'Arsenal', 'Player': 'Jorginho', 'TransferType': 'Out', 'OtherClub': 'Flamengo', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Arsenal', 'Player': 'Jakub Kiwior', 'TransferType': 'Out', 'OtherClub': 'Juventus', 'Fee_M_Euros': 18.0, 'Position': 'Defender', 'Importance': 0.08},
+        {'Team': 'Arsenal', 'Player': 'Oleksandr Zinchenko', 'TransferType': 'Out', 'OtherClub': 'Inter Milan', 'Fee_M_Euros': 20.0, 'Position': 'Defender', 'Importance': 0.08},
+        {'Team': 'Arsenal', 'Player': 'Fabio Vieira', 'TransferType': 'Out', 'OtherClub': 'Porto', 'Fee_M_Euros': 15.0, 'Position': 'Midfielder', 'Importance': 0.06},
+        {'Team': 'Arsenal', 'Player': 'Reiss Nelson', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.06},
         {'Team': 'Arsenal', 'Player': 'Emile Smith Rowe', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.08},
         {'Team': 'Arsenal', 'Player': 'Eddie Nketiah', 'TransferType': 'Out', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.08},
         {'Team': 'Arsenal', 'Player': 'Aaron Ramsdale', 'TransferType': 'Out', 'OtherClub': 'Southampton', 'Fee_M_Euros': 21.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
@@ -446,8 +453,8 @@ def save_squad_values(raw_dir='data/raw'):
     """Save squad market values from Transfermarkt for the 2026/27 season (updated with net transfers)."""
     os.makedirs(raw_dir, exist_ok=True)
     squad_values = {
-        'Man City': 1480.0, # in Millions of Euros
-        'Arsenal': 1440.0,
+        'Arsenal': 1395.0, # in Millions of Euros (updated post-departures)
+        'Man City': 1480.0,
         'Chelsea': 1425.0,
         'Liverpool': 990.0,
         'Tottenham': 945.0,
