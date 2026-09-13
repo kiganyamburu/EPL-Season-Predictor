@@ -300,40 +300,71 @@ def identify_promoted_teams(df):
     
     return df
 
-def run_feature_engineering_pipeline():
-    print("=== STARTING FEATURE ENGINEERING PIPELINE ===")
+def update_dataset_with_recent_matches():
+    """
+    Check for completed match scorelines in fixtures_raw.csv, append them to historical results,
+    and re-run complete feature engineering (Elo, rolling stats, squad value, managers).
+    Returns (completed_df, unplayed_df).
+    """
+    from src.data_collection import parse_completed_fixtures_from_raw
+
     raw_results_path = 'data/processed/historical_results.csv'
     if not os.path.exists(raw_results_path):
-        print(f"Error: {raw_results_path} does not exist. Run data collection first.")
-        return
+        print(f"Error: {raw_results_path} does not exist.")
+        return pd.DataFrame(), pd.DataFrame()
+
+    df_hist = pd.read_csv(raw_results_path)
+    
+    # Parse completed matches from raw fixtures
+    completed_2627, unplayed_2627 = parse_completed_fixtures_from_raw('data/raw')
+    
+    if not completed_2627.empty:
+        # Check which 2026/27 matches are already in historical results
+        df_hist['MatchID'] = df_hist['Season'].astype(str) + '_' + df_hist['HomeTeam'].astype(str) + '_' + df_hist['AwayTeam'].astype(str)
+        completed_2627['MatchID'] = completed_2627['Season'].astype(str) + '_' + completed_2627['HomeTeam'].astype(str) + '_' + completed_2627['AwayTeam'].astype(str)
         
-    df = pd.read_csv(raw_results_path)
-    df['Date'] = pd.to_datetime(df['Date'], format='mixed', dayfirst=True)
+        existing_ids = set(df_hist['MatchID'])
+        new_matches = completed_2627[~completed_2627['MatchID'].isin(existing_ids)].copy()
+        
+        df_hist = df_hist.drop(columns=['MatchID'])
+        new_matches = new_matches.drop(columns=['MatchID'])
+        
+        if not new_matches.empty:
+            print(f"Adding {len(new_matches)} newly completed 2026/27 matches to dataset...")
+            combined_df = pd.concat([df_hist, new_matches], ignore_index=True)
+            # Update historical_results.csv
+            combined_df.to_csv(raw_results_path, index=False)
+        else:
+            combined_df = df_hist
+    else:
+        combined_df = df_hist
+
+    combined_df['Date'] = pd.to_datetime(combined_df['Date'], format='mixed', dayfirst=True)
     
-    # 1. Elo Ratings
-    df, final_elos, season_final_elos = calculate_elo_ratings(df)
+    # Re-run full feature engineering pipeline
+    combined_df, final_elos, season_final_elos = calculate_elo_ratings(combined_df)
+    combined_df = calculate_rolling_features(combined_df)
+    combined_df = identify_promoted_teams(combined_df)
+    combined_df = add_market_values_and_managers(combined_df)
     
-    # 2. Rolling Form & Goals
-    df = calculate_rolling_features(df)
-    
-    # 3. Promoted status
-    df = identify_promoted_teams(df)
-    
-    # 4. Squad Values and Managers
-    df = add_market_values_and_managers(df)
-    
-    # Save processed training dataset
+    # Save processed dataset
     os.makedirs('data/processed', exist_ok=True)
     processed_df_path = 'data/processed/matches_with_features.csv'
-    df.to_csv(processed_df_path, index=False)
-    print(f"Processed match dataset with features saved to {processed_df_path}. Matches: {len(df)}")
+    combined_df.to_csv(processed_df_path, index=False)
+    print(f"Updated matches_with_features.csv with {len(combined_df)} total matches.")
     
-    # Save final Elo ratings to raw/final_elos.csv for season simulation carry-over
+    # Save final Elos
     final_elo_df = pd.DataFrame(list(final_elos.items()), columns=['Team', 'Elo'])
     final_elo_df.to_csv('data/processed/final_elos.csv', index=False)
-    print("Saved final Elo ratings to data/processed/final_elos.csv")
+    print("Saved updated final Elo ratings to data/processed/final_elos.csv")
     
+    return completed_2627, unplayed_2627
+
+def run_feature_engineering_pipeline():
+    print("=== STARTING FEATURE ENGINEERING PIPELINE ===")
+    update_dataset_with_recent_matches()
     print("=== FEATURE ENGINEERING PIPELINE COMPLETED ===")
 
 if __name__ == "__main__":
     run_feature_engineering_pipeline()
+

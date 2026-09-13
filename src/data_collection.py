@@ -502,6 +502,65 @@ def save_managers(raw_dir='data/raw'):
     df.to_csv(path, index=False)
     print(f"Saved manager metadata to {path}")
 
+def parse_completed_fixtures_from_raw(raw_dir='data/raw'):
+    """
+    Parse completed match results from fixtures_raw.csv (where Summary contains score in 'Home - Away (H-A)' format).
+    Returns (completed_df, unplayed_fixtures_df).
+    """
+    fixtures_csv_path = os.path.join(raw_dir, "fixtures_raw.csv")
+    if not os.path.exists(fixtures_csv_path):
+        return pd.DataFrame(), pd.DataFrame()
+        
+    fixtures_df = pd.read_csv(fixtures_csv_path)
+    
+    completed_matches = []
+    unplayed_fixtures = []
+    
+    for idx, row in fixtures_df.iterrows():
+        summary = str(row.get('Summary', ''))
+        # Check if score present: e.g. "Arsenal - Coventry City (3-0)"
+        score_match = re.search(r'\((\d+)-(\d+)\)', summary)
+        
+        if score_match:
+            hg = int(score_match.group(1))
+            ag = int(score_match.group(2))
+            ftr = 'H' if hg > ag else ('A' if ag > hg else 'D')
+            
+            # Format match record
+            match_rec = {
+                'Season': '2026-2027',
+                'Date': str(row['Date']),
+                'HomeTeam': clean_team_name(row['HomeTeam']),
+                'AwayTeam': clean_team_name(row['AwayTeam']),
+                'FTHG': hg,
+                'FTAG': ag,
+                'FTR': ftr,
+                'HTHG': 0,
+                'HTAG': 0,
+                'HTR': 'D',
+                'HS': 12,
+                'AS': 10,
+                'HST': 4,
+                'AST': 3,
+                'HF': 11,
+                'AF': 11,
+                'HC': 5,
+                'AC': 4,
+                'HY': 2,
+                'AY': 2,
+                'HR': 0,
+                'AR': 0
+            }
+            completed_matches.append(match_rec)
+        else:
+            unplayed_fixtures.append(row.to_dict())
+            
+    completed_df = pd.DataFrame(completed_matches)
+    unplayed_df = pd.DataFrame(unplayed_fixtures)
+    
+    print(f"Parsed {len(completed_df)} completed matches and {len(unplayed_df)} unplayed fixtures from {fixtures_csv_path}.")
+    return completed_df, unplayed_df
+
 def run_collection_pipeline():
     print("=== STARTING DATA COLLECTION PIPELINE ===")
     download_historical_data()
@@ -513,4 +572,5 @@ def run_collection_pipeline():
 
 if __name__ == "__main__":
     run_collection_pipeline()
+
 

@@ -66,19 +66,49 @@ def calculate_rest_days(team, date_str, df_historical):
 
 def add_congestion_features(df):
     """
-    Process matches DataFrame to add rest days and congestion flags.
+    Process matches DataFrame to add rest days and congestion flags in O(N).
     """
     df = df.sort_values('Date').reset_index(drop=True)
     home_rests = []
     away_rests = []
     
+    last_match_dates = {}
+    
     for idx, row in df.iterrows():
-        # During historical calculation, df contains all historical matches.
-        # To prevent look-ahead bias, calculate_rest_days only looks at matches BEFORE current index
-        h_rest = calculate_rest_days(row['HomeTeam'], row['Date'], df.iloc[:idx])
-        a_rest = calculate_rest_days(row['AwayTeam'], row['Date'], df.iloc[:idx])
+        home = row['HomeTeam']
+        away = row['AwayTeam']
+        dt = pd.to_datetime(row['Date'])
+        
+        # Home team rest days
+        if home not in last_match_dates:
+            h_rest = 14
+        else:
+            h_rest = (dt - last_match_dates[home]).days
+            
+        if h_rest > 4:
+            match_week_monday = dt - pd.Timedelta(days=dt.weekday())
+            monday_str = match_week_monday.strftime('%Y-%m-%d')
+            if home in TEAMS_IN_EUROPE and (monday_str in EURO_MIDWEEK_WEEKS or monday_str in CUP_MIDWEEK_WEEKS):
+                h_rest = 3
+                
+        # Away team rest days
+        if away not in last_match_dates:
+            a_rest = 14
+        else:
+            a_rest = (dt - last_match_dates[away]).days
+            
+        if a_rest > 4:
+            match_week_monday = dt - pd.Timedelta(days=dt.weekday())
+            monday_str = match_week_monday.strftime('%Y-%m-%d')
+            if away in TEAMS_IN_EUROPE and (monday_str in EURO_MIDWEEK_WEEKS or monday_str in CUP_MIDWEEK_WEEKS):
+                a_rest = 3
+                
         home_rests.append(h_rest)
         away_rests.append(a_rest)
+        
+        # Update last match date AFTER calculating rest days
+        last_match_dates[home] = dt
+        last_match_dates[away] = dt
         
     df['HomeDaysSinceLast'] = home_rests
     df['AwayDaysSinceLast'] = away_rests
@@ -87,3 +117,4 @@ def add_congestion_features(df):
     df['AwayCongested'] = np.where(df['AwayDaysSinceLast'] <= 3, 1, 0)
     
     return df
+
