@@ -87,14 +87,16 @@ def load_data():
     preds_path = 'output/predictions.csv'
     standings_path = 'output/final_table_projection.csv'
     squad_path = 'data/raw/squad_values.csv'
+    transfers_path = 'data/raw/transfers.csv'
     
     preds_df = pd.read_csv(preds_path) if os.path.exists(preds_path) else None
     standings_df = pd.read_csv(standings_path) if os.path.exists(standings_path) else None
     squad_df = pd.read_csv(squad_path) if os.path.exists(squad_path) else None
+    transfers_df = pd.read_csv(transfers_path) if os.path.exists(transfers_path) else None
     
-    return preds_df, standings_df, squad_df
+    return preds_df, standings_df, squad_df, transfers_df
 
-preds_df, standings_df, squad_df = load_data()
+preds_df, standings_df, squad_df, transfers_df = load_data()
 
 # Check if data exists
 if standings_df is None or preds_df is None:
@@ -140,10 +142,11 @@ with col3:
 st.write("")
 
 # Tabs Setup
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab_transfers, tab4, tab5 = st.tabs([
     "📊 Simulated Standings", 
     "📈 Standing Distributions", 
     "⚽ Match predictions", 
+    "🔄 Squad Transfers & Signings",
     "🔍 Narrative Insights",
     "🔮 What-If Sandbox"
 ])
@@ -347,6 +350,79 @@ with tab3:
             # Render explanation
             explanation_text = match_row.get('Explanation', 'No explanation generated for this match.')
             st.info(f"💡 **Model Factors & Explanations**:\n\n{explanation_text}")
+
+
+# ------------------------------------------------------------------------------
+# TAB TRANSFERS: SQUAD TRANSFERS & SIGNINGS
+# ------------------------------------------------------------------------------
+with tab_transfers:
+    st.subheader("🔄 Premier League Transfer Activity & Squad Updates")
+    st.write("Explore all new player arrivals (signings) and departures across the 20 Premier League clubs.")
+    
+    if transfers_df is None or transfers_df.empty:
+        st.info("No transfers data found in data/raw/transfers.csv.")
+    else:
+        teams_list = sorted(list(transfers_df['Team'].unique()))
+        selected_transfer_team = st.selectbox("Select EPL Club to View Squad Activity:", teams_list)
+        
+        team_transfers = transfers_df[transfers_df['Team'] == selected_transfer_team]
+        ins = team_transfers[team_transfers['TransferType'] == 'In']
+        outs = team_transfers[team_transfers['TransferType'] == 'Out']
+        
+        total_in_fee = ins['Fee_M_Euros'].sum()
+        total_out_fee = outs['Fee_M_Euros'].sum()
+        net_spend = total_in_fee - total_out_fee
+        
+        col_m1, col_m2, col_m3, col_m4 = st.columns(4)
+        with col_m1:
+            st.metric(label="📥 New Signings", value=len(ins))
+        with col_m2:
+            st.metric(label="📤 Players Departed", value=len(outs))
+        with col_m3:
+            st.metric(label="💰 Gross Spend", value=f"€{total_in_fee:.1f}M")
+        with col_m4:
+            st.metric(label="📊 Net Spend", value=f"€{net_spend:+.1f}M")
+            
+        st.write("---")
+        col_in_list, col_out_list = st.columns(2)
+        
+        with col_in_list:
+            st.markdown(f"### 📥 {selected_transfer_team} New Signings (Arrivals)")
+            if ins.empty:
+                st.write("No major incoming signings recorded.")
+            else:
+                for _, row in ins.iterrows():
+                    st.markdown(f"""
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                        <span style="font-weight: 700; font-size: 1.1rem; color: #10b981;">⚽ {row['Player']}</span> ({row['Position']})<br/>
+                        <span style="color: #94a3b8; font-size: 0.9rem;">Joined from: <strong>{row['OtherClub']}</strong> | Fee: <strong>€{row['Fee_M_Euros']:.1f}M</strong></span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+        with col_out_list:
+            st.markdown(f"### 📤 {selected_transfer_team} Departures (Players Left)")
+            if outs.empty:
+                st.write("No major departures recorded.")
+            else:
+                for _, row in outs.iterrows():
+                    st.markdown(f"""
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                        <span style="font-weight: 700; font-size: 1.1rem; color: #ef4444;">🚪 {row['Player']}</span> ({row['Position']})<br/>
+                        <span style="color: #94a3b8; font-size: 0.9rem;">Joined: <strong>{row['OtherClub']}</strong> | Fee Received: <strong>€{row['Fee_M_Euros']:.1f}M</strong></span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+        st.write("---")
+        st.markdown("### 🌟 League-Wide Marquee Transfers")
+        top_signings = transfers_df[transfers_df['TransferType'] == 'In'].sort_values('Fee_M_Euros', ascending=False).head(10)
+        st.dataframe(
+            top_signings[['Team', 'Player', 'Position', 'OtherClub', 'Fee_M_Euros']].rename(columns={
+                'OtherClub': 'Former Club',
+                'Fee_M_Euros': 'Fee (€M)'
+            }),
+            use_container_width=True,
+            hide_index=True
+        )
 
 
 # ------------------------------------------------------------------------------

@@ -290,30 +290,182 @@ def generate_mock_fixtures(raw_dir='data/raw'):
     print(f"Generated {len(fixtures_df)} fallback fixtures and saved to {fixtures_csv_path}")
     return fixtures_df
 
+def save_transfers(raw_dir='data/raw'):
+    """Save comprehensive transfer activity (signings and departures) for the 2026/27 EPL season."""
+    os.makedirs(raw_dir, exist_ok=True)
+    transfers = [
+        # Arsenal
+        {'Team': 'Arsenal', 'Player': 'Viktor Gyökeres', 'TransferType': 'In', 'OtherClub': 'Sporting CP', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Arsenal', 'Player': 'Mikel Merino', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 32.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Riccardo Calafiori', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Arsenal', 'Player': 'Emile Smith Rowe', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Arsenal', 'Player': 'Eddie Nketiah', 'TransferType': 'Out', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.08},
+        {'Team': 'Arsenal', 'Player': 'Aaron Ramsdale', 'TransferType': 'Out', 'OtherClub': 'Southampton', 'Fee_M_Euros': 21.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
+
+        # Man City
+        {'Team': 'Man City', 'Player': 'Savinho', 'TransferType': 'In', 'OtherClub': 'Troyes', 'Fee_M_Euros': 40.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Man City', 'Player': 'Tijjani Reijnders', 'TransferType': 'In', 'OtherClub': 'AC Milan', 'Fee_M_Euros': 55.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Man City', 'Player': 'Claudio Echeverri', 'TransferType': 'In', 'OtherClub': 'River Plate', 'Fee_M_Euros': 18.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Man City', 'Player': 'Julian Alvarez', 'TransferType': 'Out', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 75.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Man City', 'Player': 'Joao Cancelo', 'TransferType': 'Out', 'OtherClub': 'Al-Hilal', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.10},
+
+        # Liverpool
+        {'Team': 'Liverpool', 'Player': 'Martin Zubimendi', 'TransferType': 'In', 'OtherClub': 'Real Sociedad', 'Fee_M_Euros': 60.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Liverpool', 'Player': 'Giorgi Mamardashvili', 'TransferType': 'In', 'OtherClub': 'Valencia', 'Fee_M_Euros': 35.0, 'Position': 'Goalkeeper', 'Importance': 0.12},
+        {'Team': 'Liverpool', 'Player': 'Federico Chiesa', 'TransferType': 'In', 'OtherClub': 'Juventus', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Liverpool', 'Player': 'Fabio Carvalho', 'TransferType': 'Out', 'OtherClub': 'Brentford', 'Fee_M_Euros': 27.0, 'Position': 'Midfielder', 'Importance': 0.07},
+        {'Team': 'Liverpool', 'Player': 'Sepp van den Berg', 'TransferType': 'Out', 'OtherClub': 'Brentford', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.07},
+
+        # Chelsea
+        {'Team': 'Chelsea', 'Player': 'Pedro Neto', 'TransferType': 'In', 'OtherClub': 'Wolves', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Joao Felix', 'TransferType': 'In', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 52.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Chelsea', 'Player': 'Kiernan Dewsbury-Hall', 'TransferType': 'In', 'OtherClub': 'Leicester', 'Fee_M_Euros': 35.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Chelsea', 'Player': 'Conor Gallagher', 'TransferType': 'Out', 'OtherClub': 'Atletico Madrid', 'Fee_M_Euros': 42.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Chelsea', 'Player': 'Ian Maatsen', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 44.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Chelsea', 'Player': 'Romelu Lukaku', 'TransferType': 'Out', 'OtherClub': 'Napoli', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.10},
+
+        # Man United
+        {'Team': 'Man United', 'Player': 'Leny Yoro', 'TransferType': 'In', 'OtherClub': 'Lille', 'Fee_M_Euros': 62.0, 'Position': 'Defender', 'Importance': 0.15},
+        {'Team': 'Man United', 'Player': 'Manuel Ugarte', 'TransferType': 'In', 'OtherClub': 'PSG', 'Fee_M_Euros': 50.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Man United', 'Player': 'Matthijs de Ligt', 'TransferType': 'In', 'OtherClub': 'Bayern Munich', 'Fee_M_Euros': 45.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Man United', 'Player': 'Joshua Zirkzee', 'TransferType': 'In', 'OtherClub': 'Bologna', 'Fee_M_Euros': 42.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Man United', 'Player': 'Scott McTominay', 'TransferType': 'Out', 'OtherClub': 'Napoli', 'Fee_M_Euros': 30.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Man United', 'Player': 'Aaron Wan-Bissaka', 'TransferType': 'Out', 'OtherClub': 'West Ham', 'Fee_M_Euros': 17.0, 'Position': 'Defender', 'Importance': 0.10},
+
+        # Tottenham
+        {'Team': 'Tottenham', 'Player': 'Dominic Solanke', 'TransferType': 'In', 'OtherClub': 'Bournemouth', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Tottenham', 'Player': 'Archie Gray', 'TransferType': 'In', 'OtherClub': 'Leeds', 'Fee_M_Euros': 41.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Tottenham', 'Player': 'Wilson Odobert', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Tottenham', 'Player': 'Oliver Skipp', 'TransferType': 'Out', 'OtherClub': 'Leicester', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Tottenham', 'Player': 'Emerson Royal', 'TransferType': 'Out', 'OtherClub': 'AC Milan', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.08},
+
+        # Aston Villa
+        {'Team': 'Aston Villa', 'Player': 'Amadou Onana', 'TransferType': 'In', 'OtherClub': 'Everton', 'Fee_M_Euros': 59.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Aston Villa', 'Player': 'Ian Maatsen', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 44.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Aston Villa', 'Player': 'Jaden Philogene', 'TransferType': 'In', 'OtherClub': 'Hull', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Aston Villa', 'Player': 'Douglas Luiz', 'TransferType': 'Out', 'OtherClub': 'Juventus', 'Fee_M_Euros': 50.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Aston Villa', 'Player': 'Moussa Diaby', 'TransferType': 'Out', 'OtherClub': 'Al-Ittihad', 'Fee_M_Euros': 60.0, 'Position': 'Forward', 'Importance': 0.15},
+
+        # Newcastle
+        {'Team': 'Newcastle', 'Player': 'Lewis Hall', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 33.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Newcastle', 'Player': 'William Osula', 'TransferType': 'In', 'OtherClub': 'Sheffield United', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.08},
+        {'Team': 'Newcastle', 'Player': 'Lloyd Kelly', 'TransferType': 'In', 'OtherClub': 'Bournemouth', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Newcastle', 'Player': 'Elliot Anderson', 'TransferType': 'Out', 'OtherClub': 'Nott\'m Forest', 'Fee_M_Euros': 41.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Newcastle', 'Player': 'Yankuba Minteh', 'TransferType': 'Out', 'OtherClub': 'Brighton', 'Fee_M_Euros': 38.0, 'Position': 'Forward', 'Importance': 0.10},
+
+        # Brighton
+        {'Team': 'Brighton', 'Player': 'Georginio Rutter', 'TransferType': 'In', 'OtherClub': 'Leeds', 'Fee_M_Euros': 47.0, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Brighton', 'Player': 'Yankuba Minteh', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 38.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Brighton', 'Player': 'Mats Wieffer', 'TransferType': 'In', 'OtherClub': 'Feyenoord', 'Fee_M_Euros': 30.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Brighton', 'Player': 'Ferdi Kadioglu', 'TransferType': 'In', 'OtherClub': 'Fenerbahce', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Brighton', 'Player': 'Deniz Undav', 'TransferType': 'Out', 'OtherClub': 'Stuttgart', 'Fee_M_Euros': 27.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Brighton', 'Player': 'Pascal Groß', 'TransferType': 'Out', 'OtherClub': 'Borussia Dortmund', 'Fee_M_Euros': 7.0, 'Position': 'Midfielder', 'Importance': 0.14},
+
+        # Fulham
+        {'Team': 'Fulham', 'Player': 'Emile Smith Rowe', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 34.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Fulham', 'Player': 'Joachim Andersen', 'TransferType': 'In', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Fulham', 'Player': 'Sander Berge', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Fulham', 'Player': 'Joao Palhinha', 'TransferType': 'Out', 'OtherClub': 'Bayern Munich', 'Fee_M_Euros': 51.0, 'Position': 'Midfielder', 'Importance': 0.18},
+        {'Team': 'Fulham', 'Player': 'Tosin Adarabioyo', 'TransferType': 'Out', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
+
+        # Bournemouth
+        {'Team': 'Bournemouth', 'Player': 'Evanilson', 'TransferType': 'In', 'OtherClub': 'FC Porto', 'Fee_M_Euros': 47.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Bournemouth', 'Player': 'Dean Huijsen', 'TransferType': 'In', 'OtherClub': 'Juventus', 'Fee_M_Euros': 15.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Bournemouth', 'Player': 'Julian Araujo', 'TransferType': 'In', 'OtherClub': 'Barcelona', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.10},
+        {'Team': 'Bournemouth', 'Player': 'Dominic Solanke', 'TransferType': 'Out', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 65.0, 'Position': 'Forward', 'Importance': 0.18},
+        {'Team': 'Bournemouth', 'Player': 'Lloyd Kelly', 'TransferType': 'Out', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.12},
+
+        # Brentford
+        {'Team': 'Brentford', 'Player': 'Igor Thiago', 'TransferType': 'In', 'OtherClub': 'Club Brugge', 'Fee_M_Euros': 33.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Brentford', 'Player': 'Fabio Carvalho', 'TransferType': 'In', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 27.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Brentford', 'Player': 'Sepp van den Berg', 'TransferType': 'In', 'OtherClub': 'Liverpool', 'Fee_M_Euros': 25.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Brentford', 'Player': 'Ivan Toney', 'TransferType': 'Out', 'OtherClub': 'Al-Ahli', 'Fee_M_Euros': 42.0, 'Position': 'Forward', 'Importance': 0.18},
+        {'Team': 'Brentford', 'Player': 'David Raya', 'TransferType': 'Out', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 32.0, 'Position': 'Goalkeeper', 'Importance': 0.15},
+
+        # Crystal Palace
+        {'Team': 'Crystal Palace', 'Player': 'Eddie Nketiah', 'TransferType': 'In', 'OtherClub': 'Arsenal', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Crystal Palace', 'Player': 'Maxence Lacroix', 'TransferType': 'In', 'OtherClub': 'Wolfsburg', 'Fee_M_Euros': 21.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Crystal Palace', 'Player': 'Ismaila Sarr', 'TransferType': 'In', 'OtherClub': 'Marseille', 'Fee_M_Euros': 15.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Crystal Palace', 'Player': 'Michael Olise', 'TransferType': 'Out', 'OtherClub': 'Bayern Munich', 'Fee_M_Euros': 53.0, 'Position': 'Forward', 'Importance': 0.18},
+        {'Team': 'Crystal Palace', 'Player': 'Joachim Andersen', 'TransferType': 'Out', 'OtherClub': 'Fulham', 'Fee_M_Euros': 30.0, 'Position': 'Defender', 'Importance': 0.15},
+
+        # Everton
+        {'Team': 'Everton', 'Player': 'Jake O\'Brien', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 19.5, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Everton', 'Player': 'Iliman Ndiaye', 'TransferType': 'In', 'OtherClub': 'Marseille', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Everton', 'Player': 'Tim Iroegbunam', 'TransferType': 'In', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 11.0, 'Position': 'Midfielder', 'Importance': 0.10},
+        {'Team': 'Everton', 'Player': 'Amadou Onana', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 59.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Everton', 'Player': 'Ben Godfrey', 'TransferType': 'Out', 'OtherClub': 'Atalanta', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.10},
+
+        # Nott'm Forest
+        {'Team': 'Nott\'m Forest', 'Player': 'Elliot Anderson', 'TransferType': 'In', 'OtherClub': 'Newcastle', 'Fee_M_Euros': 41.0, 'Position': 'Midfielder', 'Importance': 0.15},
+        {'Team': 'Nott\'m Forest', 'Player': 'Nikola Milenkovic', 'TransferType': 'In', 'OtherClub': 'Fiorentina', 'Fee_M_Euros': 14.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Nott\'m Forest', 'Player': 'Ramon Sosa', 'TransferType': 'In', 'OtherClub': 'Talleres', 'Fee_M_Euros': 12.0, 'Position': 'Forward', 'Importance': 0.10},
+        {'Team': 'Nott\'m Forest', 'Player': 'Moussa Niakhaté', 'TransferType': 'Out', 'OtherClub': 'Lyon', 'Fee_M_Euros': 32.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Nott\'m Forest', 'Player': 'Orel Mangala', 'TransferType': 'Out', 'OtherClub': 'Lyon', 'Fee_M_Euros': 23.0, 'Position': 'Midfielder', 'Importance': 0.12},
+
+        # Leeds (Promoted)
+        {'Team': 'Leeds', 'Player': 'Largie Ramazani', 'TransferType': 'In', 'OtherClub': 'Almeria', 'Fee_M_Euros': 11.7, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Leeds', 'Player': 'Ao Tanaka', 'TransferType': 'In', 'OtherClub': 'Fortuna Dusseldorf', 'Fee_M_Euros': 4.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Leeds', 'Player': 'Joe Rodon', 'TransferType': 'In', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Leeds', 'Player': 'Archie Gray', 'TransferType': 'Out', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 41.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Leeds', 'Player': 'Georginio Rutter', 'TransferType': 'Out', 'OtherClub': 'Brighton', 'Fee_M_Euros': 47.0, 'Position': 'Forward', 'Importance': 0.16},
+        {'Team': 'Leeds', 'Player': 'Crysencio Summerville', 'TransferType': 'Out', 'OtherClub': 'West Ham', 'Fee_M_Euros': 29.0, 'Position': 'Forward', 'Importance': 0.18},
+
+        # Sunderland (Promoted)
+        {'Team': 'Sunderland', 'Player': 'Salis Abdul Samed', 'TransferType': 'In', 'OtherClub': 'Lens', 'Fee_M_Euros': 5.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Sunderland', 'Player': 'Alan Browne', 'TransferType': 'In', 'OtherClub': 'Preston', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.12},
+        {'Team': 'Sunderland', 'Player': 'Milan Aleksic', 'TransferType': 'In', 'OtherClub': 'Radnicki', 'Fee_M_Euros': 3.7, 'Position': 'Midfielder', 'Importance': 0.08},
+        {'Team': 'Sunderland', 'Player': 'Jack Clarke', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.18},
+
+        # Ipswich
+        {'Team': 'Ipswich', 'Player': 'Omari Hutchinson', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 23.5, 'Position': 'Forward', 'Importance': 0.15},
+        {'Team': 'Ipswich', 'Player': 'Jacob Greaves', 'TransferType': 'In', 'OtherClub': 'Hull', 'Fee_M_Euros': 21.5, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Liam Delap', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 17.8, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Jack Clarke', 'TransferType': 'In', 'OtherClub': 'Sunderland', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Sammie Szmodics', 'TransferType': 'In', 'OtherClub': 'Blackburn', 'Fee_M_Euros': 10.6, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Ipswich', 'Player': 'Vaclav Hladky', 'TransferType': 'Out', 'OtherClub': 'Burnley', 'Fee_M_Euros': 0.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
+
+        # Coventry (Promoted)
+        {'Team': 'Coventry', 'Player': 'Jack Rudoni', 'TransferType': 'In', 'OtherClub': 'Huddersfield', 'Fee_M_Euros': 6.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Coventry', 'Player': 'Oliver Dovin', 'TransferType': 'In', 'OtherClub': 'Hammarby', 'Fee_M_Euros': 1.9, 'Position': 'Goalkeeper', 'Importance': 0.12},
+        {'Team': 'Coventry', 'Player': 'Brandon Thomas-Asante', 'TransferType': 'In', 'OtherClub': 'West Brom', 'Fee_M_Euros': 2.5, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Coventry', 'Player': 'Callum O\'Hare', 'TransferType': 'Out', 'OtherClub': 'Sheffield United', 'Fee_M_Euros': 0.0, 'Position': 'Midfielder', 'Importance': 0.14},
+
+        # Hull (Promoted)
+        {'Team': 'Hull', 'Player': 'Charlie Hughes', 'TransferType': 'In', 'OtherClub': 'Wigan', 'Fee_M_Euros': 4.0, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Mohamed Belloumi', 'TransferType': 'In', 'OtherClub': 'Farense', 'Fee_M_Euros': 5.5, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Hull', 'Player': 'Jacob Greaves', 'TransferType': 'Out', 'OtherClub': 'Ipswich', 'Fee_M_Euros': 21.5, 'Position': 'Defender', 'Importance': 0.16},
+        {'Team': 'Hull', 'Player': 'Jaden Philogene', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.16}
+    ]
+    df = pd.DataFrame(transfers)
+    path = os.path.join(raw_dir, "transfers.csv")
+    df.to_csv(path, index=False)
+    print(f"Saved {len(df)} player transfer records to {path}")
+
 def save_squad_values(raw_dir='data/raw'):
-    """Save squad market values from Transfermarkt for the 2026/27 season."""
+    """Save squad market values from Transfermarkt for the 2026/27 season (updated with net transfers)."""
     os.makedirs(raw_dir, exist_ok=True)
     squad_values = {
-        'Man City': 1470.0, # in Millions of Euros
-        'Chelsea': 1410.0,
-        'Arsenal': 1410.0,
-        'Liverpool': 979.5,
-        'Tottenham': 920.5,
-        'Man United': 874.3,
-        'Brighton': 619.5,
-        'Bournemouth': 572.88,
-        'Newcastle': 567.8,
-        'Brentford': 565.4,
-        'Aston Villa': 536.0,
-        'Nott\'m Forest': 517.8,
-        'Crystal Palace': 504.7,
-        'Everton': 434.1,
-        'Leeds': 408.6,
-        'Sunderland': 383.18,
-        'Fulham': 301.3,
-        'Ipswich': 238.15,
-        'Coventry': 236.85,
-        'Hull': 95.9
+        'Man City': 1480.0, # in Millions of Euros
+        'Arsenal': 1440.0,
+        'Chelsea': 1425.0,
+        'Liverpool': 990.0,
+        'Tottenham': 945.0,
+        'Man United': 910.0,
+        'Brighton': 655.0,
+        'Bournemouth': 575.0,
+        'Newcastle': 565.0,
+        'Brentford': 560.0,
+        'Aston Villa': 545.0,
+        'Nott\'m Forest': 525.0,
+        'Crystal Palace': 490.0,
+        'Everton': 420.0,
+        'Leeds': 390.0,
+        'Sunderland': 375.0,
+        'Fulham': 310.0,
+        'Ipswich': 295.0,
+        'Coventry': 240.0,
+        'Hull': 88.0
     }
     df = pd.DataFrame(list(squad_values.items()), columns=['Team', 'MarketValue_M_Euros'])
     path = os.path.join(raw_dir, "squad_values.csv")
@@ -355,8 +507,10 @@ def run_collection_pipeline():
     download_historical_data()
     download_and_parse_fixtures()
     save_squad_values()
+    save_transfers()
     save_managers()
     print("=== DATA COLLECTION PIPELINE COMPLETED ===")
 
 if __name__ == "__main__":
     run_collection_pipeline()
+

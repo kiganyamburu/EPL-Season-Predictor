@@ -231,6 +231,35 @@ def add_market_values_and_managers(df, squad_values_path='data/raw/squad_values.
             return 1 # default to new manager if unknown
         return 0 # assume stable manager for historical training data (no high variance flag)
         
+    # Transfer features lookup
+    transfers_path = 'data/raw/transfers.csv'
+    transfer_impacts = {}
+    net_spends = {}
+    if os.path.exists(transfers_path):
+        t_df = pd.read_csv(transfers_path)
+        for team, group in t_df.groupby('Team'):
+            ins = group[group['TransferType'] == 'In']
+            outs = group[group['TransferType'] == 'Out']
+            net_spend = ins['Fee_M_Euros'].sum() - outs['Fee_M_Euros'].sum()
+            impact_score = ins['Importance'].sum() - outs['Importance'].sum()
+            net_spends[team] = net_spend
+            transfer_impacts[team] = impact_score
+
+    def get_transfer_impact(team, season):
+        if season == "2026-2027":
+            return transfer_impacts.get(team, 0.0)
+        return 0.0
+
+    def get_net_spend(team, season):
+        if season == "2026-2027":
+            return net_spends.get(team, 0.0)
+        return 0.0
+
+    df['HomeTransferImpact'] = df.apply(lambda r: get_transfer_impact(r['HomeTeam'], r['Season']), axis=1)
+    df['AwayTransferImpact'] = df.apply(lambda r: get_transfer_impact(r['AwayTeam'], r['Season']), axis=1)
+    df['HomeNetSpend'] = df.apply(lambda r: get_net_spend(r['HomeTeam'], r['Season']), axis=1)
+    df['AwayNetSpend'] = df.apply(lambda r: get_net_spend(r['AwayTeam'], r['Season']), axis=1)
+
     df['HomeNewManager'] = df.apply(lambda r: is_new_manager(r['HomeTeam'], r['Date'], r['Season']), axis=1)
     df['AwayNewManager'] = df.apply(lambda r: is_new_manager(r['AwayTeam'], r['Date'], r['Season']), axis=1)
     

@@ -392,6 +392,21 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         else:
             lmbda_base, mu_base = 1.35, 1.15
             
+        # Load transfers impact if available
+        transfers_path = 'data/raw/transfers.csv'
+        if os.path.exists(transfers_path):
+            try:
+                t_df = pd.read_csv(transfers_path)
+                h_t = t_df[t_df['Team'] == home]
+                a_t = t_df[t_df['Team'] == away]
+                h_imp = h_t[h_t['TransferType'] == 'In']['Importance'].sum() - h_t[h_t['TransferType'] == 'Out']['Importance'].sum()
+                a_imp = a_t[a_t['TransferType'] == 'In']['Importance'].sum() - a_t[a_t['TransferType'] == 'Out']['Importance'].sum()
+                # Apply small transfer multiplier to expected goals
+                lmbda_base *= (1.0 + 0.5 * h_imp)
+                mu_base *= (1.0 + 0.5 * a_imp)
+            except Exception:
+                pass
+
         # Adjust expected goals for injuries
         if config.get('injuries'):
             lmbda_base, mu_base = injury_tracker.adjust_expected_goals(lmbda_base, mu_base, h_avail, a_avail)
