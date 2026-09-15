@@ -207,7 +207,7 @@ tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab5 = st.tabs([
     "⚔️ Head-to-Head Simulator",
     "🔄 Squad Transfers & Signings",
     "🔍 Narrative Insights",
-    "🔮 What-If Sandbox"
+    "What-If Sandbox"
 ])
 
 # ------------------------------------------------------------------------------
