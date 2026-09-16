@@ -819,7 +819,7 @@ with tab_transfers:
         
         col_m1, col_m2, col_m3, col_m4 = st.columns(4)
         with col_m1:
-            st.metric(label="📥 New Signings", value=len(ins))
+            st.metric(label=" New Signings", value=len(ins))
         with col_m2:
             st.metric(label="📤 Players Departed", value=len(outs))
         with col_m3:
