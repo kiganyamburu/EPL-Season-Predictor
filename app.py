@@ -821,7 +821,7 @@ with tab_transfers:
         with col_m1:
             st.metric(label=" New Signings", value=len(ins))
         with col_m2:
-            st.metric(label="📤 Players Departed", value=len(outs))
+            st.metric(label=" Players Departed", value=len(outs))
         with col_m3:
             st.metric(label="💰 Gross Spend", value=f"€{total_in_fee:.1f}M")
         with col_m4:
