@@ -825,7 +825,7 @@ with tab_transfers:
         with col_m3:
             st.metric(label=" Gross Spend", value=f"€{total_in_fee:.1f}M")
         with col_m4:
-            st.metric(label="📊 Net Spend", value=f"€{net_spend:+.1f}M")
+            st.metric(label=" Net Spend", value=f"€{net_spend:+.1f}M")
             
         st.write("---")
         col_in_list, col_out_list = st.columns(2)
