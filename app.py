@@ -838,7 +838,7 @@ with tab_transfers:
                 for _, row in ins.iterrows():
                     st.markdown(f"""
                     <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
-                        <span style="font-weight: 700; font-size: 1.1rem; color: #10b981;">⚽ {row['Player']}</span> ({row['Position']})<br/>
+                        <span style="font-weight: 700; font-size: 1.1rem; color: #10b981;"> {row['Player']}</span> ({row['Position']})<br/>
                         <span style="color: #94a3b8; font-size: 0.9rem;">Joined from: <strong>{row['OtherClub']}</strong> | Fee: <strong>€{row['Fee_M_Euros']:.1f}M</strong></span>
                     </div>
                     """, unsafe_allow_html=True)
