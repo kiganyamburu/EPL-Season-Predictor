@@ -857,7 +857,7 @@ with tab_transfers:
                     """, unsafe_allow_html=True)
                     
         st.write("---")
-        st.markdown("### 🌟 League-Wide Marquee Transfers")
+        st.markdown("###  League-Wide Marquee Transfers")
         top_signings = transfers_df[transfers_df['TransferType'] == 'In'].sort_values('Fee_M_Euros', ascending=False).head(10)
         st.dataframe(
             top_signings[['Team', 'Player', 'Position', 'OtherClub', 'Fee_M_Euros']].rename(columns={
