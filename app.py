@@ -876,7 +876,7 @@ with tab4:
     st.subheader("EPL 2026/27 Simulated Season Storylines")
     
     # 1. Title Race Narrative
-    st.markdown("### 🏆 The Title Race")
+    st.markdown("###  The Title Race")
     top_3_teams = standings_df.head(3)
     text_title_race = f"The Monte Carlo simulation predicts a highly contested battle at the top of the league. "
     for r_idx, row in top_3_teams.iterrows():
