@@ -893,7 +893,7 @@ with tab4:
     st.write(text_relegation)
     
     # 3. Surprise Packages & Financial Efficiency
-    st.markdown("### 📈 Efficiency & Surprise Packages")
+    st.markdown("###  Efficiency & Surprise Packages")
     st.write("We compare the expected final standings against squad market values to find teams performing above or below their financial weight.")
     
     if squad_df is not None:
