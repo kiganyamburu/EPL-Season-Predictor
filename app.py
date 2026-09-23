@@ -921,7 +921,7 @@ with tab4:
                 st.write("No major outperformers projected.")
                 
         with col_under:
-            st.error("📉 Underachievers (Projected to Underperform Squad Value Rank)")
+            st.error(" Underachievers (Projected to Underperform Squad Value Rank)")
             under_list = []
             for _, row in underperformers.head(3).iterrows():
                 under_list.append(f"**{row['Team']}**: Squad Rank {row['SquadValueRank']} vs. Projected Standings Rank {row['ExpectedRank']} ({row['Efficiency']} positions)")
