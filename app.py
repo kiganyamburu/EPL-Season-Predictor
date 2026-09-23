@@ -911,7 +911,7 @@ with tab4:
         col_out, col_under = st.columns(2)
         
         with col_out:
-            st.success("💰 Smart Spending (Projected to Outperform Squad Value Rank)")
+            st.success(" Smart Spending (Projected to Outperform Squad Value Rank)")
             out_list = []
             for _, row in outperformers.head(3).iterrows():
                 out_list.append(f"**{row['Team']}**: Squad Rank {row['SquadValueRank']} vs. Projected Standings Rank {row['ExpectedRank']} (+{row['Efficiency']} positions)")
