@@ -965,7 +965,7 @@ def load_sandbox_data():
 # TAB 5: WHAT-IF SANDBOX
 # ------------------------------------------------------------------------------
 with tab5:
-    st.subheader("🔮 Premier League What-If Sandbox")
+    st.subheader(" Premier League What-If Sandbox")
     st.write("Simulate the entire season in real-time under custom scenarios. Adjust squad injuries or fire managers, and watch the title odds and expected points shift instantly.")
     
     # Load data
