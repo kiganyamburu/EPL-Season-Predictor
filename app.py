@@ -979,7 +979,7 @@ with tab5:
         active_teams = sorted(list(final_elos_map.keys()))
         
         with col_s1:
-            st.markdown("### 🚑 Adjust Team Injuries")
+            st.markdown("###  Adjust Team Injuries")
             selected_injury_team = st.selectbox("Select Team to Injure", ["None"] + active_teams, key="sandbox_injury_team")
             
             injury_loss = 0.0
