@@ -993,7 +993,7 @@ with tab5:
                     help="0.15 represents ~15% drop in team rating (e.g. key player like Haaland/Saka injured)"
                 )
                 
-            st.markdown("### 👔 Manager Changes")
+            st.markdown("###  Manager Changes")
             selected_mgr_team = st.selectbox("Fire & Appoint New Manager for:", ["None"] + active_teams, key="sandbox_mgr_team")
             
         with col_s2:
