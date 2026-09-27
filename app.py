@@ -1059,7 +1059,7 @@ with tab5:
                 # Format comparison table
                 comparison_df = comparison_df.sort_values('ExpectedPoints_WhatIf', ascending=False).reset_index(drop=True)
                 
-                st.success("✅ Simulation completed! Compare findings below:")
+                st.success(" Simulation completed! Compare findings below:")
                 
                 # Display styled differences
                 st.dataframe(
