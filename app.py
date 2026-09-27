@@ -997,7 +997,7 @@ with tab5:
             selected_mgr_team = st.selectbox("Fire & Appoint New Manager for:", ["None"] + active_teams, key="sandbox_mgr_team")
             
         with col_s2:
-            st.markdown("### 📊 Active Scenarios Summary")
+            st.markdown("###  Active Scenarios Summary")
             scenarios = []
             custom_injured = []
             custom_managers = {}
