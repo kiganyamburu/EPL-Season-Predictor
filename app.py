@@ -1007,7 +1007,7 @@ with tab5:
                 custom_injured.append({'Team': selected_injury_team, 'Importance': injury_loss})
                 
             if selected_mgr_team != "None":
-                scenarios.append(f"👔 **{selected_mgr_team}**: Appointed a new manager today (triggers new manager bounce)")
+                scenarios.append(f" **{selected_mgr_team}**: Appointed a new manager today (triggers new manager bounce)")
                 # Set appointment date to the start of the season so it qualifies as new manager
                 custom_managers[selected_mgr_team] = '2026-08-01'
                 
