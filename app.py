@@ -844,7 +844,7 @@ with tab_transfers:
                     """, unsafe_allow_html=True)
                     
         with col_out_list:
-            st.markdown(f"### 📤 {selected_transfer_team} Departures (Players Left)")
+            st.markdown(f"###  {selected_transfer_team} Departures (Players Left)")
             if outs.empty:
                 st.write("No major departures recorded.")
             else:
