@@ -1018,7 +1018,7 @@ with tab5:
                 st.write("No active overlays. The simulator will match the pre-season default predictions.")
                 
             num_sandbox_sims = st.number_input("Number of Simulations", min_value=100, max_value=2000, value=500, step=100)
-            run_sim = st.button("🔮 Run Sandbox Simulation")
+            run_sim = st.button(" Run Sandbox Simulation")
             
         if run_sim:
             with st.spinner("Running vectorized Monte Carlo season simulation..."):
