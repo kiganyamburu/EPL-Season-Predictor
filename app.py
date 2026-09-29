@@ -568,7 +568,7 @@ with tab_h2h:
     col_sel1, col_swap, col_sel2 = st.columns([5, 1, 5])
     with col_sel1:
         default_h_idx = active_teams.index('Arsenal') if 'Arsenal' in active_teams else 0
-        h2h_home = st.selectbox("🏠 Select Home Team", active_teams, index=default_h_idx, key="h2h_home_team")
+        h2h_home = st.selectbox(" Select Home Team", active_teams, index=default_h_idx, key="h2h_home_team")
     with col_swap:
         st.write("")
         st.write("")
