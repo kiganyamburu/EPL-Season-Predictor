@@ -686,7 +686,7 @@ with tab_h2h:
         col_heat, col_mkts = st.columns([6, 5])
         
         with col_heat:
-            st.markdown(f"### 🎯 Score Probability Heatmap")
+            st.markdown(f"###  Score Probability Heatmap")
             st.caption(f"Most Likely Score: **{ml_score_str}** ({ml_prob:.1f}% probability) | Exp Goals: **{home_exp_g:.2f}** vs **{away_exp_g:.2f}**")
             
             z_vals = np.round(score_matrix * 100, 1)
