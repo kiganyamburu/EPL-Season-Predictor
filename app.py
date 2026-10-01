@@ -753,7 +753,7 @@ with tab_h2h:
                 
         # Historical H2H Meetings
         st.write("---")
-        st.markdown(f"### 📜 Historical Head-to-Head Record ({h2h_home} vs. {h2h_away})")
+        st.markdown(f"###  Historical Head-to-Head Record ({h2h_home} vs. {h2h_away})")
         if hist_df is not None and not hist_df.empty:
             h2h_matches = hist_df[
                 ((hist_df['HomeTeam'] == h2h_home) & (hist_df['AwayTeam'] == h2h_away)) |
