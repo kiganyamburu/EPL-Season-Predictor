@@ -749,7 +749,7 @@ with tab_h2h:
             st.dataframe(pd.DataFrame(mkt_data), use_container_width=True, height=270, hide_index=True)
             
             if match_pred is not None and 'Explanation' in match_pred and pd.notna(match_pred['Explanation']):
-                st.info(f"💡 **Model Contributing Factors**:\n\n{match_pred['Explanation']}")
+                st.info(f" **Model Contributing Factors**:\n\n{match_pred['Explanation']}")
                 
         # Historical H2H Meetings
         st.write("---")
