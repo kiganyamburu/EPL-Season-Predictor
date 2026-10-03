@@ -212,39 +212,163 @@ tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab5 = st.tabs([
 ])
 
 # ------------------------------------------------------------------------------
-# TAB 1: SIMULATED STANDINGS
+# TAB 1: LEAGUE STANDINGS (LIVE, PROJECTED & COMPARISON)
 # ------------------------------------------------------------------------------
 with tab1:
-    st.subheader("Projected Final League Table")
-    st.write("This table shows the median final points, goal difference, and ranks across all 10,000 simulations, together with 90% confidence intervals.")
+    st.subheader("Premier League Standings")
     
-    # Styled dataframe
-    # Helper to add colors
-    def style_table(val):
-        # We can format cells inside the st.dataframe styler
-        pass
+    col_t_mode, col_space = st.columns([3, 1])
+    with col_t_mode:
+        table_mode = st.radio(
+            "Standings View Mode:",
+            ["📊 Projected Final Table", "🏆 Current Live Standings (Played So Far)", "⚖️ Side-by-Side (Current vs. Projected)"],
+            horizontal=True,
+            key="standings_view_mode"
+        )
+    
+    if table_mode == "📊 Projected Final Table":
+        st.write("This table shows the median final points, goal difference, and ranks across 10,000 simulations, together with 90% confidence intervals.")
+        display_df = standings_df.copy()
+        display_df.columns = [
+            'Team', 'Exp Points', 'Points Range (90% CI)', 'Exp GD', 
+            'GD Range', 'Exp Rank', 'Rank Range', 'Title Win %', 'Top 4 %', 'Relegation %'
+        ]
+        styler = display_df.style.background_gradient(
+            subset=['Title Win %', 'Top 4 %'], cmap='Blues'
+        ).background_gradient(
+            subset=['Relegation %'], cmap='Reds'
+        ).format({
+            'Title Win %': '{:.2f}%',
+            'Top 4 %': '{:.2f}%',
+            'Relegation %': '{:.2f}%'
+        })
+        st.dataframe(styler, use_container_width=True, height=730)
         
-    # We display the standings_df with nice column names
-    display_df = standings_df.copy()
-    display_df.columns = [
-        'Team', 'Exp Points', 'Points Range (90% CI)', 'Exp GD', 
-        'GD Range', 'Exp Rank', 'Rank Range', 'Title Win %', 'Top 4 %', 'Relegation %'
-    ]
-    
-    # Apply styling
-    # Highlight zones: Title (Gold), Champions League (Blue), Relegation (Red)
-    # We can style the dataframe using pandas Styler
-    styler = display_df.style.background_gradient(
-        subset=['Title Win %', 'Top 4 %'], cmap='Blues'
-    ).background_gradient(
-        subset=['Relegation %'], cmap='Reds'
-    ).format({
-        'Title Win %': '{:.2f}%',
-        'Top 4 %': '{:.2f}%',
-        'Relegation %': '{:.2f}%'
-    })
-    
-    st.dataframe(styler, use_container_width=True, height=730)
+    elif table_mode == "🏆 Current Live Standings (Played So Far)":
+        if live_df is not None and not live_df.empty:
+            matches_count = len(completed_df) if completed_df is not None else 0
+            st.write(f"Actual Premier League table based on **{matches_count} completed matches** recorded in the 2026/27 campaign.")
+            
+            # KPI Cards
+            col_k1, col_k2, col_k3, col_k4 = st.columns(4)
+            with col_k1:
+                st.markdown(f"""
+                <div class="kpi-card" style="padding: 16px;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #00f2fe;">{matches_count} / 380</div>
+                    <div class="kpi-label">Matches Completed</div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col_k2:
+                leader = live_df.iloc[0]
+                st.markdown(f"""
+                <div class="kpi-card" style="padding: 16px;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;">{leader['Team']}</div>
+                    <div class="kpi-label">Current Leader ({leader['Pts']} pts)</div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col_k3:
+                top_gf = live_df.sort_values('GF', ascending=False).iloc[0]
+                st.markdown(f"""
+                <div class="kpi-card" style="padding: 16px;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #38bdf8;">{top_gf['Team']}</div>
+                    <div class="kpi-label">Best Attack ({top_gf['GF']} goals)</div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col_k4:
+                top_ga = live_df.sort_values('GA', ascending=True).iloc[0]
+                st.markdown(f"""
+                <div class="kpi-card" style="padding: 16px;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #a855f7;">{top_ga['Team']}</div>
+                    <div class="kpi-label">Best Defense ({top_ga['GA']} conceded)</div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+            st.write("")
+            display_live = live_df[['Rank', 'Team', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts', 'RecentForm']].copy()
+            display_live = display_live.rename(columns={'RecentForm': 'Form (Last 5)'})
+            
+            styler_live = display_live.style.background_gradient(
+                subset=['Pts', 'GD'], cmap='Blues'
+            )
+            st.dataframe(styler_live, use_container_width=True, height=730, hide_index=True)
+        else:
+            st.info("No completed match results recorded in the fixtures feed yet.")
+            
+    else:  # Side-by-Side (Current vs. Projected)
+        if live_df is not None and standings_df is not None:
+            st.write("Compare current positions against final projected finishes to identify overperformers and comeback candidates.")
+            
+            comp = pd.merge(
+                live_df[['Rank', 'Team', 'P', 'Pts', 'GD']],
+                standings_df[['Team', 'ExpectedRank', 'ExpectedPoints', 'ExpectedGD', 'TitleWin%', 'Top4%', 'Relegated%']],
+                on='Team'
+            )
+            comp = comp.rename(columns={
+                'Rank': 'Live Rank',
+                'Pts': 'Live Pts',
+                'ExpectedRank': 'Proj Rank',
+                'ExpectedPoints': 'Proj Pts',
+                'ExpectedGD': 'Proj GD'
+            })
+            comp['Rank Delta'] = comp['Live Rank'] - comp['Proj Rank']
+            def format_delta(d):
+                if d > 0:
+                    return f"▲ +{d} (Climb)"
+                elif d < 0:
+                    return f"▼ {d} (Fall)"
+                return "= (Steady)"
+            comp['Trajectory'] = comp['Rank Delta'].apply(format_delta)
+            comp['Pts to Add'] = comp['Proj Pts'] - comp['Live Pts']
+            comp = comp.sort_values('Live Rank').reset_index(drop=True)
+            
+            show_cols = ['Live Rank', 'Team', 'P', 'Live Pts', 'Proj Pts', 'Pts to Add', 'Proj Rank', 'Trajectory', 'TitleWin%', 'Top4%', 'Relegated%']
+            st.dataframe(
+                comp[show_cols].style.background_gradient(
+                    subset=['Live Pts', 'Proj Pts'], cmap='Blues'
+                ).background_gradient(
+                    subset=['TitleWin%', 'Top4%'], cmap='Greens'
+                ).background_gradient(
+                    subset=['Relegated%'], cmap='Reds'
+                ).format({
+                    'Live Pts': '{:.0f}',
+                    'Proj Pts': '{:.1f}',
+                    'Pts to Add': '{:+.1f}',
+                    'TitleWin%': '{:.1f}%',
+                    'Top4%': '{:.1f}%',
+                    'Relegated%': '{:.1f}%'
+                }),
+                use_container_width=True,
+                height=730,
+                hide_index=True
+            )
+            
+            st.write("---")
+            st.subheader("📈 Current Rank vs. Projected Final Position")
+            fig_comp = px.scatter(
+                comp,
+                x='Live Rank',
+                y='Proj Rank',
+                text='Team',
+                size='TitleWin%',
+                color='Rank Delta',
+                color_continuous_scale='RdYlGn',
+                labels={'Live Rank': 'Current Position', 'Proj Rank': 'Projected Final Position'}
+            )
+            fig_comp.add_shape(
+                type="line", line=dict(dash="dash", color="rgba(255,255,255,0.25)"),
+                x0=1, y0=1, x1=20, y1=20
+            )
+            fig_comp.update_traces(textposition='top center')
+            fig_comp.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#e2e8f0'),
+                xaxis=dict(gridcolor='rgba(255,255,255,0.05)', dtick=1, autorange="reversed"),
+                yaxis=dict(gridcolor='rgba(255,255,255,0.05)', dtick=1, autorange="reversed"),
+                height=550,
+                margin=dict(l=40, r=40, t=20, b=20)
+            )
+            st.plotly_chart(fig_comp, use_container_width=True)
 
 # ------------------------------------------------------------------------------
 # TAB 2: STANDING DISTRIBUTIONS (CHARTS)
@@ -410,6 +534,246 @@ with tab3:
             # Render explanation
             explanation_text = match_row.get('Explanation', 'No explanation generated for this match.')
             st.info(f"💡 **Model Factors & Explanations**:\n\n{explanation_text}")
+
+
+# ------------------------------------------------------------------------------
+# TAB H2H: HEAD-TO-HEAD SIMULATOR & SCORE HEATMAP
+# ------------------------------------------------------------------------------
+with tab_h2h:
+    st.subheader("⚔️ Head-to-Head Matchup Simulator")
+    st.write("Simulate any Premier League fixture to analyze score probability heatmaps, derived betting market odds, and historical rivalry records.")
+    
+    active_teams = sorted(list(standings_df['Team'].unique()))
+    
+    col_sel1, col_swap, col_sel2 = st.columns([5, 1, 5])
+    with col_sel1:
+        default_h_idx = active_teams.index('Arsenal') if 'Arsenal' in active_teams else 0
+        h2h_home = st.selectbox("🏠 Select Home Team", active_teams, index=default_h_idx, key="h2h_home_team")
+    with col_swap:
+        st.write("")
+        st.write("")
+        st.markdown("<div style='text-align: center; font-size: 1.5rem; font-weight: 800; color: #00f2fe; padding-top: 6px;'>VS</div>", unsafe_allow_html=True)
+    with col_sel2:
+        default_a_idx = active_teams.index('Man City') if 'Man City' in active_teams else 1
+        h2h_away = st.selectbox("✈️ Select Away Team", active_teams, index=default_a_idx, key="h2h_away_team")
+        
+    if h2h_home == h2h_away:
+        st.warning("⚠️ Please select two different teams to run the head-to-head matchup simulation.")
+    else:
+        # Load final Elo ratings
+        final_elos_map = {}
+        if os.path.exists('data/processed/final_elos.csv'):
+            f_elo_df = pd.read_csv('data/processed/final_elos.csv')
+            final_elos_map = dict(zip(f_elo_df['Team'], f_elo_df['Elo']))
+            
+        h_elo = final_elos_map.get(h2h_home, 1500.0)
+        a_elo = final_elos_map.get(h2h_away, 1500.0)
+        elo_diff = h_elo - a_elo
+        
+        # Check if match is in precomputed schedule
+        match_pred = None
+        if preds_df is not None:
+            matches_found = preds_df[(preds_df['HomeTeam'] == h2h_home) & (preds_df['AwayTeam'] == h2h_away)]
+            if not matches_found.empty:
+                match_pred = matches_found.iloc[0]
+                
+        # Expected goals (Home advantage ~ 1.25)
+        home_exp_g = max(0.25, 1.35 + elo_diff / 450.0)
+        away_exp_g = max(0.20, 1.15 - elo_diff / 450.0)
+        
+        # Compute joint Poisson distribution with Dixon-Coles low-score correlation
+        max_g = 5
+        score_matrix = np.zeros((max_g + 1, max_g + 1))
+        from scipy.stats import poisson
+        rho = -0.015
+        for x in range(max_g + 1):
+            for y in range(max_g + 1):
+                px = poisson.pmf(x, home_exp_g)
+                py = poisson.pmf(y, away_exp_g)
+                adj = 1.0
+                if x == 0 and y == 0:
+                    adj = 1.0 - home_exp_g * away_exp_g * rho
+                elif x == 1 and y == 0:
+                    adj = 1.0 + away_exp_g * rho
+                elif x == 0 and y == 1:
+                    adj = 1.0 + home_exp_g * rho
+                elif x == 1 and y == 1:
+                    adj = 1.0 - rho
+                adj = max(0.01, adj)
+                score_matrix[x, y] = px * py * adj
+        score_matrix /= score_matrix.sum()
+        
+        # Calculate outcome probabilities
+        p_home_win = np.sum(np.triu(score_matrix, 1).T)
+        p_draw = np.sum(np.diag(score_matrix))
+        p_away_win = np.sum(np.tril(score_matrix, -1).T)
+        
+        # Align with precomputed ensemble predictions if available
+        if match_pred is not None:
+            p_home_win = match_pred['HomeWin%'] / 100.0
+            p_draw = match_pred['Draw%'] / 100.0
+            p_away_win = match_pred['AwayWin%'] / 100.0
+            
+            # Rescale quadrants of score matrix to perfectly match blended ensemble
+            sum_h = np.sum(np.triu(score_matrix, 1).T)
+            sum_d = np.sum(np.diag(score_matrix))
+            sum_a = np.sum(np.tril(score_matrix, -1).T)
+            for x in range(max_g + 1):
+                for y in range(max_g + 1):
+                    if x > y and sum_h > 0:
+                        score_matrix[x, y] *= p_home_win / sum_h
+                    elif x < y and sum_a > 0:
+                        score_matrix[x, y] *= p_away_win / sum_a
+                    elif x == y and sum_d > 0:
+                        score_matrix[x, y] *= p_draw / sum_d
+            score_matrix /= score_matrix.sum()
+            
+        # Top Probability KPI Cards
+        col_res1, col_res2, col_res3 = st.columns(3)
+        with col_res1:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px; border-color: rgba(16, 185, 129, 0.4);">
+                <div style="font-size: 2.2rem; font-weight: 800; color: #10b981;">{p_home_win*100:.1f}%</div>
+                <div class="kpi-label">🏠 {h2h_home} Win</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Fair Odds: <strong>{1/max(0.01, p_home_win):.2f}</strong></div>
+            </div>
+            """, unsafe_allow_html=True)
+        with col_res2:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px; border-color: rgba(245, 158, 11, 0.4);">
+                <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b;">{p_draw*100:.1f}%</div>
+                <div class="kpi-label">🤝 Draw</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Fair Odds: <strong>{1/max(0.01, p_draw):.2f}</strong></div>
+            </div>
+            """, unsafe_allow_html=True)
+        with col_res3:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px; border-color: rgba(56, 189, 248, 0.4);">
+                <div style="font-size: 2.2rem; font-weight: 800; color: #38bdf8;">{p_away_win*100:.1f}%</div>
+                <div class="kpi-label">✈️ {h2h_away} Win</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Fair Odds: <strong>{1/max(0.01, p_away_win):.2f}</strong></div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        st.write("")
+        
+        # Most likely score
+        max_idx = np.unravel_index(np.argmax(score_matrix), score_matrix.shape)
+        ml_score_str = f"{max_idx[0]} - {max_idx[1]}"
+        ml_prob = score_matrix[max_idx] * 100.0
+        
+        # Columns: Score Heatmap (Left) and Derived Markets (Right)
+        col_heat, col_mkts = st.columns([6, 5])
+        
+        with col_heat:
+            st.markdown(f"### 🎯 Score Probability Heatmap")
+            st.caption(f"Most Likely Score: **{ml_score_str}** ({ml_prob:.1f}% probability) | Exp Goals: **{home_exp_g:.2f}** vs **{away_exp_g:.2f}**")
+            
+            z_vals = np.round(score_matrix * 100, 1)
+            y_labels = [f"{h2h_home}: {i}" for i in range(max_g + 1)]
+            x_labels = [f"{h2h_away}: {i}" for i in range(max_g + 1)]
+            
+            fig_heat = go.Figure(data=go.Heatmap(
+                z=z_vals,
+                x=x_labels,
+                y=y_labels,
+                text=np.array([[f"{z_vals[r, c]:.1f}%" for c in range(max_g + 1)] for r in range(max_g + 1)]),
+                texttemplate="%{text}",
+                textfont=dict(size=12, color="white"),
+                colorscale="Viridis",
+                showscale=False
+            ))
+            fig_heat.update_layout(
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#e2e8f0'),
+                xaxis=dict(gridcolor='rgba(255,255,255,0.05)', title=f"{h2h_away} Goals"),
+                yaxis=dict(gridcolor='rgba(255,255,255,0.05)', title=f"{h2h_home} Goals", autorange="reversed"),
+                height=420,
+                margin=dict(l=40, r=40, t=10, b=10)
+            )
+            st.plotly_chart(fig_heat, use_container_width=True)
+            
+        with col_mkts:
+            st.markdown("### 📊 Derived Goal & Betting Markets")
+            
+            # Goal totals
+            goals_sum = np.add.outer(np.arange(max_g + 1), np.arange(max_g + 1))
+            p_o15 = np.sum(score_matrix[goals_sum >= 2])
+            p_u15 = max(0.001, 1.0 - p_o15)
+            p_o25 = np.sum(score_matrix[goals_sum >= 3])
+            p_u25 = max(0.001, 1.0 - p_o25)
+            p_o35 = np.sum(score_matrix[goals_sum >= 4])
+            p_u35 = max(0.001, 1.0 - p_o35)
+            
+            # Both teams to score
+            p_btts_yes = np.sum(score_matrix[1:, 1:])
+            p_btts_no = max(0.001, 1.0 - p_btts_yes)
+            
+            # Clean sheets
+            p_cs_home = np.sum(score_matrix[:, 0]) # Away scores 0
+            p_cs_away = np.sum(score_matrix[0, :]) # Home scores 0
+            
+            # Double chance
+            p_1x = p_home_win + p_draw
+            p_x2 = p_draw + p_away_win
+            
+            mkt_data = [
+                {"Market": "Over 1.5 Goals", "Probability": f"{p_o15*100:.1f}%", "Fair Odds": f"{1/p_o15:.2f}", "Alternative": "Under 1.5", "Alt Prob": f"{p_u15*100:.1f}%", "Alt Odds": f"{1/p_u15:.2f}"},
+                {"Market": "Over 2.5 Goals", "Probability": f"{p_o25*100:.1f}%", "Fair Odds": f"{1/p_o25:.2f}", "Alternative": "Under 2.5", "Alt Prob": f"{p_u25*100:.1f}%", "Alt Odds": f"{1/p_u25:.2f}"},
+                {"Market": "Over 3.5 Goals", "Probability": f"{p_o35*100:.1f}%", "Fair Odds": f"{1/p_o35:.2f}", "Alternative": "Under 3.5", "Alt Prob": f"{p_u35*100:.1f}%", "Alt Odds": f"{1/p_u35:.2f}"},
+                {"Market": "BTTS (Yes)", "Probability": f"{p_btts_yes*100:.1f}%", "Fair Odds": f"{1/p_btts_yes:.2f}", "Alternative": "BTTS (No)", "Alt Prob": f"{p_btts_no*100:.1f}%", "Alt Odds": f"{1/p_btts_no:.2f}"},
+                {"Market": f"{h2h_home} Clean Sheet", "Probability": f"{p_cs_home*100:.1f}%", "Fair Odds": f"{1/max(0.001, p_cs_home):.2f}", "Alternative": f"{h2h_away} Clean Sheet", "Alt Prob": f"{p_cs_away*100:.1f}%", "Alt Odds": f"{1/max(0.001, p_cs_away):.2f}"},
+                {"Market": "Double Chance (1X)", "Probability": f"{p_1x*100:.1f}%", "Fair Odds": f"{1/p_1x:.2f}", "Alternative": "Double Chance (X2)", "Alt Prob": f"{p_x2*100:.1f}%", "Alt Odds": f"{1/p_x2:.2f}"}
+            ]
+            st.dataframe(pd.DataFrame(mkt_data), use_container_width=True, height=270, hide_index=True)
+            
+            if match_pred is not None and 'Explanation' in match_pred and pd.notna(match_pred['Explanation']):
+                st.info(f"💡 **Model Contributing Factors**:\n\n{match_pred['Explanation']}")
+                
+        # Historical H2H Meetings
+        st.write("---")
+        st.markdown(f"### 📜 Historical Head-to-Head Record ({h2h_home} vs. {h2h_away})")
+        if hist_df is not None and not hist_df.empty:
+            h2h_matches = hist_df[
+                ((hist_df['HomeTeam'] == h2h_home) & (hist_df['AwayTeam'] == h2h_away)) |
+                ((hist_df['HomeTeam'] == h2h_away) & (hist_df['AwayTeam'] == h2h_home))
+            ].copy()
+            
+            if h2h_matches.empty:
+                st.write(f"No previous Premier League meetings recorded between {h2h_home} and {h2h_away} in the historical database (2015-2026).")
+            else:
+                total_m = len(h2h_matches)
+                h_wins = len(h2h_matches[((h2h_matches['HomeTeam'] == h2h_home) & (h2h_matches['FTR'] == 'H')) | ((h2h_matches['AwayTeam'] == h2h_home) & (h2h_matches['FTR'] == 'A'))])
+                draws = len(h2h_matches[h2h_matches['FTR'] == 'D'])
+                a_wins = len(h2h_matches[((h2h_matches['HomeTeam'] == h2h_away) & (h2h_matches['FTR'] == 'H')) | ((h2h_matches['AwayTeam'] == h2h_away) & (h2h_matches['FTR'] == 'A'))])
+                
+                col_h1, col_h2, col_h3, col_h4 = st.columns(4)
+                with col_h1:
+                    st.metric("Total Meetings (Since 2015)", total_m)
+                with col_h2:
+                    st.metric(f"{h2h_home} Wins", f"{h_wins} ({h_wins/total_m*100:.0f}%)")
+                with col_h3:
+                    st.metric("Draws", f"{draws} ({draws/total_m*100:.0f}%)")
+                with col_h4:
+                    st.metric(f"{h2h_away} Wins", f"{a_wins} ({a_wins/total_m*100:.0f}%)")
+                    
+                # Recent encounters table
+                h2h_matches['Date'] = pd.to_datetime(h2h_matches['Date'], format='mixed', dayfirst=True)
+                recent_h2h = h2h_matches.sort_values('Date', ascending=False).head(8)
+                recent_display = []
+                for _, r in recent_h2h.iterrows():
+                    recent_display.append({
+                        'Season': r['Season'],
+                        'Date': r['Date'].strftime('%d %b %Y'),
+                        'Home': r['HomeTeam'],
+                        'Score': f"{int(r['FTHG'])} - {int(r['FTAG'])}",
+                        'Away': r['AwayTeam'],
+                        'Outcome': f"{r['HomeTeam']} Win" if r['FTR'] == 'H' else (f"{r['AwayTeam']} Win" if r['FTR'] == 'A' else 'Draw')
+                    })
+                st.dataframe(pd.DataFrame(recent_display), use_container_width=True, hide_index=True)
+        else:
+            st.info("Historical match database not loaded.")
 
 
 # ------------------------------------------------------------------------------
