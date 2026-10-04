@@ -81,26 +81,85 @@ h1, h2, h3 {
 </style>
 """, unsafe_allow_html=True)
 
-# Helper function to load simulated data
+# Helper function to load simulated and live data
 @st.cache_data
 def load_data():
     preds_path = 'output/predictions.csv'
     standings_path = 'output/final_table_projection.csv'
     squad_path = 'data/raw/squad_values.csv'
     transfers_path = 'data/raw/transfers.csv'
+    hist_path = 'data/processed/historical_results.csv'
     
     preds_df = pd.read_csv(preds_path) if os.path.exists(preds_path) else None
     standings_df = pd.read_csv(standings_path) if os.path.exists(standings_path) else None
     squad_df = pd.read_csv(squad_path) if os.path.exists(squad_path) else None
     transfers_df = pd.read_csv(transfers_path) if os.path.exists(transfers_path) else None
+    hist_df = pd.read_csv(hist_path) if os.path.exists(hist_path) else None
     
-    return preds_df, standings_df, squad_df, transfers_df
+    # Compute live standings from fixtures_raw.csv (matches played with actual scorelines)
+    from src.data_collection import parse_completed_fixtures_from_raw
+    completed_df, unplayed_df = parse_completed_fixtures_from_raw('data/raw')
+    
+    live_df = None
+    if not completed_df.empty:
+        teams = sorted(list(set(standings_df['Team']) if standings_df is not None else set(completed_df['HomeTeam'])))
+        stats = {t: {'Team': t, 'P': 0, 'W': 0, 'D': 0, 'L': 0, 'GF': 0, 'GA': 0, 'GD': 0, 'Pts': 0, 'Form': []} for t in teams}
+        
+        c_df = completed_df.copy()
+        c_df['Date'] = pd.to_datetime(c_df['Date'])
+        c_df = c_df.sort_values('Date').reset_index(drop=True)
+        
+        for _, row in c_df.iterrows():
+            h = row['HomeTeam']
+            a = row['AwayTeam']
+            hg = int(row['FTHG'])
+            ag = int(row['FTAG'])
+            
+            if h in stats and a in stats:
+                stats[h]['P'] += 1
+                stats[a]['P'] += 1
+                stats[h]['GF'] += hg
+                stats[h]['GA'] += ag
+                stats[a]['GF'] += ag
+                stats[a]['GA'] += hg
+                stats[h]['GD'] += (hg - ag)
+                stats[a]['GD'] += (ag - hg)
+                
+                if hg > ag:
+                    stats[h]['W'] += 1
+                    stats[h]['Pts'] += 3
+                    stats[h]['Form'].append('W')
+                    stats[a]['L'] += 1
+                    stats[a]['Form'].append('L')
+                elif ag > hg:
+                    stats[a]['W'] += 1
+                    stats[a]['Pts'] += 3
+                    stats[a]['Form'].append('W')
+                    stats[h]['L'] += 1
+                    stats[h]['Form'].append('L')
+                else:
+                    stats[h]['D'] += 1
+                    stats[h]['Pts'] += 1
+                    stats[h]['Form'].append('D')
+                    stats[a]['D'] += 1
+                    stats[a]['Pts'] += 1
+                    stats[a]['Form'].append('D')
+                    
+        for t in stats:
+            recent = stats[t]['Form'][-5:]
+            stats[t]['RecentForm'] = " ".join(recent) if recent else "-"
+            
+        live_df = pd.DataFrame(list(stats.values()))
+        live_df = live_df.sort_values(by=['Pts', 'GD', 'GF'], ascending=[False, False, False]).reset_index(drop=True)
+        live_df['Rank'] = live_df.index + 1
+        
+    return preds_df, standings_df, squad_df, transfers_df, hist_df, live_df, completed_df
 
-preds_df, standings_df, squad_df, transfers_df = load_data()
+preds_df, standings_df, squad_df, transfers_df, hist_df, live_df, completed_df = load_data()
 
 # Check if data exists
 if standings_df is None or preds_df is None:
-    st.error("Error: Simulation outputs not found in `/output/`. Please run the pipeline script first using the terminal command: `python -m src.pipeline`")
+    st.error("Error: Simulation outputs not found in `/output/`. Please run the pipeline script first using the terminal command: `python -m src.pipeline_v2`")
     st.stop()
 
 # Header Section
@@ -142,10 +201,11 @@ with col3:
 st.write("")
 
 # Tabs Setup
-tab1, tab2, tab3, tab_transfers, tab4, tab5 = st.tabs([
-    "📊 Simulated Standings", 
+tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab5 = st.tabs([
+    "📊 Standings (Live & Projected)", 
     "📈 Standing Distributions", 
-    "⚽ Match predictions", 
+    "⚽ Match Predictions", 
+    "⚔️ Head-to-Head Simulator",
     "🔄 Squad Transfers & Signings",
     "🔍 Narrative Insights",
     "🔮 What-If Sandbox"
