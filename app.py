@@ -185,7 +185,7 @@ with col2:
     st.markdown(f"""
     <div class="kpi-card">
         <div class="kpi-val">{top4_fav['Team']}</div>
-        <div class="kpi-label">⭐ Top 4 Lock ({top4_fav['Top4%']:.1f}%)</div>
+        <div class="kpi-label"> Top 4 Lock ({top4_fav['Top4%']:.1f}%)</div>
     </div>
     """, unsafe_allow_html=True)
 
