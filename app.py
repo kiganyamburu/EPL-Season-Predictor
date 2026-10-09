@@ -884,7 +884,7 @@ with tab4:
     st.write(text_title_race)
     
     # 2. Relegation Battle Narrative
-    st.markdown("###  Relegation Danger")
+    st.markdown("### Relegation Danger")
     bottom_3_teams = standings_df.tail(3)
     text_relegation = f"At the bottom of the table, survival will be a fierce scrap. The bottom 3 teams with the highest relegation probability are: "
     for r_idx, row in bottom_3_teams.iterrows():
