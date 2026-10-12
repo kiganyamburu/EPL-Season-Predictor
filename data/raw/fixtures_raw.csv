@@ -1,17 +1,54 @@
 Date,HomeTeam,AwayTeam,Summary
-2026-09-13,Coventry,Brighton,Coventry City - Brighton & Hove Albion FC
-2026-09-13,Man United,Man City,Manchester United - Manchester City
-2026-09-14,Leeds,Newcastle,Leeds United - Newcastle United
-2026-09-18,Brentford,Chelsea,Brentford FC - Chelsea
-2026-09-19,Brighton,Arsenal,Brighton & Hove Albion FC - Arsenal
-2026-09-19,Everton,Ipswich,Everton - Ipswich Town
-2026-09-19,Newcastle,Hull,Newcastle United - Hull City
-2026-09-19,Nott'm Forest,Coventry,Nottingham Forest - Coventry City
-2026-09-19,Tottenham,Aston Villa,Tottenham Hotspur - Aston Villa
-2026-09-20,Bournemouth,Liverpool,AFC Bournemouth - Liverpool
-2026-09-20,Fulham,Man United,Fulham - Manchester United
-2026-09-20,Leeds,Crystal Palace,Leeds United - Crystal Palace
-2026-09-20,Man City,Sunderland,Manchester City - Sunderland
+2026-08-21,Arsenal,Coventry,Arsenal - Coventry City (3-0)
+2026-08-22,Hull,Man United,Hull City - Manchester United (2-0)
+2026-08-22,Everton,Crystal Palace,Everton - Crystal Palace (2-0)
+2026-08-22,Ipswich,Sunderland,Ipswich Town - Sunderland (2-1)
+2026-08-22,Nott'm Forest,Leeds,Nottingham Forest - Leeds United (0-1)
+2026-08-22,Brentford,Tottenham,Brentford FC - Tottenham Hotspur (3-0)
+2026-08-23,Brighton,Aston Villa,Brighton & Hove Albion FC - Aston Villa (4-0)
+2026-08-23,Man City,Bournemouth,Manchester City - AFC Bournemouth (2-1)
+2026-08-23,Newcastle,Liverpool,Newcastle United - Liverpool (2-2)
+2026-08-24,Fulham,Chelsea,Fulham - Chelsea (2-3)
+2026-08-28,Crystal Palace,Man City,Crystal Palace - Manchester City (1-4)
+2026-08-29,Bournemouth,Everton,AFC Bournemouth - Everton (1-1)
+2026-08-29,Coventry,Hull,Coventry City - Hull City (0-1)
+2026-08-29,Liverpool,Nott'm Forest,Liverpool - Nottingham Forest (2-2)
+2026-08-29,Tottenham,Newcastle,Tottenham Hotspur - Newcastle United (0-2)
+2026-08-30,Chelsea,Brighton,Chelsea - Brighton & Hove Albion FC (4-3)
+2026-08-30,Leeds,Brentford,Leeds United - Brentford FC (1-1)
+2026-08-30,Man United,Ipswich,Manchester United - Ipswich Town (5-2)
+2026-08-30,Sunderland,Fulham,Sunderland - Fulham (1-0)
+2026-08-31,Aston Villa,Arsenal,Aston Villa - Arsenal (0-1)
+2026-09-04,Ipswich,Liverpool,Ipswich Town - Liverpool (0-2)
+2026-09-05,Brentford,Sunderland,Brentford FC - Sunderland (1-1)
+2026-09-05,Brighton,Leeds,Brighton & Hove Albion FC - Leeds United (1-1)
+2026-09-05,Fulham,Crystal Palace,Fulham - Crystal Palace (2-3)
+2026-09-05,Hull,Aston Villa,Hull City - Aston Villa (0-0)
+2026-09-05,Man City,Coventry,Manchester City - Coventry City (1-0)
+2026-09-05,Newcastle,Bournemouth,Newcastle United - AFC Bournemouth (2-2)
+2026-09-05,Nott'm Forest,Tottenham,Nottingham Forest - Tottenham Hotspur (0-0)
+2026-09-06,Arsenal,Chelsea,Arsenal - Chelsea (2-1)
+2026-09-06,Everton,Man United,Everton - Manchester United (2-2)
+2026-09-12,Bournemouth,Brentford,AFC Bournemouth - Brentford FC (2-2)
+2026-09-12,Aston Villa,Nott'm Forest,Aston Villa - Nottingham Forest (1-2)
+2026-09-12,Chelsea,Hull,Chelsea - Hull City (2-2)
+2026-09-12,Crystal Palace,Ipswich,Crystal Palace - Ipswich Town (2-3)
+2026-09-12,Liverpool,Fulham,Liverpool - Fulham (0-0)
+2026-09-12,Sunderland,Arsenal,Sunderland - Arsenal (0-2)
+2026-09-12,Tottenham,Everton,Tottenham Hotspur - Everton (0-0)
+2026-09-13,Coventry,Brighton,Coventry City - Brighton & Hove Albion FC (0-5)
+2026-09-13,Man United,Man City,Manchester United - Manchester City (0-1)
+2026-09-14,Leeds,Newcastle,Leeds United - Newcastle United (4-1)
+2026-09-18,Brentford,Chelsea,Brentford FC - Chelsea (3-0)
+2026-09-19,Brighton,Arsenal,Brighton & Hove Albion FC - Arsenal (3-0)
+2026-09-19,Everton,Ipswich,Everton - Ipswich Town (1-0)
+2026-09-19,Newcastle,Hull,Newcastle United - Hull City (2-1)
+2026-09-19,Nott'm Forest,Coventry,Nottingham Forest - Coventry City (0-1)
+2026-09-19,Tottenham,Aston Villa,Tottenham Hotspur - Aston Villa (2-3)
+2026-09-20,Bournemouth,Liverpool,AFC Bournemouth - Liverpool (0-1)
+2026-09-20,Fulham,Man United,Fulham - Manchester United (1-1)
+2026-09-20,Leeds,Crystal Palace,Leeds United - Crystal Palace (0-0)
+2026-09-20,Man City,Sunderland,Manchester City - Sunderland (5-3)
 2026-10-10,Arsenal,Leeds,Arsenal - Leeds United
 2026-10-10,Aston Villa,Brentford,Aston Villa - Brentford FC
 2026-10-10,Chelsea,Bournemouth,Chelsea - AFC Bournemouth
@@ -52,36 +89,36 @@ Date,HomeTeam,AwayTeam,Summary
 2026-10-31,Tottenham,Crystal Palace,Tottenham Hotspur - Crystal Palace
 2026-11-01,Liverpool,Arsenal,Liverpool - Arsenal
 2026-11-02,Newcastle,Everton,Newcastle United - Everton
+2026-11-06,Everton,Coventry,Everton - Coventry City
 2026-11-07,Arsenal,Hull,Arsenal - Hull City
-2026-11-07,Brighton,Brentford,Brighton & Hove Albion FC - Brentford FC
-2026-11-07,Crystal Palace,Liverpool,Crystal Palace - Liverpool
-2026-11-07,Everton,Coventry,Everton - Coventry City
 2026-11-07,Fulham,Newcastle,Fulham - Newcastle United
-2026-11-07,Ipswich,Bournemouth,Ipswich Town - AFC Bournemouth
 2026-11-07,Leeds,Tottenham,Leeds United - Tottenham Hotspur
-2026-11-07,Man United,Aston Villa,Manchester United - Aston Villa
 2026-11-07,Nott'm Forest,Man City,Nottingham Forest - Manchester City
-2026-11-07,Sunderland,Chelsea,Sunderland - Chelsea
+2026-11-08,Brighton,Brentford,Brighton & Hove Albion FC - Brentford FC
+2026-11-08,Crystal Palace,Liverpool,Crystal Palace - Liverpool
+2026-11-08,Ipswich,Bournemouth,Ipswich Town - AFC Bournemouth
+2026-11-08,Man United,Aston Villa,Manchester United - Aston Villa
+2026-11-08,Sunderland,Chelsea,Sunderland - Chelsea
 2026-11-21,Bournemouth,Nott'm Forest,AFC Bournemouth - Nottingham Forest
 2026-11-21,Aston Villa,Sunderland,Aston Villa - Sunderland
-2026-11-21,Brentford,Everton,Brentford FC - Everton
 2026-11-21,Chelsea,Leeds,Chelsea - Leeds United
 2026-11-21,Coventry,Crystal Palace,Coventry City - Crystal Palace
-2026-11-21,Hull,Brighton,Hull City - Brighton & Hove Albion FC
-2026-11-21,Liverpool,Man United,Liverpool - Manchester United
 2026-11-21,Man City,Fulham,Manchester City - Fulham
 2026-11-21,Newcastle,Arsenal,Newcastle United - Arsenal
 2026-11-21,Tottenham,Ipswich,Tottenham Hotspur - Ipswich Town
-2026-11-28,Arsenal,Man City,Arsenal - Manchester City
-2026-11-28,Brighton,Newcastle,Brighton & Hove Albion FC - Newcastle United
-2026-11-28,Crystal Palace,Hull,Crystal Palace - Hull City
-2026-11-28,Everton,Liverpool,Everton - Liverpool
-2026-11-28,Fulham,Bournemouth,Fulham - AFC Bournemouth
+2026-11-22,Hull,Brighton,Hull City - Brighton & Hove Albion FC
+2026-11-22,Liverpool,Man United,Liverpool - Manchester United
+2026-11-23,Brentford,Everton,Brentford FC - Everton
+2026-11-27,Nott'm Forest,Chelsea,Nottingham Forest - Chelsea
 2026-11-28,Ipswich,Aston Villa,Ipswich Town - Aston Villa
 2026-11-28,Leeds,Coventry,Leeds United - Coventry City
 2026-11-28,Man United,Brentford,Manchester United - Brentford FC
-2026-11-28,Nott'm Forest,Chelsea,Nottingham Forest - Chelsea
-2026-11-28,Sunderland,Tottenham,Sunderland - Tottenham Hotspur
+2026-11-29,Arsenal,Man City,Arsenal - Manchester City
+2026-11-29,Brighton,Newcastle,Brighton & Hove Albion FC - Newcastle United
+2026-11-29,Crystal Palace,Hull,Crystal Palace - Hull City
+2026-11-29,Everton,Liverpool,Everton - Liverpool
+2026-11-29,Fulham,Bournemouth,Fulham - AFC Bournemouth
+2026-11-29,Sunderland,Tottenham,Sunderland - Tottenham Hotspur
 2026-12-02,Bournemouth,Brighton,AFC Bournemouth - Brighton & Hove Albion FC
 2026-12-02,Aston Villa,Everton,Aston Villa - Everton
 2026-12-02,Brentford,Arsenal,Brentford FC - Arsenal

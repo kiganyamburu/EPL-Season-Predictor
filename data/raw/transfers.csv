@@ -26,100 +26,356 @@ Arsenal,Fabio Vieira,Out,Porto (Loan),0.0,Midfielder,0.06
 Arsenal,Reiss Nelson,Out,Fulham (Loan),0.0,Forward,0.06
 Arsenal,Albert Sambi Lokonga,Out,Sevilla (Loan),0.0,Midfielder,0.05
 Arsenal,Mohamed Elneny,Out,Al Jazira (Free),0.0,Midfielder,0.04
-Man City,Savinho,In,Troyes,40.0,Forward,0.12
+Man City,Gianluigi Donnarumma,In,PSG,60.0,Goalkeeper,0.16
+Man City,James Trafford,In,Burnley,20.0,Goalkeeper,0.1
+Man City,Marc Guéhi,In,Crystal Palace,70.0,Defender,0.15
+Man City,Abdukodir Khusanov,In,Lens,35.0,Defender,0.12
+Man City,Rayan Aït-Nouri,In,Wolves,45.0,Defender,0.13
+Man City,Vitor Reis,In,Palmeiras,30.0,Defender,0.11
 Man City,Tijjani Reijnders,In,AC Milan,55.0,Midfielder,0.14
-Man City,Claudio Echeverri,In,River Plate,18.0,Midfielder,0.08
+Man City,Nico González,In,Porto,40.0,Midfielder,0.12
+Man City,Enzo Fernández,In,Chelsea,110.0,Midfielder,0.16
+Man City,Elliot Anderson,In,Nott'm Forest,45.0,Midfielder,0.12
+Man City,Savinho,In,Troyes,40.0,Forward,0.13
+Man City,Rayan Cherki,In,Lyon,35.0,Forward,0.13
+Man City,Iliman Ndiaye,In,Everton,30.0,Forward,0.12
+Man City,Rodri,Out,Barcelona,90.0,Midfielder,0.18
+Man City,Ederson,Out,Al-Ittihad,40.0,Goalkeeper,0.15
 Man City,Julian Alvarez,Out,Atletico Madrid,75.0,Forward,0.15
+Man City,Jack Grealish,Out,Transferred,50.0,Forward,0.12
+Man City,Kevin De Bruyne,Out,San Diego FC,0.0,Midfielder,0.16
+Man City,Matheus Nunes,Out,Transferred,30.0,Midfielder,0.1
 Man City,Joao Cancelo,Out,Al-Hilal,25.0,Defender,0.1
-Liverpool,Martin Zubimendi,In,Real Sociedad,60.0,Midfielder,0.15
-Liverpool,Giorgi Mamardashvili,In,Valencia,35.0,Goalkeeper,0.12
+Liverpool,Giorgi Mamardashvili,In,Valencia,35.0,Goalkeeper,0.13
+Liverpool,Freddie Woodman,In,Preston,5.0,Goalkeeper,0.08
+Liverpool,Ronald Araújo,In,Barcelona,70.0,Defender,0.15
+Liverpool,Jeremie Frimpong,In,Bayer Leverkusen,45.0,Defender,0.14
+Liverpool,Milos Kerkez,In,Bournemouth,40.0,Defender,0.13
+Liverpool,Giovanni Leoni,In,Sampdoria,15.0,Defender,0.09
+Liverpool,Jeremy Jacquet,In,Rennes,12.0,Defender,0.08
+Liverpool,Florian Wirtz,In,Bayer Leverkusen,120.0,Midfielder,0.18
+Liverpool,Alexander Isak,In,Newcastle,130.0,Forward,0.18
+Liverpool,Hugo Ekitike,In,Eintracht Frankfurt,45.0,Forward,0.13
+Liverpool,Bradley Barcola,In,PSG,60.0,Forward,0.15
 Liverpool,Federico Chiesa,In,Juventus,15.0,Forward,0.12
+Liverpool,Victor Muñoz,In,Real Madrid,10.0,Forward,0.08
+Liverpool,Mohamed Salah,Out,Transferred,80.0,Forward,0.18
+Liverpool,Darwin Núñez,Out,Transferred,65.0,Forward,0.15
+Liverpool,Luis Díaz,Out,Transferred,70.0,Forward,0.15
+Liverpool,Diogo Jota,Out,Transferred,50.0,Forward,0.13
+Liverpool,Trent Alexander-Arnold,Out,Real Madrid,0.0,Defender,0.16
+Liverpool,Ibrahima Konaté,Out,Transferred,50.0,Defender,0.14
+Liverpool,Andy Robertson,Out,Tottenham,25.0,Defender,0.13
+Liverpool,Harvey Elliott,Out,Transferred,35.0,Midfielder,0.12
+Liverpool,Curtis Jones,Out,Transferred,35.0,Midfielder,0.12
 Liverpool,Fabio Carvalho,Out,Brentford,27.0,Midfielder,0.07
 Liverpool,Sepp van den Berg,Out,Brentford,25.0,Defender,0.07
+Chelsea,Emiliano Martínez,In,Aston Villa,40.0,Goalkeeper,0.14
+Chelsea,Mike Penders,In,Genk,20.0,Goalkeeper,0.08
+Chelsea,Maxence Lacroix,In,Wolfsburg,30.0,Defender,0.12
+Chelsea,Aaron Anselmino,In,Boca Juniors,18.0,Defender,0.1
+Chelsea,Mamadou Sarr,In,Strasbourg,15.0,Defender,0.08
+Chelsea,Jorrel Hato,In,Ajax,45.0,Defender,0.14
+Chelsea,Pep Chavarría,In,Rayo Vallecano,12.0,Defender,0.08
+Chelsea,João Neves,In,PSG,70.0,Midfielder,0.15
+Chelsea,Jordan Henderson,In,Ajax,5.0,Midfielder,0.08
+Chelsea,Andrey Santos,In,Strasbourg,0.0,Midfielder,0.1
+Chelsea,Reggie Watson,In,Chelsea Academy,0.0,Midfielder,0.05
+Chelsea,João Pedro,In,Brighton,60.0,Forward,0.15
+Chelsea,Liam Delap,In,Ipswich,35.0,Forward,0.12
+Chelsea,Estêvão,In,Palmeiras,60.0,Forward,0.15
+Chelsea,Alejandro Garnacho,In,Man United,65.0,Forward,0.15
+Chelsea,Morgan Rogers,In,Aston Villa,50.0,Forward,0.14
+Chelsea,Jamie Gittens,In,Borussia Dortmund,55.0,Forward,0.14
 Chelsea,Pedro Neto,In,Wolves,60.0,Forward,0.15
-Chelsea,Joao Felix,In,Atletico Madrid,52.0,Forward,0.14
-Chelsea,Kiernan Dewsbury-Hall,In,Leicester,35.0,Midfielder,0.12
+Chelsea,Joao Felix,In,Atletico Madrid,52.0,Forward,0.13
+Chelsea,Enzo Fernández,Out,Man City,110.0,Midfielder,0.16
+Chelsea,Noni Madueke,Out,Arsenal,45.0,Forward,0.13
 Chelsea,Conor Gallagher,Out,Atletico Madrid,42.0,Midfielder,0.15
 Chelsea,Ian Maatsen,Out,Aston Villa,44.0,Defender,0.1
 Chelsea,Romelu Lukaku,Out,Napoli,30.0,Forward,0.1
-Man United,Leny Yoro,In,Lille,62.0,Defender,0.15
-Man United,Manuel Ugarte,In,PSG,50.0,Midfielder,0.15
+Chelsea,Kepa Arrizabalaga,Out,Arsenal,5.0,Goalkeeper,0.08
+Chelsea,Omari Hutchinson,Out,Ipswich,23.5,Forward,0.1
+Man United,Senne Lammens,In,Antwerp,20.0,Goalkeeper,0.12
+Man United,Karl Darlow,In,Leeds,5.0,Goalkeeper,0.08
+Man United,Patrick Dorgu,In,Lecce,30.0,Defender,0.12
+Man United,Leny Yoro,In,Lille,62.0,Defender,0.14
 Man United,Matthijs de Ligt,In,Bayern Munich,45.0,Defender,0.14
-Man United,Joshua Zirkzee,In,Bologna,42.0,Forward,0.14
+Man United,Carlos Baleba,In,Brighton,65.0,Midfielder,0.15
+Man United,Andrey Santos,In,Chelsea,35.0,Midfielder,0.12
+Man United,Youri Tielemans,In,Aston Villa,40.0,Midfielder,0.14
+Man United,Manuel Ugarte,In,PSG,50.0,Midfielder,0.14
+Man United,Bryan Mbeumo,In,Brentford,65.0,Forward,0.15
+Man United,Matheus Cunha,In,Wolves,70.0,Forward,0.15
+Man United,Benjamin Šeško,In,RB Leipzig,75.0,Forward,0.16
+Man United,Joshua Zirkzee,In,Bologna,42.0,Forward,0.13
+Man United,Alejandro Garnacho,Out,Chelsea,65.0,Forward,0.15
+Man United,Rasmus Højlund,Out,Transferred,60.0,Forward,0.14
+Man United,Antony,Out,Transferred,25.0,Forward,0.1
+Man United,Casemiro,Out,Transferred,20.0,Midfielder,0.12
+Man United,Christian Eriksen,Out,Transferred,0.0,Midfielder,0.08
 Man United,Scott McTominay,Out,Napoli,30.0,Midfielder,0.12
 Man United,Aaron Wan-Bissaka,Out,West Ham,17.0,Defender,0.1
+Man United,André Onana,Out,Transferred,35.0,Goalkeeper,0.14
+Tottenham,Antonín Kinský,In,Slavia Prague,15.0,Goalkeeper,0.1
+Tottenham,Martin Dúbravka,In,Newcastle,5.0,Goalkeeper,0.08
+Tottenham,Andy Robertson,In,Liverpool,25.0,Defender,0.13
+Tottenham,Tosin Adarabioyo,In,Chelsea,20.0,Defender,0.11
+Tottenham,Marcos Senesi,In,Bournemouth,25.0,Defender,0.12
+Tottenham,Jan Paul van Hecke,In,Brighton,35.0,Defender,0.13
+Tottenham,Sandro Tonali,In,Newcastle,70.0,Midfielder,0.16
+Tottenham,Conor Gallagher,In,Atletico Madrid,45.0,Midfielder,0.14
+Tottenham,Mateus Fernandes,In,Southampton,30.0,Midfielder,0.12
+Tottenham,Xavi Simons,In,RB Leipzig,80.0,Midfielder,0.16
+Tottenham,Sávio,In,Man City,50.0,Forward,0.14
 Tottenham,Dominic Solanke,In,Bournemouth,65.0,Forward,0.16
-Tottenham,Archie Gray,In,Leeds,41.0,Midfielder,0.12
+Tottenham,Mohammed Kudus,In,West Ham,65.0,Forward,0.15
+Tottenham,Omar Marmoush,In,Eintracht Frankfurt,55.0,Forward,0.14
+Tottenham,Mykhailo Mudryk,In,Chelsea,40.0,Forward,0.12
 Tottenham,Wilson Odobert,In,Burnley,30.0,Forward,0.1
+Tottenham,Son Heung-min,Out,Transferred,40.0,Forward,0.16
+Tottenham,Guglielmo Vicario,Out,Transferred,35.0,Goalkeeper,0.14
+Tottenham,Cristian Romero,Out,Transferred,60.0,Defender,0.15
+Tottenham,Yves Bissouma,Out,Transferred,25.0,Midfielder,0.12
+Tottenham,Pape Matar Sarr,Out,Transferred,30.0,Midfielder,0.12
+Tottenham,Brennan Johnson,Out,Transferred,45.0,Forward,0.13
+Tottenham,Richarlison,Out,Transferred,35.0,Forward,0.12
 Tottenham,Oliver Skipp,Out,Leicester,23.0,Midfielder,0.08
 Tottenham,Emerson Royal,Out,AC Milan,15.0,Defender,0.08
+Tottenham,Joe Rodon,Out,Leeds,12.0,Defender,0.08
 Aston Villa,Amadou Onana,In,Everton,59.0,Midfielder,0.15
 Aston Villa,Ian Maatsen,In,Chelsea,44.0,Defender,0.12
-Aston Villa,Jaden Philogene,In,Hull,18.0,Forward,0.1
+Aston Villa,Marco Bizot,In,Brest,12.0,Goalkeeper,0.12
+Aston Villa,Zion Suzuki,In,Parma,15.0,Goalkeeper,0.12
+Aston Villa,Victor Lindelöf,In,Man United,10.0,Defender,0.11
+Aston Villa,Aaron Wan-Bissaka,In,West Ham,18.0,Defender,0.12
+Aston Villa,Taylor Harwood-Bellis,In,Southampton,20.0,Defender,0.11
+Aston Villa,Matteo Ruggeri,In,Atalanta,22.0,Defender,0.13
+Aston Villa,Leon Goretzka,In,Bayern Munich,30.0,Midfielder,0.15
+Aston Villa,João Gomes,In,Wolves,35.0,Midfielder,0.14
+Aston Villa,Ross Barkley,In,Luton,5.0,Midfielder,0.1
+Aston Villa,Nicolas Jackson,In,Chelsea,55.0,Forward,0.16
+Aston Villa,Alejandro Garnacho,In,Man United,60.0,Forward,0.16
+Aston Villa,Tammy Abraham,In,Roma,25.0,Forward,0.14
+Aston Villa,Ezri Konsa,Out,Arsenal,45.0,Defender,0.14
+Aston Villa,Emiliano Martínez,Out,Chelsea,40.0,Goalkeeper,0.15
+Aston Villa,Morgan Rogers,Out,Chelsea,50.0,Forward,0.14
 Aston Villa,Douglas Luiz,Out,Juventus,50.0,Midfielder,0.16
 Aston Villa,Moussa Diaby,Out,Al-Ittihad,60.0,Forward,0.15
+Aston Villa,Ollie Watkins,Out,Transferred,60.0,Forward,0.18
 Newcastle,Lewis Hall,In,Chelsea,33.0,Defender,0.12
 Newcastle,William Osula,In,Sheffield United,12.0,Forward,0.08
-Newcastle,Lloyd Kelly,In,Bournemouth,0.0,Defender,0.1
+Newcastle,Lukas Hornicek,In,Braga,8.0,Goalkeeper,0.1
+Newcastle,Amar Dedić,In,Salzburg,20.0,Defender,0.12
+Newcastle,Malick Thiaw,In,AC Milan,35.0,Defender,0.14
+Newcastle,Nicolás González,In,Fiorentina,30.0,Midfielder,0.13
+Newcastle,Jacob Ramsey,In,Aston Villa,38.0,Midfielder,0.13
+Newcastle,Anthony Elanga,In,Nott'm Forest,45.0,Forward,0.14
+Newcastle,Yoane Wissa,In,Brentford,35.0,Forward,0.14
+Newcastle,Alexander Isak,Out,Liverpool,130.0,Forward,0.2
+Newcastle,Sandro Tonali,Out,Tottenham,65.0,Midfielder,0.16
 Newcastle,Elliot Anderson,Out,Nott'm Forest,41.0,Midfielder,0.12
 Newcastle,Yankuba Minteh,Out,Brighton,38.0,Forward,0.1
 Brighton,Georginio Rutter,In,Leeds,47.0,Forward,0.15
 Brighton,Yankuba Minteh,In,Newcastle,38.0,Forward,0.14
-Brighton,Mats Wieffer,In,Feyenoord,30.0,Midfielder,0.12
-Brighton,Ferdi Kadioglu,In,Fenerbahce,30.0,Defender,0.12
+Brighton,Mats Wieffer,In,Feyenoord,30.0,Midfielder,0.13
+Brighton,Ferdi Kadioglu,In,Fenerbahce,30.0,Defender,0.13
+Brighton,Matt O'Riley,In,Celtic,30.0,Midfielder,0.13
+Brighton,Brajan Gruda,In,Mainz 05,30.0,Forward,0.13
+Brighton,Olivier Boscagli,In,PSV,20.0,Defender,0.12
+Brighton,Maxim De Cuyper,In,Club Brugge,20.0,Defender,0.12
+Brighton,Diego Coppola,In,Hellas Verona,15.0,Defender,0.11
+Brighton,Luka Vušković,In,Spurs / Hajduk,14.0,Defender,0.11
+Brighton,Diego Gómez,In,Inter Miami,14.0,Midfielder,0.11
+Brighton,Charalampos Kostoulas,In,Olympiacos,12.0,Forward,0.1
+Brighton,Stefanos Tzimas,In,PAOK,12.0,Forward,0.1
+Brighton,Joao Pedro,Out,Chelsea,60.0,Forward,0.16
 Brighton,Deniz Undav,Out,Stuttgart,27.0,Forward,0.12
-Brighton,Pascal Groß,Out,Borussia Dortmund,7.0,Midfielder,0.14
-Fulham,Emile Smith Rowe,In,Arsenal,34.0,Midfielder,0.15
+Brighton,Billy Gilmour,Out,Napoli,14.0,Midfielder,0.11
+Fulham,Benjamin Lecomte,In,Montpellier,5.0,Goalkeeper,0.1
 Fulham,Joachim Andersen,In,Crystal Palace,30.0,Defender,0.14
-Fulham,Sander Berge,In,Burnley,23.0,Midfielder,0.12
+Fulham,Jorge Cuenca,In,Villarreal,6.7,Defender,0.11
+Fulham,Sander Berge,In,Burnley,23.0,Midfielder,0.13
+Fulham,Shea Charles,In,Southampton,12.0,Midfielder,0.11
+Fulham,Hugo Larsson,In,Eintracht Frankfurt,25.0,Midfielder,0.14
+Fulham,Emile Smith Rowe,In,Arsenal,34.0,Midfielder,0.15
+Fulham,Ryan Sessegnon,In,Tottenham,0.0,Midfielder,0.11
+Fulham,Gonzalo García,In,Real Madrid,10.0,Forward,0.11
+Fulham,Kevin,In,Shakhtar,15.0,Forward,0.12
+Fulham,Oscar Bobb,In,Man City,25.0,Forward,0.14
 Fulham,Joao Palhinha,Out,Bayern Munich,51.0,Midfielder,0.18
 Fulham,Tosin Adarabioyo,Out,Chelsea,0.0,Defender,0.12
+Fulham,Harry Wilson,Out,Leeds,15.0,Forward,0.13
+Fulham,Issa Diop,Out,Ipswich,12.0,Defender,0.12
+Bournemouth,Djordje Petrović,In,Chelsea,25.0,Goalkeeper,0.13
+Bournemouth,Michele Di Gregorio,In,Juventus,18.0,Goalkeeper,0.12
+Bournemouth,Fraser Forster,In,Tottenham,3.0,Goalkeeper,0.08
+Bournemouth,Bafodé Diakité,In,Lille,22.0,Defender,0.13
+Bournemouth,António Tavares,In,Transferred,10.0,Defender,0.09
+Bournemouth,Juan Luis Sánchez,In,Transferred,12.0,Defender,0.1
+Bournemouth,Adrien Truffert,In,Rennes,20.0,Defender,0.12
+Bournemouth,Amine Adli,In,Bayer Leverkusen,30.0,Midfielder,0.14
+Bournemouth,Álvaro Rodríguez,In,Real Madrid,15.0,Forward,0.12
 Bournemouth,Evanilson,In,FC Porto,47.0,Forward,0.16
-Bournemouth,Dean Huijsen,In,Juventus,15.0,Defender,0.12
 Bournemouth,Julian Araujo,In,Barcelona,10.0,Defender,0.1
 Bournemouth,Dominic Solanke,Out,Tottenham,65.0,Forward,0.18
+Bournemouth,Milos Kerkez,Out,Liverpool,40.0,Defender,0.14
+Bournemouth,Marcos Senesi,Out,Tottenham,25.0,Defender,0.13
 Bournemouth,Lloyd Kelly,Out,Newcastle,0.0,Defender,0.12
-Brentford,Igor Thiago,In,Club Brugge,33.0,Forward,0.14
-Brentford,Fabio Carvalho,In,Liverpool,27.0,Midfielder,0.14
+Bournemouth,Dean Huijsen,Out,Transferred,15.0,Defender,0.11
+Brentford,Caoimhín Kelleher,In,Liverpool,18.0,Goalkeeper,0.13
+Brentford,Hákon Valdimarsson,In,Elfsborg,3.0,Goalkeeper,0.1
+Brentford,Ellery Balcombe,In,Brentford Academy,0.0,Goalkeeper,0.08
+Brentford,Aaron Hickey,In,Bologna,16.5,Defender,0.12
+Brentford,Rico Henry,In,Walsall,1.8,Defender,0.12
 Brentford,Sepp van den Berg,In,Liverpool,25.0,Defender,0.12
+Brentford,Ethan Pinnock,In,Barnsley,3.3,Defender,0.13
+Brentford,Kristoffer Ajer,In,Celtic,15.7,Defender,0.13
+Brentford,Nathan Collins,In,Wolves,26.8,Defender,0.14
+Brentford,El Hadji Malick Diouf,In,Slavia Prague,15.0,Defender,0.11
+Brentford,Michael Kayode,In,Fiorentina,18.0,Defender,0.12
+Brentford,Ji-soo Kim,In,Seongnam,0.7,Defender,0.09
+Brentford,Jannik Schuster,In,RB Salzburg,2.0,Defender,0.08
+Brentford,Benjamin Fredrick,In,Simoiben,0.5,Defender,0.08
+Brentford,Yehor Yarmoliuk,In,Dnipro-1,1.5,Midfielder,0.11
+Brentford,Mathias Jensen,In,Celta Vigo,3.8,Midfielder,0.13
+Brentford,Josh Dasilva,In,Arsenal,0.0,Midfielder,0.1
+Brentford,Fabio Carvalho,In,Liverpool,27.0,Midfielder,0.14
+Brentford,Antoni Milambo,In,Feyenoord,18.0,Midfielder,0.12
+Brentford,Mamadou Sangaré,In,Rapid Wien,10.0,Midfielder,0.1
+Brentford,Keane Lewis-Potter,In,Hull City,20.0,Midfielder,0.12
+Brentford,Mikkel Damsgaard,In,Sampdoria,15.0,Midfielder,0.13
+Brentford,Vitaly Janelt,In,VfL Bochum,0.6,Midfielder,0.13
+Brentford,Kevin Schade,In,Freiburg,25.0,Forward,0.13
+Brentford,Igor Thiago,In,Club Brugge,33.0,Forward,0.14
+Brentford,Dango Ouattara,In,Bournemouth,25.0,Forward,0.13
+Brentford,Callum Wilson,In,Newcastle,10.0,Forward,0.12
+Brentford,Jaidon Anthony,In,Bournemouth,12.0,Forward,0.11
+Brentford,Gustavo Nunes,In,Grêmio,12.0,Forward,0.11
+Brentford,Kaye Furo,In,Club Brugge,2.5,Forward,0.08
 Brentford,Ivan Toney,Out,Al-Ahli,42.0,Forward,0.18
 Brentford,David Raya,Out,Arsenal,32.0,Goalkeeper,0.15
+Brentford,Yoane Wissa,Out,Newcastle,35.0,Forward,0.14
+Brentford,Bryan Mbeumo,Out,Man United,65.0,Forward,0.18
+Brentford,Christian Nørgaard,Out,Arsenal,15.0,Midfielder,0.13
+Crystal Palace,Walter Benítez,In,PSV,6.0,Goalkeeper,0.11
+Crystal Palace,Axel Disasi,In,Chelsea,25.0,Defender,0.13
+Crystal Palace,Benjamin Chilwell,In,Chelsea,20.0,Defender,0.13
+Crystal Palace,Oscar Mingueza,In,Celta Vigo,12.0,Defender,0.12
+Crystal Palace,Takehiro Tomiyasu,In,Arsenal,15.0,Defender,0.13
+Crystal Palace,Quinten Timber,In,Feyenoord,28.0,Midfielder,0.14
+Crystal Palace,Jørgen Strand Larsen,In,Celta Vigo,27.0,Forward,0.14
+Crystal Palace,Ismaila Sarr,In,Marseille,15.0,Forward,0.13
+Crystal Palace,Dwight McNeil,In,Everton,18.0,Forward,0.13
 Crystal Palace,Eddie Nketiah,In,Arsenal,30.0,Forward,0.14
-Crystal Palace,Maxence Lacroix,In,Wolfsburg,21.0,Defender,0.14
-Crystal Palace,Ismaila Sarr,In,Marseille,15.0,Forward,0.12
+Crystal Palace,Evann Guessand,In,Nice,12.0,Forward,0.11
+Crystal Palace,Yeremy Pino,In,Villarreal,32.0,Forward,0.15
+Crystal Palace,Dario Osorio,In,Midtjylland,10.0,Forward,0.11
 Crystal Palace,Michael Olise,Out,Bayern Munich,53.0,Forward,0.18
 Crystal Palace,Joachim Andersen,Out,Fulham,30.0,Defender,0.15
+Crystal Palace,Marc Guéhi,Out,Man City,60.0,Defender,0.18
 Everton,Jake O'Brien,In,Lyon,19.5,Defender,0.12
-Everton,Iliman Ndiaye,In,Marseille,18.0,Forward,0.14
-Everton,Tim Iroegbunam,In,Aston Villa,11.0,Midfielder,0.1
+Everton,Mark Travers,In,Bournemouth,8.0,Goalkeeper,0.1
+Everton,Ainsley Maitland-Niles,In,Lyon,10.0,Defender,0.11
+Everton,Kiernan Dewsbury-Hall,In,Chelsea,35.0,Midfielder,0.14
+Everton,Hayden Hackney,In,Middlesbrough,22.0,Midfielder,0.13
+Everton,Merlin Röhl,In,Freiburg,20.0,Midfielder,0.12
+Everton,Carlos Alcaraz,In,Southampton,18.0,Midfielder,0.12
+Everton,Jack Grealish,In,Man City,50.0,Forward,0.16
+Everton,Brennan Johnson,In,Tottenham,45.0,Forward,0.15
+Everton,Thierno Barry,In,Villarreal,27.0,Forward,0.14
 Everton,Amadou Onana,Out,Aston Villa,59.0,Midfielder,0.16
+Everton,Iliman Ndiaye,Out,Man City,30.0,Forward,0.14
 Everton,Ben Godfrey,Out,Atalanta,12.0,Defender,0.1
-Nott'm Forest,Elliot Anderson,In,Newcastle,41.0,Midfielder,0.15
+Nott'm Forest,John Victor,In,Botafogo,8.0,Goalkeeper,0.11
+Nott'm Forest,Ousmane Diomande,In,Sporting CP,40.0,Defender,0.15
 Nott'm Forest,Nikola Milenkovic,In,Fiorentina,14.0,Defender,0.14
-Nott'm Forest,Ramon Sosa,In,Talleres,12.0,Forward,0.1
+Nott'm Forest,Daniel Muñoz,In,Crystal Palace,10.0,Defender,0.12
+Nott'm Forest,Luca Netz,In,Borussia Monchengladbach,12.0,Defender,0.12
+Nott'm Forest,Nicolò Savona,In,Juventus,15.0,Defender,0.13
+Nott'm Forest,Xaver Schlager,In,RB Leipzig,20.0,Midfielder,0.14
+Nott'm Forest,James McAtee,In,Man City,25.0,Midfielder,0.14
+Nott'm Forest,Igor Jesus,In,Botafogo,22.0,Forward,0.14
+Nott'm Forest,Arnaud Kalimuendo,In,Rennes,25.0,Forward,0.14
+Nott'm Forest,Dan Ndoye,In,Bologna,18.0,Forward,0.13
+Nott'm Forest,Anthony Elanga,Out,Newcastle,45.0,Forward,0.15
+Nott'm Forest,Taiwo Awoniyi,Out,Coventry,18.0,Forward,0.14
 Nott'm Forest,Moussa Niakhaté,Out,Lyon,32.0,Defender,0.12
 Nott'm Forest,Orel Mangala,Out,Lyon,23.0,Midfielder,0.12
-Leeds,Largie Ramazani,In,Almeria,11.7,Forward,0.12
-Leeds,Ao Tanaka,In,Fortuna Dusseldorf,4.0,Midfielder,0.12
+Leeds,James Trafford,In,Burnley,18.0,Goalkeeper,0.13
+Leeds,Lucas Perri,In,Lyon,10.0,Goalkeeper,0.11
+Leeds,Jayden Bogle,In,Sheffield United,6.0,Defender,0.12
+Leeds,Gabriel Gudmundsson,In,Lille,12.0,Defender,0.12
+Leeds,Tarik Muharemović,In,Juventus,8.0,Defender,0.11
 Leeds,Joe Rodon,In,Tottenham,12.0,Defender,0.14
+Leeds,Jaka Bijol,In,Udinese,15.0,Defender,0.13
+Leeds,James Justin,In,Leicester,10.0,Defender,0.12
+Leeds,Nico Elvedi,In,Borussia Monchengladbach,12.0,Defender,0.13
+Leeds,Sean Longstaff,In,Newcastle,15.0,Midfielder,0.13
+Leeds,Anton Stach,In,Hoffenheim,16.0,Midfielder,0.14
+Leeds,Ao Tanaka,In,Fortuna Dusseldorf,4.0,Midfielder,0.12
+Leeds,Dominic Calvert-Lewin,In,Everton,25.0,Forward,0.16
+Leeds,Harry Wilson,In,Fulham,15.0,Forward,0.14
+Leeds,Noah Okafor,In,AC Milan,18.0,Forward,0.15
+Leeds,Lukas Nmecha,In,Wolfsburg,10.0,Forward,0.12
+Leeds,Jean-Mattéo Bahoya,In,Eintracht Frankfurt,8.0,Forward,0.11
 Leeds,Archie Gray,Out,Tottenham,41.0,Midfielder,0.16
 Leeds,Georginio Rutter,Out,Brighton,47.0,Forward,0.16
 Leeds,Crysencio Summerville,Out,West Ham,29.0,Forward,0.18
-Sunderland,Salis Abdul Samed,In,Lens,5.0,Midfielder,0.12
-Sunderland,Alan Browne,In,Preston,0.0,Midfielder,0.12
-Sunderland,Milan Aleksic,In,Radnicki,3.7,Midfielder,0.08
+Sunderland,Robin Roefs,In,NEC Nijmegen,6.0,Goalkeeper,0.11
+Sunderland,Omar Alderete,In,Getafe,10.0,Defender,0.12
+Sunderland,Kevin Danso,In,Lens,22.0,Defender,0.14
+Sunderland,Reinildo Mandava,In,Atletico Madrid,12.0,Defender,0.13
+Sunderland,Thomas Meunier,In,Lille,5.0,Defender,0.11
+Sunderland,Nordi Mukiele,In,PSG,15.0,Defender,0.13
+Sunderland,Enzo Le Fée,In,Roma,20.0,Midfielder,0.14
+Sunderland,Noah Sadiki,In,Union SG,12.0,Midfielder,0.12
+Sunderland,Granit Xhaka,In,Bayer Leverkusen,25.0,Midfielder,0.17
+Sunderland,Brian Brobbey,In,Ajax,30.0,Forward,0.16
+Sunderland,Wilson Isidor,In,Zenit,6.0,Forward,0.12
+Sunderland,Nilson Angulo,In,Anderlecht,8.0,Forward,0.11
 Sunderland,Jack Clarke,Out,Ipswich,18.0,Forward,0.18
-Ipswich,Omari Hutchinson,In,Chelsea,23.5,Forward,0.15
+Ipswich,Arijanet Muric,In,Burnley,9.5,Goalkeeper,0.12
+Ipswich,Kjell Scherpen,In,Brighton,5.0,Goalkeeper,0.1
 Ipswich,Jacob Greaves,In,Hull,21.5,Defender,0.14
-Ipswich,Liam Delap,In,Man City,17.8,Forward,0.14
-Ipswich,Jack Clarke,In,Sunderland,18.0,Forward,0.14
-Ipswich,Sammie Szmodics,In,Blackburn,10.6,Forward,0.14
+Ipswich,Ben Johnson,In,West Ham,0.0,Defender,0.12
+Ipswich,Issa Diop,In,Fulham,12.0,Defender,0.12
+Ipswich,Kalvin Phillips,In,Man City,0.0,Midfielder,0.13
+Ipswich,Jens-Lys Cajuste,In,Napoli,0.0,Midfielder,0.12
+Ipswich,Omari Hutchinson,In,Chelsea,23.5,Midfielder,0.15
+Ipswich,Jack Clarke,In,Sunderland,18.0,Midfielder,0.14
+Ipswich,Julio Enciso,In,Brighton,15.0,Midfielder,0.13
+Ipswich,Abdul Fatawu,In,Leicester,17.0,Midfielder,0.13
+Ipswich,Liam Delap,In,Man City,17.8,Forward,0.15
+Ipswich,Daizen Maeda,In,Celtic,14.0,Forward,0.13
 Ipswich,Vaclav Hladky,Out,Burnley,0.0,Goalkeeper,0.1
+Ipswich,Luke Woolfenden,Out,Coventry,4.0,Defender,0.11
+Coventry,Daniel Bentley,In,Wolves,3.0,Goalkeeper,0.11
+Coventry,Aurèle Amenda,In,Eintracht Frankfurt,12.0,Defender,0.13
+Coventry,Kaine Kesler-Hayden,In,Aston Villa,5.0,Defender,0.11
+Coventry,Ethan Pinnock,In,Brentford,8.0,Defender,0.13
+Coventry,Luke Woolfenden,In,Ipswich,4.0,Defender,0.11
+Coventry,Matt Grimes,In,Swansea,6.0,Midfielder,0.12
+Coventry,Gustavo Hamer,In,Sheffield United,15.0,Midfielder,0.15
+Coventry,Frank Onyeka,In,Brentford,10.0,Midfielder,0.13
 Coventry,Jack Rudoni,In,Huddersfield,6.0,Midfielder,0.14
-Coventry,Oliver Dovin,In,Hammarby,1.9,Goalkeeper,0.12
-Coventry,Brandon Thomas-Asante,In,West Brom,2.5,Forward,0.12
+Coventry,Taiwo Awoniyi,In,Nott'm Forest,18.0,Forward,0.16
+Coventry,Loum Tchaouna,In,Lazio,12.0,Forward,0.13
+Coventry,Brandon Thomas-Asante,In,West Brom,2.5,Forward,0.11
 Coventry,Callum O'Hare,Out,Sheffield United,0.0,Midfielder,0.14
+Hull,Jack Butland,In,Rangers,5.0,Goalkeeper,0.12
+Hull,Konstantinos Tzolakis,In,Olympiacos,6.0,Goalkeeper,0.11
 Hull,Charlie Hughes,In,Wigan,4.0,Defender,0.12
+Hull,Ryan Giles,In,Luton,5.0,Defender,0.11
+Hull,Brooke Norton-Cuffy,In,Genoa,2.0,Defender,0.1
+Hull,Matthew Targett,In,Newcastle,6.0,Defender,0.12
+Hull,Lucas Gourna-Douath,In,Salzburg,12.0,Midfielder,0.14
+Hull,Tim Iroegbunam,In,Everton,11.0,Midfielder,0.13
+Hull,Hidemasa Morita,In,Sporting CP,14.0,Midfielder,0.15
 Hull,Mohamed Belloumi,In,Farense,5.5,Forward,0.12
+Hull,Joe Gelhardt,In,Leeds,6.0,Forward,0.12
+Hull,Oliver McBurnie,In,Las Palmas,0.0,Forward,0.12
+Hull,Benjamin Tzolis,In,Club Brugge,15.0,Forward,0.14
+Hull,Mohamed-Ali Cho,In,Nice,12.0,Forward,0.13
 Hull,Jacob Greaves,Out,Ipswich,21.5,Defender,0.16
 Hull,Jaden Philogene,Out,Aston Villa,18.0,Forward,0.16
