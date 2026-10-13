@@ -145,7 +145,7 @@ def load_data():
                     stats[a]['Form'].append('D')
                     
         for t in stats:
-            recent = stats[t]['Form'][-5:]
+            recent = stats[t]['Form'][-6:]
             stats[t]['RecentForm'] = " ".join(recent) if recent else "-"
             
         live_df = pd.DataFrame(list(stats.values()))
@@ -284,7 +284,7 @@ with tab1:
                 
             st.write("")
             display_live = live_df[['Rank', 'Team', 'P', 'W', 'D', 'L', 'GF', 'GA', 'GD', 'Pts', 'RecentForm']].copy()
-            display_live = display_live.rename(columns={'RecentForm': 'Form (Last 5)'})
+            display_live = display_live.rename(columns={'RecentForm': 'Form (Last 6)'})
             
             styler_live = display_live.style.background_gradient(
                 subset=['Pts', 'GD'], cmap='Blues'

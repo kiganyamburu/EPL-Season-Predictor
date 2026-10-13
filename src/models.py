@@ -44,8 +44,10 @@ class DixonColesModel:
         
         # Calculate time weights: exp(-phi * days_elapsed)
         # We calculate days elapsed relative to the most recent match date in df
-        max_date = pd.to_datetime(df['Date']).max()
-        df['DaysElapsed'] = (max_date - pd.to_datetime(df['Date'])).dt.days
+        parsed_dates = pd.to_datetime(df['Date'], format='mixed', dayfirst=True)
+        max_date = parsed_dates.max()
+        df = df.copy()
+        df['DaysElapsed'] = (max_date - parsed_dates).dt.days
         df['Weight'] = np.exp(-self.phi * df['DaysElapsed'])
         
         # Format match data for rapid optimization
