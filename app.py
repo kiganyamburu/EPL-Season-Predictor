@@ -82,7 +82,6 @@ h1, h2, h3 {
 """, unsafe_allow_html=True)
 
 # Helper function to load simulated and live data
-@st.cache_data
 def load_data():
     preds_path = 'output/predictions.csv'
     standings_path = 'output/final_table_projection.csv'
