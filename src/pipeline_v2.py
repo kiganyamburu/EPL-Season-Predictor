@@ -163,9 +163,9 @@ def run_backtest_v2(df, config, config_name="Model"):
         # Adjust with congestion
         if config.get('congestion'):
             if h_congested:
-                lmbda *= 0.90
+                lmbda *= 0.96
             if a_congested:
-                mu *= 0.90
+                mu *= 0.96
                 
         # Blend promoted baselines
         if config.get('promoted_handling'):
@@ -414,9 +414,9 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         # Adjust expected goals for congestion
         if config.get('congestion'):
             if h_congested:
-                lmbda_base *= 0.90
+                lmbda_base *= 0.96
             if a_congested:
-                mu_base *= 0.90
+                mu_base *= 0.96
                 
         # 3. XGBoost prediction (calculated based on pre-season / current state)
         h_val = squad_values.get(home, 100.0)
@@ -709,8 +709,8 @@ def run_feature_sweeps():
             'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
-        '2. Time-weighted Decay (phi=0.003)': {
-            'decay_phi': 0.003, 'dynamic_elo': False, 'promoted_handling': False, 
+        '2. Time-weighted Decay (phi=0.0002)': {
+            'decay_phi': 0.0002, 'dynamic_elo': False, 'promoted_handling': False, 
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
         '3. Dynamic Elo Updates ON': {
@@ -731,11 +731,11 @@ def run_feature_sweeps():
         },
         '7. Stateful Form Correlation ON': {
             'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
-            'injuries': False, 'congestion': False, 'bayesian_form': True, 'form_boost': 0.02
+            'injuries': False, 'congestion': False, 'bayesian_form': True, 'form_boost': 0.01
         },
         '8. Upgraded Ensemble (All ON)': {
-            'decay_phi': 0.003, 'dynamic_elo': True, 'promoted_handling': True, 
-            'injuries': True, 'congestion': True, 'bayesian_form': True, 'form_boost': 0.02
+            'decay_phi': 0.0002, 'dynamic_elo': True, 'promoted_handling': True, 
+            'injuries': True, 'congestion': True, 'bayesian_form': True, 'form_boost': 0.01
         }
     }
     

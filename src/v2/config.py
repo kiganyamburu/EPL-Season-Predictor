@@ -9,12 +9,12 @@ ENABLE_CONGESTION = True
 ENABLE_BAYESIAN_FORM = True
 
 # Tuning parameters
-DECAY_PHI = 0.003            # Exponential time-decay rate for historical matches
+DECAY_PHI = 0.0002            # Calibrated exponential time-decay rate (half-life ~3.8 years)
 ELO_K_FACTOR = 20            # Elo updates sensitivity
 ELO_HFA = 100                # Elo home field advantage rating offset
-FORM_BOOST_RATE = 0.02       # Form change per win/loss inside correlated simulation
-FORM_LIMIT_MAX = 1.2         # Max bound for performance form scaling
-FORM_LIMIT_MIN = 0.8         # Min bound for performance form scaling
+FORM_BOOST_RATE = 0.01       # Calibrated form change per win/loss inside correlated simulation
+FORM_LIMIT_MAX = 1.10        # Max bound for performance form scaling
+FORM_LIMIT_MIN = 0.90        # Min bound for performance form scaling
 PROMOTED_TRANSITION_W = 10   # Gameweek limit to transition promoted team standard model
 
 # Data file paths
