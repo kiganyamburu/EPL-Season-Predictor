@@ -1,4 +1,5 @@
 import os
+import re
 import numpy as np
 import pandas as pd
 from scipy.stats import poisson
@@ -189,16 +190,29 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
         flat_probs = score_matrix.flatten()
         cum_probs_matrix[idx, :] = np.cumsum(flat_probs)
         
+        summary_str = str(row.get('Summary', ''))
+        m_score = re.search(r'\((\d+)-(\d+)\)', summary_str)
+        if m_score:
+            actual_score = f"{m_score.group(1)}-{m_score.group(2)}"
+            status = 'Completed'
+            ml_score = actual_score
+        else:
+            actual_score = None
+            status = 'Scheduled'
+            ml_score = dc_preds['MostLikelyScore']
+
         # Log match predictions
         preds_output.append({
             'MatchDay': idx // 10 + 1,
             'Date': date.strftime('%Y-%m-%d'),
             'HomeTeam': home,
             'AwayTeam': away,
+            'Status': status,
+            'ActualScore': actual_score,
             'HomeWin%': round(blended['HomeWin'] * 100, 2),
             'Draw%': round(blended['Draw'] * 100, 2),
             'AwayWin%': round(blended['AwayWin'] * 100, 2),
-            'MostLikelyScore': dc_preds['MostLikelyScore']
+            'MostLikelyScore': ml_score
         })
         
     # Write predictions to output/predictions.csv
@@ -215,6 +229,17 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
     home_idx = fixtures_df['HomeTeam'].map(team_to_idx).values
     away_idx = fixtures_df['AwayTeam'].map(team_to_idx).values
     
+    # Identify completed fixtures with actual scores
+    completed_mask = np.zeros(num_fixtures, dtype=bool)
+    completed_hg = np.zeros(num_fixtures, dtype=int)
+    completed_ag = np.zeros(num_fixtures, dtype=int)
+    for i, r in fixtures_df.iterrows():
+        m = re.search(r'\((\d+)-(\d+)\)', str(r.get('Summary', '')))
+        if m:
+            completed_mask[i] = True
+            completed_hg[i] = int(m.group(1))
+            completed_ag[i] = int(m.group(2))
+
     # We will accumulate team stats across all simulations
     # Shapes: (num_sims, num_teams)
     sim_points = np.zeros((num_sims, num_teams), dtype=int)
@@ -229,15 +254,17 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
         r = np.random.rand(num_fixtures, 1)
         
         # Vectorized discrete sampling: find which bin each random float falls into
-        # cum_probs_matrix is (380, 121)
-        # (r > cum_probs_matrix).sum(axis=1) yields the index in [0, 120]
         score_indices = (r > cum_probs_matrix).sum(axis=1)
         
         # Map score index to goals scored
-        # score_to_goals has shape (121, 2)
         goals = score_to_goals[score_indices] # shape (380, 2)
         hg = goals[:, 0]
         ag = goals[:, 1]
+        
+        # Override completed fixtures with ground-truth scores
+        if np.any(completed_mask):
+            hg[completed_mask] = completed_hg[completed_mask]
+            ag[completed_mask] = completed_ag[completed_mask]
         
         # Calculate points for each game
         # 3 for win, 1 for draw, 0 for loss

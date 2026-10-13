@@ -19,9 +19,9 @@ def weekly_refresh(gameweek=None, real_mode=True):
         completed_df, unplayed_df = update_dataset_with_recent_matches()
         
         if not unplayed_df.empty:
-            fixtures_path = 'data/raw/fixtures_raw.csv'
-            unplayed_df.to_csv(fixtures_path, index=False)
-            print(f"Updated {fixtures_path} with {len(unplayed_df)} unplayed remaining fixtures.")
+            unplayed_path = 'data/processed/unplayed_fixtures.csv'
+            unplayed_df.to_csv(unplayed_path, index=False)
+            print(f"Saved {len(unplayed_df)} unplayed remaining fixtures to {unplayed_path}.")
             
         history_path = 'output/predictions_history.csv'
         preds_path = 'output/predictions.csv'

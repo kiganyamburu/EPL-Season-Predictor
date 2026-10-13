@@ -459,19 +459,27 @@ with tab3:
     st.write("Browse win/draw/loss odds and the most likely scoreline for all 380 upcoming fixtures.")
     
     # Filters
-    col_f1, col_f2, col_f3 = st.columns([1, 1, 2])
+    col_f1, col_f2, col_f3 = st.columns([1, 1, 1.5])
     with col_f1:
         matchday_filter = st.selectbox(
             "Matchday", 
             ["All"] + sorted(list(preds_df['MatchDay'].unique()))
         )
     with col_f2:
+        status_options = ["All"]
+        if 'Status' in preds_df.columns:
+            status_options += sorted(list(preds_df['Status'].dropna().unique()))
+        status_filter = st.selectbox("Status", status_options)
+    with col_f3:
         team_search = st.text_input("Filter by Team Name").strip()
         
     # Apply filters
     filtered_preds = preds_df.copy()
     if matchday_filter != "All":
         filtered_preds = filtered_preds[filtered_preds['MatchDay'] == matchday_filter]
+        
+    if status_filter != "All" and 'Status' in filtered_preds.columns:
+        filtered_preds = filtered_preds[filtered_preds['Status'] == status_filter]
         
     if team_search:
         filtered_preds = filtered_preds[
@@ -489,22 +497,26 @@ with tab3:
             'MatchDay': 'GW',
             'HomeTeam': 'Home Team',
             'AwayTeam': 'Away Team',
+            'ActualScore': 'Actual Score',
             'HomeWin%': 'Home Win %',
             'Draw%': 'Draw %',
             'AwayWin%': 'Away Win %',
-            'MostLikelyScore': 'Most Likely Score'
+            'MostLikelyScore': 'Predicted / Final Score'
         })
         
-        # Drop Explanation from dataframe columns to prevent cluttering the table
-        cols_to_show = [c for c in display_preds.columns if c != 'Explanation']
+        # Select columns to display
+        pref_cols = ['GW', 'Date', 'Home Team', 'Away Team', 'Status', 'Actual Score', 'Home Win %', 'Draw %', 'Away Win %', 'Predicted / Final Score']
+        cols_to_show = [c for c in pref_cols if c in display_preds.columns]
+        
         st.dataframe(
             display_preds[cols_to_show].style.format({
                 'Home Win %': '{:.1f}%',
                 'Draw %': '{:.1f}%',
-                'Away Win %': '{:.1f}%'
+                'Away Win %': '{:.1f}%',
+                'Actual Score': lambda v: '-' if pd.isna(v) or v is None else str(v)
             }), 
             use_container_width=True, 
-            height=400,
+            height=430,
             hide_index=True
         )
         
@@ -515,13 +527,22 @@ with tab3:
         
         fixture_options = filtered_preds.index.tolist()
         if fixture_options:
+            def format_option(i):
+                r = filtered_preds.loc[i]
+                status_badge = f"[{r['Status']}] " if 'Status' in r and pd.notna(r['Status']) else ""
+                score_badge = f" ({r['ActualScore']})" if 'ActualScore' in r and pd.notna(r['ActualScore']) else ""
+                return f"{status_badge}GW {r['MatchDay']}: {r['HomeTeam']} vs. {r['AwayTeam']}{score_badge}"
+                
             selected_idx = st.selectbox(
                 "Select Match to Inspect:", 
                 fixture_options,
-                format_func=lambda i: f"GW {filtered_preds.loc[i, 'MatchDay']}: {filtered_preds.loc[i, 'HomeTeam']} vs. {filtered_preds.loc[i, 'AwayTeam']}"
+                format_func=format_option
             )
             
             match_row = filtered_preds.loc[selected_idx]
+            
+            if 'Status' in match_row and match_row['Status'] == 'Completed':
+                st.success(f"⚽ **Completed Match** | Score: **{match_row.get('ActualScore', '-')}** | Date: **{match_row['Date']}**")
             
             col_o1, col_o2, col_o3 = st.columns(3)
             with col_o1:

@@ -1,4 +1,5 @@
 import os
+import re
 import numpy as np
 import pandas as pd
 from sklearn.metrics import log_loss, accuracy_score
@@ -541,12 +542,23 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         # Cumulative probs for sampling
         cum_probs = np.cumsum(score_matrices.reshape(num_sims, num_scores), axis=1)
         
-        # Sample match outcomes
-        r = np.random.rand(num_sims, 1)
-        score_indices = (r > cum_probs).sum(axis=1)
-        goals = score_to_goals[score_indices]
-        hg = goals[:, 0]
-        ag = goals[:, 1]
+        # Check if match has already been completed in reality
+        summary_str = str(row.get('Summary', ''))
+        re_score = re.search(r'\((\d+)-(\d+)\)', summary_str)
+        if re_score:
+            actual_hg = int(re_score.group(1))
+            actual_ag = int(re_score.group(2))
+            is_completed = True
+            hg = np.full(num_sims, actual_hg, dtype=int)
+            ag = np.full(num_sims, actual_ag, dtype=int)
+        else:
+            is_completed = False
+            # Sample match outcomes
+            r = np.random.rand(num_sims, 1)
+            score_indices = (r > cum_probs).sum(axis=1)
+            goals = score_to_goals[score_indices]
+            hg = goals[:, 0]
+            ag = goals[:, 1]
         
         # Points allocation
         h_pts = np.where(hg > ag, 3, np.where(hg == ag, 1, 0))
@@ -610,17 +622,35 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
             mean_h, mean_d, mean_a
         )
         
-        preds_output.append({
-            'MatchDay': idx // 10 + 1,
-            'Date': date.strftime('%Y-%m-%d'),
-            'HomeTeam': home,
-            'AwayTeam': away,
-            'HomeWin%': round(mean_h * 100, 2),
-            'Draw%': round(mean_d * 100, 2),
-            'AwayWin%': round(mean_a * 100, 2),
-            'MostLikelyScore': ml_score,
-            'Explanation': explain_str
-        })
+        if is_completed:
+            pred_item = {
+                'MatchDay': idx // 10 + 1,
+                'Date': date.strftime('%Y-%m-%d'),
+                'HomeTeam': home,
+                'AwayTeam': away,
+                'Status': 'Completed',
+                'ActualScore': f"{actual_hg}-{actual_ag}",
+                'HomeWin%': round(mean_h * 100, 2),
+                'Draw%': round(mean_d * 100, 2),
+                'AwayWin%': round(mean_a * 100, 2),
+                'MostLikelyScore': f"{actual_hg}-{actual_ag}",
+                'Explanation': f"**Final Result: {actual_hg} - {actual_ag}** (Completed in Gameweek {idx // 10 + 1}). " + explain_str
+            }
+        else:
+            pred_item = {
+                'MatchDay': idx // 10 + 1,
+                'Date': date.strftime('%Y-%m-%d'),
+                'HomeTeam': home,
+                'AwayTeam': away,
+                'Status': 'Scheduled',
+                'ActualScore': None,
+                'HomeWin%': round(mean_h * 100, 2),
+                'Draw%': round(mean_d * 100, 2),
+                'AwayWin%': round(mean_a * 100, 2),
+                'MostLikelyScore': ml_score,
+                'Explanation': explain_str
+            }
+        preds_output.append(pred_item)
         
     # Write final predictions file
     preds_df = pd.DataFrame(preds_output)

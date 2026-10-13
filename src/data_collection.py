@@ -606,18 +606,43 @@ def save_transfers(raw_dir='data/raw'):
         {'Team': 'Crystal Palace', 'Player': 'Marc Guéhi', 'TransferType': 'Out', 'OtherClub': 'Man City', 'Fee_M_Euros': 60.0, 'Position': 'Defender', 'Importance': 0.18},
 
         # Everton
-        {'Team': 'Everton', 'Player': 'Jake O\'Brien', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 19.5, 'Position': 'Defender', 'Importance': 0.12},
+        # Goalkeepers
+        {'Team': 'Everton', 'Player': 'Jordan Pickford', 'TransferType': 'In', 'OtherClub': 'Sunderland', 'Fee_M_Euros': 28.5, 'Position': 'Goalkeeper', 'Importance': 0.16},
         {'Team': 'Everton', 'Player': 'Mark Travers', 'TransferType': 'In', 'OtherClub': 'Bournemouth', 'Fee_M_Euros': 8.0, 'Position': 'Goalkeeper', 'Importance': 0.10},
+        {'Team': 'Everton', 'Player': 'João Virgínia', 'TransferType': 'In', 'OtherClub': 'Arsenal Academy', 'Fee_M_Euros': 0.0, 'Position': 'Goalkeeper', 'Importance': 0.08},
+
+        # Defenders
+        {'Team': 'Everton', 'Player': 'Jarrad Branthwaite', 'TransferType': 'In', 'OtherClub': 'Carlisle United', 'Fee_M_Euros': 1.1, 'Position': 'Defender', 'Importance': 0.16},
+        {'Team': 'Everton', 'Player': 'James Tarkowski', 'TransferType': 'In', 'OtherClub': 'Burnley', 'Fee_M_Euros': 0.0, 'Position': 'Defender', 'Importance': 0.14},
+        {'Team': 'Everton', 'Player': 'Jake O\'Brien', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 19.5, 'Position': 'Defender', 'Importance': 0.12},
+        {'Team': 'Everton', 'Player': 'Vitalii Mykolenko', 'TransferType': 'In', 'OtherClub': 'Dynamo Kyiv', 'Fee_M_Euros': 23.5, 'Position': 'Defender', 'Importance': 0.13},
+        {'Team': 'Everton', 'Player': 'Nathan Patterson', 'TransferType': 'In', 'OtherClub': 'Rangers', 'Fee_M_Euros': 14.0, 'Position': 'Defender', 'Importance': 0.11},
         {'Team': 'Everton', 'Player': 'Ainsley Maitland-Niles', 'TransferType': 'In', 'OtherClub': 'Lyon', 'Fee_M_Euros': 10.0, 'Position': 'Defender', 'Importance': 0.11},
+        {'Team': 'Everton', 'Player': 'Seamus Coleman', 'TransferType': 'In', 'OtherClub': 'Sligo Rovers', 'Fee_M_Euros': 0.1, 'Position': 'Defender', 'Importance': 0.09},
+
+        # Midfielders
         {'Team': 'Everton', 'Player': 'Kiernan Dewsbury-Hall', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 35.0, 'Position': 'Midfielder', 'Importance': 0.14},
+        {'Team': 'Everton', 'Player': 'James Garner', 'TransferType': 'In', 'OtherClub': 'Man United', 'Fee_M_Euros': 10.4, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Everton', 'Player': 'Idrissa Gueye', 'TransferType': 'In', 'OtherClub': 'PSG', 'Fee_M_Euros': 4.0, 'Position': 'Midfielder', 'Importance': 0.13},
+        {'Team': 'Everton', 'Player': 'Abdoulaye Doucouré', 'TransferType': 'In', 'OtherClub': 'Watford', 'Fee_M_Euros': 22.0, 'Position': 'Midfielder', 'Importance': 0.13},
         {'Team': 'Everton', 'Player': 'Hayden Hackney', 'TransferType': 'In', 'OtherClub': 'Middlesbrough', 'Fee_M_Euros': 22.0, 'Position': 'Midfielder', 'Importance': 0.13},
         {'Team': 'Everton', 'Player': 'Merlin Röhl', 'TransferType': 'In', 'OtherClub': 'Freiburg', 'Fee_M_Euros': 20.0, 'Position': 'Midfielder', 'Importance': 0.12},
         {'Team': 'Everton', 'Player': 'Carlos Alcaraz', 'TransferType': 'In', 'OtherClub': 'Southampton', 'Fee_M_Euros': 18.0, 'Position': 'Midfielder', 'Importance': 0.12},
+
+        # Forwards
         {'Team': 'Everton', 'Player': 'Jack Grealish', 'TransferType': 'In', 'OtherClub': 'Man City', 'Fee_M_Euros': 50.0, 'Position': 'Forward', 'Importance': 0.16},
         {'Team': 'Everton', 'Player': 'Brennan Johnson', 'TransferType': 'In', 'OtherClub': 'Tottenham', 'Fee_M_Euros': 45.0, 'Position': 'Forward', 'Importance': 0.15},
         {'Team': 'Everton', 'Player': 'Thierno Barry', 'TransferType': 'In', 'OtherClub': 'Villarreal', 'Fee_M_Euros': 27.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Everton', 'Player': 'Beto', 'TransferType': 'In', 'OtherClub': 'Udinese', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Everton', 'Player': 'Armando Broja', 'TransferType': 'In', 'OtherClub': 'Chelsea', 'Fee_M_Euros': 0.0, 'Position': 'Forward', 'Importance': 0.12},
+        {'Team': 'Everton', 'Player': 'Jesper Lindstrøm', 'TransferType': 'In', 'OtherClub': 'Napoli', 'Fee_M_Euros': 0.0, 'Position': 'Forward', 'Importance': 0.12},
+
+        # Departures
         {'Team': 'Everton', 'Player': 'Amadou Onana', 'TransferType': 'Out', 'OtherClub': 'Aston Villa', 'Fee_M_Euros': 59.0, 'Position': 'Midfielder', 'Importance': 0.16},
+        {'Team': 'Everton', 'Player': 'Dominic Calvert-Lewin', 'TransferType': 'Out', 'OtherClub': 'Leeds', 'Fee_M_Euros': 25.0, 'Position': 'Forward', 'Importance': 0.16},
         {'Team': 'Everton', 'Player': 'Iliman Ndiaye', 'TransferType': 'Out', 'OtherClub': 'Man City', 'Fee_M_Euros': 30.0, 'Position': 'Forward', 'Importance': 0.14},
+        {'Team': 'Everton', 'Player': 'Dwight McNeil', 'TransferType': 'Out', 'OtherClub': 'Crystal Palace', 'Fee_M_Euros': 18.0, 'Position': 'Forward', 'Importance': 0.13},
+        {'Team': 'Everton', 'Player': 'Tim Iroegbunam', 'TransferType': 'Out', 'OtherClub': 'Hull', 'Fee_M_Euros': 11.0, 'Position': 'Midfielder', 'Importance': 0.13},
         {'Team': 'Everton', 'Player': 'Ben Godfrey', 'TransferType': 'Out', 'OtherClub': 'Atalanta', 'Fee_M_Euros': 12.0, 'Position': 'Defender', 'Importance': 0.10},
 
         # Nott'm Forest
