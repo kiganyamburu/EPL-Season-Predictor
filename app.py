@@ -575,7 +575,7 @@ with tab_h2h:
         st.markdown("<div style='text-align: center; font-size: 1.5rem; font-weight: 800; color: #00f2fe; padding-top: 6px;'>VS</div>", unsafe_allow_html=True)
     with col_sel2:
         default_a_idx = active_teams.index('Man City') if 'Man City' in active_teams else 1
-        h2h_away = st.selectbox("✈️ Select Away Team", active_teams, index=default_a_idx, key="h2h_away_team")
+        h2h_away = st.selectbox(" Select Away Team", active_teams, index=default_a_idx, key="h2h_away_team")
         
     if h2h_home == h2h_away:
         st.warning(" Please select two different teams to run the head-to-head matchup simulation.")
