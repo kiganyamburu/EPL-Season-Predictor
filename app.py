@@ -662,7 +662,7 @@ with tab_h2h:
             st.markdown(f"""
             <div class="kpi-card" style="padding: 16px; border-color: rgba(245, 158, 11, 0.4);">
                 <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b;">{p_draw*100:.1f}%</div>
-                <div class="kpi-label">🤝 Draw</div>
+                <div class="kpi-label"> Draw</div>
                 <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Fair Odds: <strong>{1/max(0.01, p_draw):.2f}</strong></div>
             </div>
             """, unsafe_allow_html=True)
