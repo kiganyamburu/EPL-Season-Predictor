@@ -715,7 +715,7 @@ with tab_h2h:
             st.plotly_chart(fig_heat, use_container_width=True)
             
         with col_mkts:
-            st.markdown("### 📊 Derived Goal & Betting Markets")
+            st.markdown("###  Derived Goal & Betting Markets")
             
             # Goal totals
             goals_sum = np.add.outer(np.arange(max_g + 1), np.arange(max_g + 1))
