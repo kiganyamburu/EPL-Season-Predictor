@@ -578,7 +578,7 @@ with tab_h2h:
         h2h_away = st.selectbox("✈️ Select Away Team", active_teams, index=default_a_idx, key="h2h_away_team")
         
     if h2h_home == h2h_away:
-        st.warning("⚠️ Please select two different teams to run the head-to-head matchup simulation.")
+        st.warning(" Please select two different teams to run the head-to-head matchup simulation.")
     else:
         # Load final Elo ratings
         final_elos_map = {}
