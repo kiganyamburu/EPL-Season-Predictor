@@ -553,7 +553,7 @@ with tab3:
                 
             # Render explanation
             explanation_text = match_row.get('Explanation', 'No explanation generated for this match.')
-            st.info(f"💡 **Model Factors & Explanations**:\n\n{explanation_text}")
+            st.info(f" **Model Factors & Explanations**:\n\n{explanation_text}")
 
 
 # ------------------------------------------------------------------------------
