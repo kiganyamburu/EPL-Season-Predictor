@@ -549,7 +549,7 @@ with tab3:
             with col_o2:
                 st.metric(label=" Draw %", value=f"{match_row['Draw%']:.1f}%")
             with col_o3:
-                st.metric(label=f"✈️ {match_row['AwayTeam']} Win %", value=f"{match_row['AwayWin%']:.1f}%")
+                st.metric(label=f" {match_row['AwayTeam']} Win %", value=f"{match_row['AwayWin%']:.1f}%")
                 
             # Render explanation
             explanation_text = match_row.get('Explanation', 'No explanation generated for this match.')
