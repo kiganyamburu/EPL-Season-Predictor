@@ -541,7 +541,7 @@ with tab3:
             match_row = filtered_preds.loc[selected_idx]
             
             if 'Status' in match_row and match_row['Status'] == 'Completed':
-                st.success(f"⚽ **Completed Match** | Score: **{match_row.get('ActualScore', '-')}** | Date: **{match_row['Date']}**")
+                st.success(f" **Completed Match** | Score: **{match_row.get('ActualScore', '-')}** | Date: **{match_row['Date']}**")
             
             col_o1, col_o2, col_o3 = st.columns(3)
             with col_o1:
