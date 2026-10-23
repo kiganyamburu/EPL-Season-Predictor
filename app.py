@@ -545,7 +545,7 @@ with tab3:
             
             col_o1, col_o2, col_o3 = st.columns(3)
             with col_o1:
-                st.metric(label=f"🏠 {match_row['HomeTeam']} Win %", value=f"{match_row['HomeWin%']:.1f}%")
+                st.metric(label=f" {match_row['HomeTeam']} Win %", value=f"{match_row['HomeWin%']:.1f}%")
             with col_o2:
                 st.metric(label="🤝 Draw %", value=f"{match_row['Draw%']:.1f}%")
             with col_o3:
