@@ -6,14 +6,14 @@ This report compares the v2 feature upgrades (ON vs. OFF) against the v1 baselin
 
 | Configuration | Log-Loss | Brier Score | Accuracy |
 | :--- | :---: | :---: | :---: |
-| **1. Baseline (v1 Model)** | 1.0620 | 0.2137 | 43.42% |
-| **2. Time-weighted Decay (phi=0.0002)** | 1.0635 | 0.2141 | 43.42% |
-| **3. Dynamic Elo Updates ON** | 1.0446 | 0.2093 | 46.58% |
-| **4. Promoted Handling ON** | 1.0616 | 0.2137 | 42.89% |
-| **5. Injury Adjustments ON** | 1.0620 | 0.2137 | 43.42% |
-| **6. Rest Fatigue/Congestion ON** | 1.0573 | 0.2128 | 45.53% |
-| **7. Stateful Form Correlation ON** | 1.0651 | 0.2145 | 42.37% |
-| **8. Upgraded Ensemble (All ON)** | 1.0490 | 0.2105 | 47.63% |
+| **1. Baseline (v1 Model)** | 1.0637 | 0.2141 | 42.89% |
+| **2. Time-weighted Decay (phi=0.0002)** | 1.0653 | 0.2145 | 44.21% |
+| **3. Dynamic Elo Updates ON** | 1.0452 | 0.2094 | 46.32% |
+| **4. Promoted Handling ON** | 1.0626 | 0.2139 | 43.16% |
+| **5. Injury Adjustments ON** | 1.0637 | 0.2141 | 42.89% |
+| **6. Rest Fatigue/Congestion ON** | 1.0590 | 0.2131 | 44.21% |
+| **7. Stateful Form Correlation ON** | 1.0669 | 0.2149 | 41.58% |
+| **8. Upgraded Ensemble (All ON)** | 1.0490 | 0.2105 | 48.16% |
 | **9. Betting Market Implied Odds** | 1.0986 | 0.2222 | 45.00% |
 
 ---

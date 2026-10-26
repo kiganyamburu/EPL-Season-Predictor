@@ -1,8 +1,12 @@
 import os
+import sys
 import argparse
 import pandas as pd
 import numpy as np
 from datetime import datetime
+
+# Ensure project root is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def weekly_refresh(gameweek=None, real_mode=True):
     """
