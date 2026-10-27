@@ -342,7 +342,7 @@ with tab1:
             )
             
             st.write("---")
-            st.subheader("📈 Current Rank vs. Projected Final Position")
+            st.subheader(" Current Rank vs. Projected Final Position")
             fig_comp = px.scatter(
                 comp,
                 x='Live Rank',
