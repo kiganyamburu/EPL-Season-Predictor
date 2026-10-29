@@ -225,7 +225,7 @@ with tab1:
             key="standings_view_mode"
         )
     
-    if table_mode == "📊 Projected Final Table":
+    if table_mode == " Projected Final Table":
         st.write("This table shows the median final points, goal difference, and ranks across 10,000 simulations, together with 90% confidence intervals.")
         display_df = standings_df.copy()
         display_df.columns = [
