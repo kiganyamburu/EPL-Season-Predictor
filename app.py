@@ -220,7 +220,7 @@ with tab1:
     with col_t_mode:
         table_mode = st.radio(
             "Standings View Mode:",
-            ["📊 Projected Final Table", "🏆 Current Live Standings (Played So Far)", "⚖️ Side-by-Side (Current vs. Projected)"],
+            [" Projected Final Table", "🏆 Current Live Standings (Played So Far)", "⚖️ Side-by-Side (Current vs. Projected)"],
             horizontal=True,
             key="standings_view_mode"
         )
