@@ -319,23 +319,20 @@ def update_dataset_with_recent_matches():
     completed_2627, unplayed_2627 = parse_completed_fixtures_from_raw('data/raw')
     
     if not completed_2627.empty:
-        # Check which 2026/27 matches are already in historical results
+        # Ensure 2026/27 matches in historical results match current fixtures_raw.csv scorelines
         df_hist['MatchID'] = df_hist['Season'].astype(str) + '_' + df_hist['HomeTeam'].astype(str) + '_' + df_hist['AwayTeam'].astype(str)
         completed_2627['MatchID'] = completed_2627['Season'].astype(str) + '_' + completed_2627['HomeTeam'].astype(str) + '_' + completed_2627['AwayTeam'].astype(str)
         
-        existing_ids = set(df_hist['MatchID'])
-        new_matches = completed_2627[~completed_2627['MatchID'].isin(existing_ids)].copy()
+        updated_ids = set(completed_2627['MatchID'])
+        df_hist = df_hist[~df_hist['MatchID'].isin(updated_ids)].copy()
         
         df_hist = df_hist.drop(columns=['MatchID'])
-        new_matches = new_matches.drop(columns=['MatchID'])
+        completed_clean = completed_2627.drop(columns=['MatchID'])
         
-        if not new_matches.empty:
-            print(f"Adding {len(new_matches)} newly completed 2026/27 matches to dataset...")
-            combined_df = pd.concat([df_hist, new_matches], ignore_index=True)
-            # Update historical_results.csv
-            combined_df.to_csv(raw_results_path, index=False)
-        else:
-            combined_df = df_hist
+        print(f"Syncing {len(completed_clean)} completed 2026/27 matches to historical results...")
+        combined_df = pd.concat([df_hist, completed_clean], ignore_index=True)
+        # Update historical_results.csv
+        combined_df.to_csv(raw_results_path, index=False)
     else:
         combined_df = df_hist
 
