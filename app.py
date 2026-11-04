@@ -201,7 +201,7 @@ st.write("")
 
 # Tabs Setup
 tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab5 = st.tabs([
-    "📊 Standings (Live & Projected)", 
+    " Standings (Live & Projected)", 
     " Standing Distributions", 
     " Match Predictions", 
     " Head-to-Head Simulator",
