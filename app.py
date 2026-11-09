@@ -560,7 +560,7 @@ with tab3:
 # TAB H2H: HEAD-TO-HEAD SIMULATOR & SCORE HEATMAP
 # ------------------------------------------------------------------------------
 with tab_h2h:
-    st.subheader("⚔️ Head-to-Head Matchup Simulator")
+    st.subheader(" Head-to-Head Matchup Simulator")
     st.write("Simulate any Premier League fixture to analyze score probability heatmaps, derived betting market odds, and historical rivalry records.")
     
     active_teams = sorted(list(standings_df['Team'].unique()))
