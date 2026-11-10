@@ -800,7 +800,7 @@ with tab_h2h:
 # TAB TRANSFERS: SQUAD TRANSFERS & SIGNINGS
 # ------------------------------------------------------------------------------
 with tab_transfers:
-    st.subheader("🔄 Premier League Transfer Activity & Squad Updates")
+    st.subheader(" Premier League Transfer Activity & Squad Updates")
     st.write("Explore all new player arrivals (signings) and departures across the 20 Premier League clubs.")
     
     if transfers_df is None or transfers_df.empty:
