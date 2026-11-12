@@ -220,12 +220,12 @@ with tab1:
     with col_t_mode:
         table_mode = st.radio(
             "Standings View Mode:",
-            [" Projected Final Table", "Current Live Standings (Played So Far)", " Side-by-Side (Current vs. Projected)"],
+            ["Projected Final Table", "Current Live Standings (Played So Far)", "Side-by-Side (Current vs. Projected)"],
             horizontal=True,
             key="standings_view_mode"
         )
     
-    if table_mode == " Projected Final Table":
+    if table_mode == "Projected Final Table":
         st.write("This table shows the median final points, goal difference, and ranks across 10,000 simulations, together with 90% confidence intervals.")
         display_df = standings_df.copy()
         display_df.columns = [
@@ -243,7 +243,7 @@ with tab1:
         })
         st.dataframe(styler, use_container_width=True, height=730)
         
-    elif table_mode == " Current Live Standings (Played So Far)":
+    elif table_mode == "Current Live Standings (Played So Far)":
         if live_df is not None and not live_df.empty:
             matches_count = len(completed_df) if completed_df is not None else 0
             st.write(f"Actual Premier League table based on **{matches_count} completed matches** recorded in the 2026/27 campaign.")
