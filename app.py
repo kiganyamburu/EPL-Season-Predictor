@@ -976,7 +976,7 @@ with tab5:
     else:
         # Sandbox parameters
         col_s1, col_s2 = st.columns(2)
-        active_teams = sorted(list(final_elos_map.keys()))
+        active_teams = sorted(set(fixtures_df_hist['HomeTeam']).union(set(fixtures_df_hist['AwayTeam'])))
         
         with col_s1:
             st.markdown("###  Adjust Team Injuries")
@@ -1033,7 +1033,7 @@ with tab5:
                     # Enable promoted/manager features
                     sandbox_config['promoted_handling'] = True
                     
-                # Execute simulation
+                # Execute simulation (do not overwrite production /output/ projections)
                 res_df = run_season_simulations_v2(
                     fixtures_df=fixtures_df_hist.copy(),
                     final_elos=final_elos_map.copy(),
@@ -1042,7 +1042,8 @@ with tab5:
                     num_sims=num_sandbox_sims,
                     dc_weight=0.5,
                     custom_injured_players=custom_injured,
-                    custom_managers=custom_managers
+                    custom_managers=custom_managers,
+                    save_outputs=False
                 )
                 
                 # Merge with baseline to show differences

@@ -256,7 +256,7 @@ def run_backtest_v2(df, config, config_name="Model"):
     
     return loss, brier, acc
 
-def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, num_sims=10000, dc_weight=0.5, custom_injured_players=None, custom_managers=None):
+def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, num_sims=10000, dc_weight=0.5, custom_injured_players=None, custom_managers=None, save_outputs=True):
     """
     Stateful Monte Carlo simulator running simulations of 2026/27.
     Vectorized across all simulated runs.
@@ -589,59 +589,61 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
             form_sims[:, a_idx] = a_forms_new
             
         # 6. Generate human-readable explanation and record predictions (for the average simulation stats)
-        mean_h = blend_h.mean()
-        mean_d = blend_d.mean()
-        mean_a = blend_a.mean()
-        
-        # Most likely score is the argmax of the average score matrix
-        mean_score_matrix = score_matrices.mean(axis=0)
-        max_idx = np.unravel_index(np.argmax(mean_score_matrix), mean_score_matrix.shape)
-        ml_score = f"{max_idx[0]}-{max_idx[1]}"
-        
-        explain_str = explain_match_prediction(
-            home, away, date.strftime('%Y-%m-%d'),
-            h_elos.mean(), a_elos.mean(),
-            squad_values.get(home, 0.0), squad_values.get(away, 0.0),
-            h_avail, a_avail,
-            h_congested, a_congested,
-            mean_h, mean_d, mean_a
-        )
-        
-        if is_completed:
-            pred_item = {
-                'MatchDay': idx // 10 + 1,
-                'Date': date.strftime('%Y-%m-%d'),
-                'HomeTeam': home,
-                'AwayTeam': away,
-                'Status': 'Completed',
-                'ActualScore': f"{actual_hg}-{actual_ag}",
-                'HomeWin%': round(mean_h * 100, 2),
-                'Draw%': round(mean_d * 100, 2),
-                'AwayWin%': round(mean_a * 100, 2),
-                'MostLikelyScore': f"{actual_hg}-{actual_ag}",
-                'Explanation': f"**Final Result: {actual_hg} - {actual_ag}** (Completed in Gameweek {idx // 10 + 1}). " + explain_str
-            }
-        else:
-            pred_item = {
-                'MatchDay': idx // 10 + 1,
-                'Date': date.strftime('%Y-%m-%d'),
-                'HomeTeam': home,
-                'AwayTeam': away,
-                'Status': 'Scheduled',
-                'ActualScore': None,
-                'HomeWin%': round(mean_h * 100, 2),
-                'Draw%': round(mean_d * 100, 2),
-                'AwayWin%': round(mean_a * 100, 2),
-                'MostLikelyScore': ml_score,
-                'Explanation': explain_str
-            }
-        preds_output.append(pred_item)
+        if save_outputs:
+            mean_h = blend_h.mean()
+            mean_d = blend_d.mean()
+            mean_a = blend_a.mean()
+            
+            # Most likely score is the argmax of the average score matrix
+            mean_score_matrix = score_matrices.mean(axis=0)
+            max_idx = np.unravel_index(np.argmax(mean_score_matrix), mean_score_matrix.shape)
+            ml_score = f"{max_idx[0]}-{max_idx[1]}"
+            
+            explain_str = explain_match_prediction(
+                home, away, date.strftime('%Y-%m-%d'),
+                h_elos.mean(), a_elos.mean(),
+                squad_values.get(home, 0.0), squad_values.get(away, 0.0),
+                h_avail, a_avail,
+                h_congested, a_congested,
+                mean_h, mean_d, mean_a
+            )
+            
+            if is_completed:
+                pred_item = {
+                    'MatchDay': idx // 10 + 1,
+                    'Date': date.strftime('%Y-%m-%d'),
+                    'HomeTeam': home,
+                    'AwayTeam': away,
+                    'Status': 'Completed',
+                    'ActualScore': f"{actual_hg}-{actual_ag}",
+                    'HomeWin%': round(mean_h * 100, 2),
+                    'Draw%': round(mean_d * 100, 2),
+                    'AwayWin%': round(mean_a * 100, 2),
+                    'MostLikelyScore': f"{actual_hg}-{actual_ag}",
+                    'Explanation': f"**Final Result: {actual_hg} - {actual_ag}** (Completed in Gameweek {idx // 10 + 1}). " + explain_str
+                }
+            else:
+                pred_item = {
+                    'MatchDay': idx // 10 + 1,
+                    'Date': date.strftime('%Y-%m-%d'),
+                    'HomeTeam': home,
+                    'AwayTeam': away,
+                    'Status': 'Scheduled',
+                    'ActualScore': None,
+                    'HomeWin%': round(mean_h * 100, 2),
+                    'Draw%': round(mean_d * 100, 2),
+                    'AwayWin%': round(mean_a * 100, 2),
+                    'MostLikelyScore': ml_score,
+                    'Explanation': explain_str
+                }
+            preds_output.append(pred_item)
         
     # Write final predictions file
-    preds_df = pd.DataFrame(preds_output)
-    os.makedirs('output', exist_ok=True)
-    preds_df.to_csv('output/predictions.csv', index=False)
-    print("Saved v2 predictions (with explainability layer) to output/predictions.csv")
+    if save_outputs:
+        preds_df = pd.DataFrame(preds_output)
+        os.makedirs('output', exist_ok=True)
+        preds_df.to_csv('output/predictions.csv', index=False)
+        print("Saved v2 predictions (with explainability layer) to output/predictions.csv")
     
     # Ranks computation
     # sort desc: gf, gd, points
@@ -695,8 +697,10 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         
     summary_df = pd.DataFrame(summary_stats)
     summary_df = summary_df.sort_values('ExpectedRank').reset_index(drop=True)
-    summary_df.to_csv('output/final_table_projection.csv', index=False)
-    print("Saved standings projection to output/final_table_projection.csv")
+    if save_outputs:
+        os.makedirs('output', exist_ok=True)
+        summary_df.to_csv('output/final_table_projection.csv', index=False)
+        print("Saved standings projection to output/final_table_projection.csv")
     print("=== v2 SEASON SIMULATION COMPLETED ===")
     
     return summary_df
