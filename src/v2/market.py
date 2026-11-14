@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.metrics import log_loss, brier_score_loss
@@ -23,10 +24,51 @@ def de_vig_odds(h_odds, d_odds, a_odds):
     
     return p_h, p_d, p_a
 
+def _attach_historical_odds_if_missing(df):
+    """Load bookmaker closing odds from raw historical E0 CSVs if absent in df."""
+    bookmakers = [
+        ('B365H', 'B365D', 'B365A'),
+        ('PSH', 'PSD', 'PSA'),
+        ('BWH', 'BWD', 'BWA'),
+        ('IWH', 'IWD', 'IWA'),
+        ('LBH', 'LBD', 'LBA')
+    ]
+    if any(all(c in df.columns for c in cols) for cols in bookmakers):
+        return df
+
+    raw_dir = 'data/raw/historical'
+    if not os.path.exists(raw_dir) or 'Season' not in df.columns:
+        return df
+
+    from src.data_collection import clean_team_name
+    odds_frames = []
+    for season in df['Season'].dropna().unique():
+        parts = str(season).split('-')
+        if len(parts) != 2:
+            continue
+        code = f"{parts[0][-2:]}{parts[1][-2:]}"
+        path = os.path.join(raw_dir, f"E0_{code}.csv")
+        if os.path.exists(path):
+            raw_df = pd.read_csv(path, on_bad_lines='skip').dropna(subset=['HomeTeam', 'AwayTeam']).copy()
+            raw_df['Season'] = season
+            raw_df['HomeTeam'] = raw_df['HomeTeam'].apply(clean_team_name)
+            raw_df['AwayTeam'] = raw_df['AwayTeam'].apply(clean_team_name)
+            keep = ['Season', 'HomeTeam', 'AwayTeam'] + [
+                c for cols in bookmakers for c in cols if c in raw_df.columns
+            ]
+            odds_frames.append(raw_df[keep])
+
+    if not odds_frames:
+        return df
+
+    odds_df = pd.concat(odds_frames, ignore_index=True).drop_duplicates(subset=['Season', 'HomeTeam', 'AwayTeam'])
+    return df.merge(odds_df, on=['Season', 'HomeTeam', 'AwayTeam'], how='left')
+
 def extract_market_probs(df):
     """
     Extract and de-vig market probabilities for a matches DataFrame.
     """
+    df = _attach_historical_odds_if_missing(df)
     market_probs = []
     
     # Try different bookmakers in order of preference

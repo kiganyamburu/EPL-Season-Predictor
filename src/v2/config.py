@@ -8,14 +8,16 @@ ENABLE_INJURIES = True
 ENABLE_CONGESTION = True
 ENABLE_BAYESIAN_FORM = True
 
-# Tuning parameters
-DECAY_PHI = 0.0002            # Calibrated exponential time-decay rate (half-life ~3.8 years)
-ELO_K_FACTOR = 20            # Elo updates sensitivity
-ELO_HFA = 100                # Elo home field advantage rating offset
-FORM_BOOST_RATE = 0.01       # Calibrated form change per win/loss inside correlated simulation
-FORM_LIMIT_MAX = 1.10        # Max bound for performance form scaling
-FORM_LIMIT_MIN = 0.90        # Min bound for performance form scaling
-PROMOTED_TRANSITION_W = 10   # Gameweek limit to transition promoted team standard model
+# Tuning parameters (calibrated via 4-season walk-forward CV)
+DECAY_PHI = 0.0012            # Exponential time-decay rate (half-life ~1.58 years)
+DC_WEIGHT = 0.35              # Optimal blend weight for Dixon-Coles vs XGBoost
+CALIBRATION_TEMP = 1.12       # Out-of-fold temperature calibration smoothing factor
+ELO_K_FACTOR = 20             # Elo updates sensitivity
+ELO_HFA = 100                 # Elo home field advantage rating offset
+FORM_BOOST_RATE = 0.01        # Calibrated form change per win/loss inside correlated simulation
+FORM_LIMIT_MAX = 1.10         # Max bound for performance form scaling
+FORM_LIMIT_MIN = 0.90         # Min bound for performance form scaling
+PROMOTED_TRANSITION_W = 10    # Gameweek limit to transition promoted team standard model
 
 # Data file paths
 MOCK_INJURY_PATH = 'data/raw/injuries_mock.csv'
@@ -28,6 +30,8 @@ MANAGERS_PATH = 'data/raw/managers.csv'
 def get_v2_config():
     return {
         'decay_phi': DECAY_PHI if ENABLE_TIME_DECAY else 0.0,
+        'dc_weight': DC_WEIGHT,
+        'calibration_temp': CALIBRATION_TEMP,
         'dynamic_elo': ENABLE_DYNAMIC_ELO,
         'promoted_handling': ENABLE_PROMOTED_HANDLING,
         'injuries': ENABLE_INJURIES,

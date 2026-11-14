@@ -168,10 +168,10 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
         # Original Dixon-Coles score probabilities
         score_matrix = dc_preds['ScoreMatrix'].copy()
         
-        # Sum of original outcomes
-        sum_h = np.sum(np.triu(score_matrix, 1).T)
+        # Sum of original outcomes (rows x = home goals, cols y = away goals)
+        sum_h = np.sum(np.tril(score_matrix, -1))
         sum_d = np.sum(np.diag(score_matrix))
-        sum_a = np.sum(np.tril(score_matrix, -1).T)
+        sum_a = np.sum(np.triu(score_matrix, 1))
         
         # Rescale score matrix quadrants to match the blended H/D/A probabilities
         for x in range(max_goals + 1):

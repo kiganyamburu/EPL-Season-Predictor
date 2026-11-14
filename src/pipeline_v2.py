@@ -7,7 +7,7 @@ from scipy.stats import poisson
 from scipy.special import gammaln
 
 # Import v2 modules
-from src.v2.config import get_v2_config, ELO_K_FACTOR, ELO_HFA, MOCK_INJURY_PATH
+from src.v2.config import get_v2_config, DECAY_PHI, DC_WEIGHT, CALIBRATION_TEMP, ELO_K_FACTOR, ELO_HFA, MOCK_INJURY_PATH
 from src.v2.injuries import InjuryTracker
 from src.v2.congestion import calculate_rest_days, add_congestion_features
 from src.v2.promoted import get_promoted_teams, blend_promoted_predictions
@@ -15,7 +15,7 @@ from src.v2.elo_dynamic import update_elos, get_expected_scores
 from src.v2.market import evaluate_market_benchmark, extract_market_probs
 from src.v2.bayesian_form import initialize_form, update_form_state, adjust_goals_with_form
 from src.v2.explain import explain_match_prediction
-from src.models import DixonColesModel, XGBoostPredictor, blend_predictions
+from src.models import DixonColesModel, XGBoostPredictor, blend_predictions, apply_temperature_scaling
 
 def compute_brier_score(true_labels, probs):
     """
@@ -27,7 +27,7 @@ def compute_brier_score(true_labels, probs):
     true_one_hot[np.arange(N), true_labels] = 1.0
     return np.mean(np.sum((probs - true_one_hot)**2, axis=1)) / 3.0
 
-def run_backtest_v2(df, config, config_name="Model"):
+def run_backtest_v2(df, config, config_name="Model", return_details=False):
     """
     Perform v2 backtest on the 2024/25 season with a specific config dictionary.
     """
@@ -66,6 +66,8 @@ def run_backtest_v2(df, config, config_name="Model"):
         'HomeSquadValPercentile', 'AwaySquadValPercentile',
         'HomeNewManager', 'AwayNewManager'
     ]
+    if 'HomeRollingXG' in df.columns:
+        xgb_features.extend(['HomeRollingXG', 'HomeRollingXGA', 'AwayRollingXG', 'AwayRollingXGA'])
     if config.get('promoted_handling'):
         xgb_features.extend(['HomePromoted', 'AwayPromoted'])
     if config.get('congestion'):
@@ -113,6 +115,7 @@ def run_backtest_v2(df, config, config_name="Model"):
     for team in promoted_teams:
         current_elos[team] = 1420.0 # Promoted baseline
         
+    baseline_elos = current_elos.copy()
     current_form = initialize_form(all_teams)
     games_played = {team: 0 for team in all_teams}
     
@@ -152,6 +155,10 @@ def run_backtest_v2(df, config, config_name="Model"):
             mu = dc_model.attack_params[a_idx_dc] * dc_model.defense_params[h_idx_dc]
         else:
             lmbda, mu = 1.35, 1.15
+            
+        if config.get('dynamic_elo'):
+            lmbda *= 10.0 ** ((h_elo - baseline_elos[home]) / 400.0)
+            mu *= 10.0 ** ((a_elo - baseline_elos[away]) / 400.0)
             
         # Adjust with injuries
         if config.get('injuries'):
@@ -194,9 +201,9 @@ def run_backtest_v2(df, config, config_name="Model"):
         score_matrix = np.clip(score_matrix, 0.0, None)
         score_matrix /= score_matrix.sum()
         
-        dc_h = np.sum(np.triu(score_matrix, 1).T)
+        dc_h = np.sum(np.tril(score_matrix, -1))
         dc_d = np.sum(np.diag(score_matrix))
-        dc_a = np.sum(np.tril(score_matrix, -1).T)
+        dc_a = np.sum(np.triu(score_matrix, 1))
         dc_pred_dict = {'HomeWin': dc_h, 'Draw': dc_d, 'AwayWin': dc_a}
         
         # 3. XGBoost prediction
@@ -214,6 +221,11 @@ def run_backtest_v2(df, config, config_name="Model"):
             'HomeNewManager': row['HomeNewManager'],
             'AwayNewManager': row['AwayNewManager']
         }
+        if 'HomeRollingXG' in df.columns:
+            feat_dict['HomeRollingXG'] = row['HomeRollingXG']
+            feat_dict['HomeRollingXGA'] = row['HomeRollingXGA']
+            feat_dict['AwayRollingXG'] = row['AwayRollingXG']
+            feat_dict['AwayRollingXGA'] = row['AwayRollingXGA']
         if config.get('promoted_handling'):
             feat_dict['HomePromoted'] = 1 if home in promoted_teams else 0
             feat_dict['AwayPromoted'] = 1 if away in promoted_teams else 0
@@ -230,9 +242,14 @@ def run_backtest_v2(df, config, config_name="Model"):
         xgb_prob_arr = xgb_predictor.model.predict_proba(x_eval[xgb_predictor.features])[0]
         xgb_pred_dict = {'HomeWin': xgb_prob_arr[2], 'Draw': xgb_prob_arr[1], 'AwayWin': xgb_prob_arr[0]}
         
-        # 4. Blend
-        blended = blend_predictions(dc_pred_dict, xgb_pred_dict, dc_weight=0.5)
-        model_probs.append([blended['AwayWin'], blended['Draw'], blended['HomeWin']])
+        # 4. Blend and calibrate
+        dc_w = config.get('dc_weight', 0.5)
+        blended = blend_predictions(dc_pred_dict, xgb_pred_dict, dc_weight=dc_w)
+        probs_row = np.array([blended['AwayWin'], blended['Draw'], blended['HomeWin']], dtype=float)
+        cal_temp = config.get('calibration_temp', 1.0)
+        if cal_temp != 1.0:
+            probs_row = apply_temperature_scaling(probs_row, cal_temp)
+        model_probs.append(probs_row)
         
         # 5. In-season dynamic Elo and form updates
         if config.get('dynamic_elo'):
@@ -254,6 +271,8 @@ def run_backtest_v2(df, config, config_name="Model"):
     acc = accuracy_score(true_labels, np.argmax(model_probs, axis=1))
     brier = compute_brier_score(true_labels, model_probs)
     
+    if return_details:
+        return loss, brier, acc, model_probs, true_labels
     return loss, brier, acc
 
 def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, num_sims=10000, dc_weight=0.5, custom_injured_players=None, custom_managers=None, save_outputs=True):
@@ -283,6 +302,8 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         'HomeSquadValPercentile', 'AwaySquadValPercentile',
         'HomeNewManager', 'AwayNewManager'
     ]
+    if 'HomeRollingXG' in df_historical.columns:
+        xgb_features.extend(['HomeRollingXG', 'HomeRollingXGA', 'AwayRollingXG', 'AwayRollingXGA'])
     if config.get('promoted_handling'):
         xgb_features.extend(['HomePromoted', 'AwayPromoted'])
     if config.get('congestion'):
@@ -307,84 +328,151 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         for team, appt_date in custom_managers.items():
             managers[team] = pd.to_datetime(appt_date)
     
+    fixtures_df = fixtures_df.copy()
     fixtures_df['Date'] = pd.to_datetime(fixtures_df['Date'])
-    
+    fixtures_df = fixtures_df.sort_values('Date').reset_index(drop=True)
+
     active_teams = sorted(list(set(fixtures_df['HomeTeam']).union(set(fixtures_df['AwayTeam']))))
     num_teams = len(active_teams)
     team_to_idx = {team: i for i, team in enumerate(active_teams)}
-    
-    # Regress Elos for start of 2026/27
+
     teams_2526 = set(df_historical[df_historical['Season'] == '2025-2026']['HomeTeam']).union(
         set(df_historical[df_historical['Season'] == '2025-2026']['AwayTeam'])
     )
     promoted_teams = set(active_teams) - teams_2526
     relegated_teams = teams_2526 - set(active_teams)
-    
+
     if relegated_teams:
         relegated_elos = [final_elos.get(t, 1500.0) for t in relegated_teams]
-        promoted_baseline = np.mean(relegated_elos)
+        promoted_baseline = float(np.mean(relegated_elos))
     else:
         promoted_baseline = 1420.0
-        
-    elo_2627 = {}
-    for t in active_teams:
-        if t in final_elos and t not in promoted_teams:
-            elo_2627[t] = 0.7 * final_elos[t] + 0.3 * 1500.0
-        else:
-            elo_2627[t] = promoted_baseline
-            
-    # Set up simulator variables
-    # Keep track of Elo and Form per simulation run
+
+    # Check if 2026-2027 has already started in df_historical so we don't double-regress
+    # or double-replay Elo/form updates on completed matches.
+    df_2627 = df_historical[df_historical['Season'] == '2026-2027'].sort_values('Date')
+    in_season = not df_2627.empty
+
+    hist_2627_records = {}
+    initial_form = initialize_form(active_teams)
+    if in_season:
+        # final_elos already holds live post-completed-match Elos (including prior regression)
+        baseline_elos = {t: float(final_elos.get(t, 1500.0)) for t in active_teams}
+        for _, hrow in df_2627.iterrows():
+            key = (hrow['HomeTeam'], hrow['AwayTeam'])
+            hist_2627_records[key] = hrow
+            if hrow['HomeTeam'] in initial_form and hrow['AwayTeam'] in initial_form:
+                initial_form = update_form_state(
+                    initial_form, hrow['HomeTeam'], hrow['AwayTeam'],
+                    hrow['FTR'], boost_rate=config.get('form_boost', 0.01)
+                )
+    else:
+        baseline_elos = {}
+        for t in active_teams:
+            if t in final_elos and t not in promoted_teams:
+                baseline_elos[t] = 0.7 * float(final_elos[t]) + 0.3 * 1500.0
+            else:
+                baseline_elos[t] = promoted_baseline
+
     # Shape: (num_sims, num_teams)
-    elo_sims = np.zeros((num_sims, num_teams))
+    elo_sims = np.zeros((num_sims, num_teams), dtype=float)
+    form_sims = np.ones((num_sims, num_teams), dtype=float)
     for t_idx, team in enumerate(active_teams):
-        elo_sims[:, t_idx] = elo_2627[team]
-        
-    form_sims = np.ones((num_sims, num_teams))
-    
+        elo_sims[:, t_idx] = baseline_elos[team]
+        form_sims[:, t_idx] = initial_form.get(team, 1.0)
+
+    # Dynamic 10-match circular rolling feature buffers seeded from df_historical
+    ROLL_WIN = 10
+    roll_gf = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_ga = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_xg = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_xga = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_pts = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_len = np.zeros(num_teams, dtype=int)
+    roll_pos = np.zeros(num_teams, dtype=int)
+    team_games_played = np.zeros(num_teams, dtype=int)
+
+    df_sorted = df_historical.sort_values('Date')
+    for t_idx, team in enumerate(active_teams):
+        tm = df_sorted[(df_sorted['HomeTeam'] == team) | (df_sorted['AwayTeam'] == team)].tail(ROLL_WIN)
+        k = len(tm)
+        if k > 0:
+            gfs, gas, xgs, xgas, ptss = [], [], [], [], []
+            for _, mr in tm.iterrows():
+                has_xg = 'HxG' in mr and 'AxG' in mr and pd.notna(mr['HxG']) and pd.notna(mr['AxG'])
+                if has_xg:
+                    h_xg_m, a_xg_m = float(mr['HxG']), float(mr['AxG'])
+                elif 'HST' in mr and 'HS' in mr and pd.notna(mr['HST']) and pd.notna(mr['HS']):
+                    h_xg_m = 0.25 * float(mr['HST']) + 0.04 * max(0.0, float(mr['HS']) - float(mr['HST']))
+                    a_xg_m = 0.25 * float(mr['AST']) + 0.04 * max(0.0, float(mr['AS']) - float(mr['AST']))
+                else:
+                    h_xg_m, a_xg_m = float(mr['FTHG']), float(mr['FTAG'])
+
+                if mr['HomeTeam'] == team:
+                    hg_m, ag_m = float(mr['FTHG']), float(mr['FTAG'])
+                    xg_m, xga_m = h_xg_m, a_xg_m
+                    p_m = 3.0 if mr['FTR'] == 'H' else (1.0 if mr['FTR'] == 'D' else 0.0)
+                else:
+                    hg_m, ag_m = float(mr['FTAG']), float(mr['FTHG'])
+                    xg_m, xga_m = a_xg_m, h_xg_m
+                    p_m = 3.0 if mr['FTR'] == 'A' else (1.0 if mr['FTR'] == 'D' else 0.0)
+                gfs.append(hg_m)
+                gas.append(ag_m)
+                xgs.append(xg_m)
+                xgas.append(xga_m)
+                ptss.append(p_m)
+            roll_gf[:, t_idx, :k] = np.array(gfs, dtype=np.float32)
+            roll_ga[:, t_idx, :k] = np.array(gas, dtype=np.float32)
+            roll_xg[:, t_idx, :k] = np.array(xgs, dtype=np.float32)
+            roll_xga[:, t_idx, :k] = np.array(xgas, dtype=np.float32)
+            roll_pts[:, t_idx, :k] = np.array(ptss, dtype=np.float32)
+            roll_len[t_idx] = k
+            roll_pos[t_idx] = k % ROLL_WIN
+
     # Standings points, goals, etc.
     points_sims = np.zeros((num_sims, num_teams), dtype=int)
     gd_sims = np.zeros((num_sims, num_teams), dtype=int)
     gf_sims = np.zeros((num_sims, num_teams), dtype=int)
     ranks_sims = np.zeros((num_sims, num_teams), dtype=int)
-    
+
     # Set up goals maps
     max_goals = 10
     num_scores = (max_goals + 1) ** 2
     log_fact = gammaln(np.arange(max_goals + 1) + 1)
-    score_to_goals = []
-    for hg in range(max_goals + 1):
-        for ag in range(max_goals + 1):
-            score_to_goals.append((hg, ag))
-    score_to_goals = np.array(score_to_goals) # (121, 2)
-    
+    score_to_goals = np.array([(hg, ag) for hg in range(max_goals + 1) for ag in range(max_goals + 1)])
+
     x_coords, y_coords = np.meshgrid(np.arange(max_goals + 1), np.arange(max_goals + 1), indexing='ij')
     mask_h = x_coords > y_coords
     mask_d = x_coords == y_coords
     mask_a = x_coords < y_coords
-    
+
+    dc_weight = config.get('dc_weight', dc_weight)
+    cal_temp = config.get('calibration_temp', 1.0)
+    feature_names = xgb_predictor.features
+
     preds_output = []
-    
+
     print("Running modular stateful Monte Carlo simulations...")
-    
+
     # Loop chronologically through matches
     for idx, row in fixtures_df.iterrows():
         home = row['HomeTeam']
         away = row['AwayTeam']
         date = row['Date']
+        matchday = int(row['MatchDay']) if 'MatchDay' in row and pd.notna(row['MatchDay']) else (idx // 10 + 1)
         h_idx = team_to_idx[home]
         a_idx = team_to_idx[away]
-        
+
         # 1. Injuries & Rest
         h_avail = injury_tracker.get_availability(home, date, custom_injured_players) if config.get('injuries') else 1.0
         a_avail = injury_tracker.get_availability(away, date, custom_injured_players) if config.get('injuries') else 1.0
-        
+
         h_rest = calculate_rest_days(home, date, fixtures_df.iloc[:idx])
         a_rest = calculate_rest_days(away, date, fixtures_df.iloc[:idx])
         h_congested = 1 if h_rest <= 3 else 0
         a_congested = 1 if a_rest <= 3 else 0
-        
-        # 2. Get baseline expected goals
+
+        # 2. Get baseline expected goals from Dixon-Coles
         h_idx_dc = dc_model.team_indices.get(home)
         a_idx_dc = dc_model.team_indices.get(away)
         if h_idx_dc is not None and a_idx_dc is not None:
@@ -392,225 +480,140 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
             mu_base = dc_model.attack_params[a_idx_dc] * dc_model.defense_params[h_idx_dc]
         else:
             lmbda_base, mu_base = 1.35, 1.15
-            
-        # Adjust expected goals for injuries
+
         if config.get('injuries'):
             lmbda_base, mu_base = injury_tracker.adjust_expected_goals(lmbda_base, mu_base, h_avail, a_avail)
-            
-        # Adjust expected goals for congestion
+
         if config.get('congestion'):
             if h_congested:
                 lmbda_base *= 0.96
             if a_congested:
                 mu_base *= 0.96
-                
-        # 3. XGBoost prediction (calculated based on pre-season / current state)
+
+        # Metadata features for XGBoost
         h_val = squad_values.get(home, 100.0)
         h_val_pct = (h_val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
         a_val = squad_values.get(away, 100.0)
         a_val_pct = (a_val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
-        
+
         h_appointed = managers.get(home)
         h_tenure = (date - h_appointed).days if h_appointed else 365
-        h_new_mgr = 1 if h_tenure < 180 else 0
+        h_new_mgr = 1 if 0 <= h_tenure < 180 else 0
         a_appointed = managers.get(away)
         a_tenure = (date - a_appointed).days if a_appointed else 365
-        a_new_mgr = 1 if a_tenure < 180 else 0
-        
-        # XGBoost features dict (use mean Elo diff for pre-season prediction stability)
-        feat_dict = {
-            'EloDiff': elo_2627[home] - elo_2627[away],
-            'HomeRollingGoalsScored': lmbda_base,
-            'HomeRollingGoalsConceded': mu_base,
-            'HomeRollingPoints': 1.3,
-            'AwayRollingGoalsScored': mu_base,
-            'AwayRollingGoalsConceded': lmbda_base,
-            'AwayRollingPoints': 1.1,
-            'HomeSquadValPercentile': h_val_pct,
-            'AwaySquadValPercentile': a_val_pct,
-            'HomeNewManager': h_new_mgr,
-            'AwayNewManager': a_new_mgr
-        }
-        if config.get('promoted_handling'):
-            feat_dict['HomePromoted'] = 1 if home in promoted_teams else 0
-            feat_dict['AwayPromoted'] = 1 if away in promoted_teams else 0
-        if config.get('congestion'):
-            feat_dict['HomeCongested'] = h_congested
-            feat_dict['AwayCongested'] = a_congested
-            feat_dict['HomeDaysSinceLast'] = h_rest
-            feat_dict['AwayDaysSinceLast'] = a_rest
-        if config.get('injuries'):
-            feat_dict['HomeAvailability'] = h_avail
-            feat_dict['AwayAvailability'] = a_avail
-            
-        x_eval = pd.DataFrame([feat_dict])
-        xgb_prob_arr = xgb_predictor.model.predict_proba(x_eval[xgb_predictor.features])[0]
-        xgb_preds = {'HomeWin': xgb_prob_arr[2], 'Draw': xgb_prob_arr[1], 'AwayWin': xgb_prob_arr[0]}
-        
-        # 4. We will run simulations in parallel across num_sims
-        h_elos = elo_sims[:, h_idx]
-        a_elos = elo_sims[:, a_idx]
-        h_forms = form_sims[:, h_idx]
-        a_forms = form_sims[:, a_idx]
-        
-        # Compute dynamic lambda and mu for each sim
-        # Use baseline goal expectation, scaled by Elo changes during simulation
-        # Scale expected goals by exponential of ELO difference changes
-        elo_scalar_h = 10.0 ** ((h_elos - elo_2627[home]) / 400.0)
-        elo_scalar_a = 10.0 ** ((a_elos - elo_2627[away]) / 400.0)
-        
-        lmbdas = lmbda_base * elo_scalar_h
-        mus = mu_base * elo_scalar_a
-        
-        # Apply Form multiplier
-        if config.get('bayesian_form'):
-            lmbdas = lmbdas * (h_forms / a_forms)
-            mus = mus * (a_forms / h_forms)
-            
-        # Apply Promoted blended logic
-        if config.get('promoted_handling'):
-            # Calculate matchday count inside simulation
-            # We can approximate with the fixture index idx
-            played_home = idx // 10
-            is_prom = 1 if home in promoted_teams else 0
-            lmbdas, mus = blend_promoted_predictions(home, lmbdas, mus, played_home, is_prom, is_home=True)
-            
-            played_away = idx // 10
-            is_prom = 1 if away in promoted_teams else 0
-            # Flip roles
-            mus, lmbdas = blend_promoted_predictions(away, mus, lmbdas, played_away, is_prom, is_home=False)
-            
-        # Construct Poisson probability distribution for each simulation (size: num_sims, 11, 11) in log-space (extremely fast)
-        lmbdas = np.clip(lmbdas, 1e-6, None)
-        mus = np.clip(mus, 1e-6, None)
-        
-        p_home = np.exp(-lmbdas[:, None] + np.arange(max_goals + 1)[None, :] * np.log(lmbdas[:, None]) - log_fact[None, :])
-        p_away = np.exp(-mus[:, None] + np.arange(max_goals + 1)[None, :] * np.log(mus[:, None]) - log_fact[None, :])
-        
-        # Joint score matrix
-        score_matrices = p_home[:, :, None] * p_away[:, None, :] # shape (num_sims, 11, 11)
-        
-        # Apply Dixon-Coles adjustment
-        adj_matrices = np.ones((num_sims, max_goals + 1, max_goals + 1))
-        adj_matrices[:, 0, 0] = 1.0 - lmbdas * mus * dc_model.rho
-        adj_matrices[:, 1, 0] = 1.0 + mus * dc_model.rho
-        adj_matrices[:, 0, 1] = 1.0 + lmbdas * dc_model.rho
-        adj_matrices[:, 1, 1] = 1.0 - dc_model.rho
-        adj_matrices = np.clip(adj_matrices, 0.01, 10.0)
-        
-        score_matrices *= adj_matrices
-        score_matrices /= score_matrices.sum(axis=(1, 2))[:, None, None]
-        
-        # Compute win/draw/loss for Dixon-Coles
-        dc_h = score_matrices[:, mask_h].sum(axis=1)
-        dc_d = score_matrices[:, mask_d].sum(axis=1)
-        dc_a = score_matrices[:, mask_a].sum(axis=1)
-        
-        # Blend probabilities
-        blend_h = dc_weight * dc_h + (1 - dc_weight) * xgb_preds['HomeWin']
-        blend_d = dc_weight * dc_d + (1 - dc_weight) * xgb_preds['Draw']
-        blend_a = dc_weight * dc_a + (1 - dc_weight) * xgb_preds['AwayWin']
-        
-        # Rescale score matrices quadrants to match blended probabilities using broadcasting (extremely fast)
-        f_h = np.where(dc_h > 0, blend_h / dc_h, 0.0)
-        f_d = np.where(dc_d > 0, blend_d / dc_d, 0.0)
-        f_a = np.where(dc_a > 0, blend_a / dc_a, 0.0)
-        
-        # Reshape for broadcasting over the score matrix cells
-        score_matrices[:, mask_h] *= f_h[:, None]
-        score_matrices[:, mask_d] *= f_d[:, None]
-        score_matrices[:, mask_a] *= f_a[:, None]
-                    
-        # Re-normalize
-        score_matrices /= score_matrices.sum(axis=(1, 2))[:, None, None]
-        
-        # Cumulative probs for sampling
-        cum_probs = np.cumsum(score_matrices.reshape(num_sims, num_scores), axis=1)
-        
-        # Check if match has already been completed in reality
+        a_new_mgr = 1 if 0 <= a_tenure < 180 else 0
+
+        # Check if match is already completed
         summary_str = str(row.get('Summary', ''))
         re_score = re.search(r'\((\d+)-(\d+)\)', summary_str)
+
         if re_score:
             actual_hg = int(re_score.group(1))
             actual_ag = int(re_score.group(2))
             is_completed = True
             hg = np.full(num_sims, actual_hg, dtype=int)
             ag = np.full(num_sims, actual_ag, dtype=int)
-        else:
-            is_completed = False
-            # Sample match outcomes
-            r = np.random.rand(num_sims, 1)
-            score_indices = (r > cum_probs).sum(axis=1)
-            goals = score_to_goals[score_indices]
-            hg = goals[:, 0]
-            ag = goals[:, 1]
-        
-        # Points allocation
-        h_pts = np.where(hg > ag, 3, np.where(hg == ag, 1, 0))
-        a_pts = np.where(ag > hg, 3, np.where(hg == ag, 1, 0))
-        
-        # Update simulated standings
-        points_sims[:, h_idx] += h_pts
-        points_sims[:, a_idx] += a_pts
-        gf_sims[:, h_idx] += hg
-        gf_sims[:, a_idx] += ag
-        gd_sims[:, h_idx] += hg - ag
-        gd_sims[:, a_idx] += ag - hg
-        
-        # 5. Update Elo and Form state variables for each simulation run
-        if config.get('dynamic_elo'):
-            ftrs = np.where(hg > ag, 'H', np.where(hg == ag, 'D', 'A'))
-            e_h_sims, e_a_sims = get_expected_scores(h_elos, a_elos, ELO_HFA)
-            s_h_sims = np.where(hg > ag, 1.0, np.where(hg == ag, 0.5, 0.0))
-            s_a_sims = 1.0 - s_h_sims
-            
-            gds = hg - ag
-            abs_gds = np.abs(gds)
-            mults = np.ones(num_sims)
-            mults = np.where(abs_gds == 2, 1.5, mults)
-            mults = np.where(abs_gds == 3, 1.75, mults)
-            mults = np.where(abs_gds >= 4, 1.75 + (abs_gds - 3) / 8.0, mults)
-            
-            h_elos_new = h_elos + ELO_K_FACTOR * mults * (s_h_sims - e_h_sims)
-            a_elos_new = a_elos + ELO_K_FACTOR * mults * (s_a_sims - e_a_sims)
-            
-            elo_sims[:, h_idx] = h_elos_new
-            elo_sims[:, a_idx] = a_elos_new
-            
-        if config.get('bayesian_form'):
-            boost = config.get('form_boost', 0.02)
-            h_forms_new = np.where(hg > ag, np.minimum(1.20, h_forms + boost), 
-                                   np.where(hg < ag, np.maximum(0.80, h_forms - boost), 
-                                            0.95 * h_forms + 0.05 * 1.0))
-            a_forms_new = np.where(hg < ag, np.minimum(1.20, a_forms + boost), 
-                                   np.where(hg > ag, np.maximum(0.80, a_forms - boost), 
-                                            0.95 * a_forms + 0.05 * 1.0))
-            form_sims[:, h_idx] = h_forms_new
-            form_sims[:, a_idx] = a_forms_new
-            
-        # 6. Generate human-readable explanation and record predictions (for the average simulation stats)
-        if save_outputs:
-            mean_h = blend_h.mean()
-            mean_d = blend_d.mean()
-            mean_a = blend_a.mean()
-            
-            # Most likely score is the argmax of the average score matrix
-            mean_score_matrix = score_matrices.mean(axis=0)
-            max_idx = np.unravel_index(np.argmax(mean_score_matrix), mean_score_matrix.shape)
-            ml_score = f"{max_idx[0]}-{max_idx[1]}"
-            
-            explain_str = explain_match_prediction(
-                home, away, date.strftime('%Y-%m-%d'),
-                h_elos.mean(), a_elos.mean(),
-                squad_values.get(home, 0.0), squad_values.get(away, 0.0),
-                h_avail, a_avail,
-                h_congested, a_congested,
-                mean_h, mean_d, mean_a
-            )
-            
-            if is_completed:
-                pred_item = {
-                    'MatchDay': idx // 10 + 1,
+
+            h_pts = np.where(hg > ag, 3, np.where(hg == ag, 1, 0))
+            a_pts = np.where(ag > hg, 3, np.where(hg == ag, 1, 0))
+            points_sims[:, h_idx] += h_pts
+            points_sims[:, a_idx] += a_pts
+            gf_sims[:, h_idx] += hg
+            gf_sims[:, a_idx] += ag
+            gd_sims[:, h_idx] += hg - ag
+            gd_sims[:, a_idx] += ag - hg
+
+            hist_row = hist_2627_records.get((home, away))
+            already_in_hist = hist_row is not None
+
+            if not already_in_hist:
+                # Completed in fixtures_df only (not yet synced into df_historical): advance state once
+                h_elos = elo_sims[:, h_idx]
+                a_elos = elo_sims[:, a_idx]
+                if config.get('dynamic_elo'):
+                    e_h_s, e_a_s = get_expected_scores(h_elos, a_elos, ELO_HFA)
+                    s_h_s = 1.0 if actual_hg > actual_ag else (0.5 if actual_hg == actual_ag else 0.0)
+                    s_a_s = 1.0 - s_h_s
+                    abs_gd = abs(actual_hg - actual_ag)
+                    mult = 1.0 if abs_gd <= 1 else (1.5 if abs_gd == 2 else (1.75 if abs_gd == 3 else 1.75 + (abs_gd - 3) / 8.0))
+                    elo_sims[:, h_idx] = h_elos + ELO_K_FACTOR * mult * (s_h_s - e_h_s)
+                    elo_sims[:, a_idx] = a_elos + ELO_K_FACTOR * mult * (s_a_s - e_a_s)
+
+            if save_outputs:
+                if already_in_hist:
+                    rec_h_elo = float(hist_row['HomeElo'])
+                    rec_a_elo = float(hist_row['AwayElo'])
+                    feat_1 = {
+                        'EloDiff': rec_h_elo - rec_a_elo,
+                        'HomeRollingGoalsScored': float(hist_row['HomeRollingGoalsScored']),
+                        'HomeRollingGoalsConceded': float(hist_row['HomeRollingGoalsConceded']),
+                        'HomeRollingPoints': float(hist_row['HomeRollingPoints']),
+                        'HomeRollingXG': float(hist_row.get('HomeRollingXG', hist_row['HomeRollingGoalsScored'])),
+                        'HomeRollingXGA': float(hist_row.get('HomeRollingXGA', hist_row['HomeRollingGoalsConceded'])),
+                        'AwayRollingGoalsScored': float(hist_row['AwayRollingGoalsScored']),
+                        'AwayRollingGoalsConceded': float(hist_row['AwayRollingGoalsConceded']),
+                        'AwayRollingPoints': float(hist_row['AwayRollingPoints']),
+                        'AwayRollingXG': float(hist_row.get('AwayRollingXG', hist_row['AwayRollingGoalsScored'])),
+                        'AwayRollingXGA': float(hist_row.get('AwayRollingXGA', hist_row['AwayRollingGoalsConceded'])),
+                        'HomeSquadValPercentile': h_val_pct,
+                        'AwaySquadValPercentile': a_val_pct,
+                        'HomeNewManager': h_new_mgr,
+                        'AwayNewManager': a_new_mgr,
+                        'HomePromoted': 1 if home in promoted_teams else 0,
+                        'AwayPromoted': 1 if away in promoted_teams else 0,
+                        'HomeCongested': h_congested,
+                        'AwayCongested': a_congested,
+                        'HomeDaysSinceLast': h_rest,
+                        'AwayDaysSinceLast': a_rest,
+                        'HomeAvailability': h_avail,
+                        'AwayAvailability': a_avail,
+                    }
+                else:
+                    rec_h_elo = float(elo_sims[:, h_idx].mean())
+                    rec_a_elo = float(elo_sims[:, a_idx].mean())
+                    feat_1 = {
+                        'EloDiff': rec_h_elo - rec_a_elo,
+                        'HomeRollingGoalsScored': lmbda_base,
+                        'HomeRollingGoalsConceded': mu_base,
+                        'HomeRollingPoints': 1.3,
+                        'HomeRollingXG': lmbda_base,
+                        'HomeRollingXGA': mu_base,
+                        'AwayRollingGoalsScored': mu_base,
+                        'AwayRollingGoalsConceded': lmbda_base,
+                        'AwayRollingPoints': 1.1,
+                        'AwayRollingXG': mu_base,
+                        'AwayRollingXGA': lmbda_base,
+                        'HomeSquadValPercentile': h_val_pct,
+                        'AwaySquadValPercentile': a_val_pct,
+                        'HomeNewManager': h_new_mgr,
+                        'AwayNewManager': a_new_mgr,
+                        'HomePromoted': 1 if home in promoted_teams else 0,
+                        'AwayPromoted': 1 if away in promoted_teams else 0,
+                        'HomeCongested': h_congested,
+                        'AwayCongested': a_congested,
+                        'HomeDaysSinceLast': h_rest,
+                        'AwayDaysSinceLast': a_rest,
+                        'HomeAvailability': h_avail,
+                        'AwayAvailability': a_avail,
+                    }
+
+                x_1 = np.array([[feat_1[c] for c in feature_names]], dtype=np.float32)
+                xp_1 = xgb_predictor.model.predict_proba(x_1)[0]
+                dc_1 = dc_model.predict_match_probabilities(home, away, max_goals=max_goals)
+                b_1 = blend_predictions(dc_1, {'HomeWin': xp_1[2], 'Draw': xp_1[1], 'AwayWin': xp_1[0]}, dc_weight=dc_weight)
+                p_1 = apply_temperature_scaling(np.array([b_1['AwayWin'], b_1['Draw'], b_1['HomeWin']]), cal_temp)
+                mean_a, mean_d, mean_h = float(p_1[0]), float(p_1[1]), float(p_1[2])
+
+                explain_str = explain_match_prediction(
+                    home, away, date.strftime('%Y-%m-%d'),
+                    rec_h_elo, rec_a_elo,
+                    squad_values.get(home, 0.0), squad_values.get(away, 0.0),
+                    h_avail, a_avail,
+                    h_congested, a_congested,
+                    mean_h, mean_d, mean_a
+                )
+                preds_output.append({
+                    'MatchDay': matchday,
                     'Date': date.strftime('%Y-%m-%d'),
                     'HomeTeam': home,
                     'AwayTeam': away,
@@ -620,25 +623,222 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
                     'Draw%': round(mean_d * 100, 2),
                     'AwayWin%': round(mean_a * 100, 2),
                     'MostLikelyScore': f"{actual_hg}-{actual_ag}",
-                    'Explanation': f"**Final Result: {actual_hg} - {actual_ag}** (Completed in Gameweek {idx // 10 + 1}). " + explain_str
-                }
-            else:
-                pred_item = {
-                    'MatchDay': idx // 10 + 1,
-                    'Date': date.strftime('%Y-%m-%d'),
-                    'HomeTeam': home,
-                    'AwayTeam': away,
-                    'Status': 'Scheduled',
-                    'ActualScore': None,
-                    'HomeWin%': round(mean_h * 100, 2),
-                    'Draw%': round(mean_d * 100, 2),
-                    'AwayWin%': round(mean_a * 100, 2),
-                    'MostLikelyScore': ml_score,
-                    'Explanation': explain_str
-                }
-            preds_output.append(pred_item)
-        
-    # Write final predictions file
+                    'Explanation': f"**Final Result: {actual_hg} - {actual_ag}** (Completed in Gameweek {matchday}). " + explain_str
+                })
+            team_games_played[h_idx] += 1
+            team_games_played[a_idx] += 1
+            continue
+
+        # 3. Unplayed fixture: compute dynamic per-simulation features for XGBoost + Dixon-Coles
+        h_elos = elo_sims[:, h_idx]
+        a_elos = elo_sims[:, a_idx]
+        h_forms = form_sims[:, h_idx]
+        a_forms = form_sims[:, a_idx]
+
+        nh = int(roll_len[h_idx])
+        na = int(roll_len[a_idx])
+        h_r_gf = roll_gf[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        h_r_ga = roll_ga[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        h_r_xg = roll_xg[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        h_r_xga = roll_xga[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        h_r_pts = roll_pts[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.1, dtype=np.float32)
+        a_r_gf = roll_gf[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        a_r_ga = roll_ga[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        a_r_xg = roll_xg[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        a_r_xga = roll_xga[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        a_r_pts = roll_pts[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.1, dtype=np.float32)
+
+        col_map = {
+            'EloDiff': (h_elos - a_elos).astype(np.float32),
+            'HomeRollingGoalsScored': h_r_gf,
+            'HomeRollingGoalsConceded': h_r_ga,
+            'HomeRollingPoints': h_r_pts,
+            'HomeRollingXG': h_r_xg,
+            'HomeRollingXGA': h_r_xga,
+            'AwayRollingGoalsScored': a_r_gf,
+            'AwayRollingGoalsConceded': a_r_ga,
+            'AwayRollingPoints': a_r_pts,
+            'AwayRollingXG': a_r_xg,
+            'AwayRollingXGA': a_r_xga,
+            'HomeSquadValPercentile': np.full(num_sims, h_val_pct, dtype=np.float32),
+            'AwaySquadValPercentile': np.full(num_sims, a_val_pct, dtype=np.float32),
+            'HomeNewManager': np.full(num_sims, h_new_mgr, dtype=np.float32),
+            'AwayNewManager': np.full(num_sims, a_new_mgr, dtype=np.float32),
+            'HomePromoted': np.full(num_sims, 1 if home in promoted_teams else 0, dtype=np.float32),
+            'AwayPromoted': np.full(num_sims, 1 if away in promoted_teams else 0, dtype=np.float32),
+            'HomeCongested': np.full(num_sims, h_congested, dtype=np.float32),
+            'AwayCongested': np.full(num_sims, a_congested, dtype=np.float32),
+            'HomeDaysSinceLast': np.full(num_sims, h_rest, dtype=np.float32),
+            'AwayDaysSinceLast': np.full(num_sims, a_rest, dtype=np.float32),
+            'HomeAvailability': np.full(num_sims, h_avail, dtype=np.float32),
+            'AwayAvailability': np.full(num_sims, a_avail, dtype=np.float32),
+        }
+        X_sim = np.column_stack([col_map[c] for c in feature_names])
+        xgb_probs = xgb_predictor.model.predict_proba(X_sim)
+        xgb_a = xgb_probs[:, 0]
+        xgb_d = xgb_probs[:, 1]
+        xgb_h = xgb_probs[:, 2]
+
+        # 4. Dynamic Dixon-Coles rates across all simulations
+        elo_scalar_h = 10.0 ** ((h_elos - baseline_elos[home]) / 400.0)
+        elo_scalar_a = 10.0 ** ((a_elos - baseline_elos[away]) / 400.0)
+
+        lmbdas = lmbda_base * elo_scalar_h
+        mus = mu_base * elo_scalar_a
+
+        if config.get('bayesian_form'):
+            lmbdas, mus = adjust_goals_with_form(lmbdas, mus, h_forms, a_forms)
+
+        if config.get('promoted_handling'):
+            played_home = int(team_games_played[h_idx])
+            is_prom_h = 1 if home in promoted_teams else 0
+            lmbdas, mus = blend_promoted_predictions(home, lmbdas, mus, played_home, is_prom_h, is_home=True)
+
+            played_away = int(team_games_played[a_idx])
+            is_prom_a = 1 if away in promoted_teams else 0
+            mus, lmbdas = blend_promoted_predictions(away, mus, lmbdas, played_away, is_prom_a, is_home=False)
+
+        lmbdas = np.clip(lmbdas, 1e-6, None)
+        mus = np.clip(mus, 1e-6, None)
+
+        p_home = np.exp(-lmbdas[:, None] + np.arange(max_goals + 1)[None, :] * np.log(lmbdas[:, None]) - log_fact[None, :])
+        p_away = np.exp(-mus[:, None] + np.arange(max_goals + 1)[None, :] * np.log(mus[:, None]) - log_fact[None, :])
+
+        score_matrices = p_home[:, :, None] * p_away[:, None, :]
+
+        adj_matrices = np.ones((num_sims, max_goals + 1, max_goals + 1))
+        adj_matrices[:, 0, 0] = 1.0 - lmbdas * mus * dc_model.rho
+        adj_matrices[:, 1, 0] = 1.0 + mus * dc_model.rho
+        adj_matrices[:, 0, 1] = 1.0 + lmbdas * dc_model.rho
+        adj_matrices[:, 1, 1] = 1.0 - dc_model.rho
+        adj_matrices = np.clip(adj_matrices, 0.01, 10.0)
+
+        score_matrices *= adj_matrices
+        score_matrices /= score_matrices.sum(axis=(1, 2))[:, None, None]
+
+        dc_h = score_matrices[:, mask_h].sum(axis=1)
+        dc_d = score_matrices[:, mask_d].sum(axis=1)
+        dc_a = score_matrices[:, mask_a].sum(axis=1)
+
+        blend_probs = np.column_stack([
+            dc_weight * dc_a + (1.0 - dc_weight) * xgb_a,
+            dc_weight * dc_d + (1.0 - dc_weight) * xgb_d,
+            dc_weight * dc_h + (1.0 - dc_weight) * xgb_h,
+        ])
+        blend_probs /= blend_probs.sum(axis=1, keepdims=True)
+        if cal_temp != 1.0:
+            blend_probs = apply_temperature_scaling(blend_probs, cal_temp)
+
+        blend_a = blend_probs[:, 0]
+        blend_d = blend_probs[:, 1]
+        blend_h = blend_probs[:, 2]
+
+        f_h = np.where(dc_h > 0, blend_h / dc_h, 0.0)
+        f_d = np.where(dc_d > 0, blend_d / dc_d, 0.0)
+        f_a = np.where(dc_a > 0, blend_a / dc_a, 0.0)
+
+        score_matrices[:, mask_h] *= f_h[:, None]
+        score_matrices[:, mask_d] *= f_d[:, None]
+        score_matrices[:, mask_a] *= f_a[:, None]
+        score_matrices /= score_matrices.sum(axis=(1, 2))[:, None, None]
+
+        cum_probs = np.cumsum(score_matrices.reshape(num_sims, num_scores), axis=1)
+
+        r = np.random.rand(num_sims, 1)
+        score_indices = (r > cum_probs).sum(axis=1)
+        goals = score_to_goals[score_indices]
+        hg = goals[:, 0]
+        ag = goals[:, 1]
+
+        h_pts = np.where(hg > ag, 3, np.where(hg == ag, 1, 0))
+        a_pts = np.where(ag > hg, 3, np.where(hg == ag, 1, 0))
+
+        points_sims[:, h_idx] += h_pts
+        points_sims[:, a_idx] += a_pts
+        gf_sims[:, h_idx] += hg
+        gf_sims[:, a_idx] += ag
+        gd_sims[:, h_idx] += hg - ag
+        gd_sims[:, a_idx] += ag - hg
+
+        # Update dynamic rolling circular buffers for both teams
+        hp_pos = int(roll_pos[h_idx])
+        ap_pos = int(roll_pos[a_idx])
+        roll_gf[:, h_idx, hp_pos] = hg.astype(np.float32)
+        roll_ga[:, h_idx, hp_pos] = ag.astype(np.float32)
+        roll_xg[:, h_idx, hp_pos] = lmbdas.astype(np.float32)
+        roll_xga[:, h_idx, hp_pos] = mus.astype(np.float32)
+        roll_pts[:, h_idx, hp_pos] = h_pts.astype(np.float32)
+        roll_pos[h_idx] = (hp_pos + 1) % ROLL_WIN
+        roll_len[h_idx] = min(ROLL_WIN, int(roll_len[h_idx]) + 1)
+
+        roll_gf[:, a_idx, ap_pos] = ag.astype(np.float32)
+        roll_ga[:, a_idx, ap_pos] = hg.astype(np.float32)
+        roll_xg[:, a_idx, ap_pos] = mus.astype(np.float32)
+        roll_xga[:, a_idx, ap_pos] = lmbdas.astype(np.float32)
+        roll_pts[:, a_idx, ap_pos] = a_pts.astype(np.float32)
+        roll_pos[a_idx] = (ap_pos + 1) % ROLL_WIN
+        roll_len[a_idx] = min(ROLL_WIN, int(roll_len[a_idx]) + 1)
+        team_games_played[h_idx] += 1
+        team_games_played[a_idx] += 1
+
+        # 5. Update Elo and Form state variables for each simulation run
+        if config.get('dynamic_elo'):
+            e_h_sims, e_a_sims = get_expected_scores(h_elos, a_elos, ELO_HFA)
+            s_h_sims = np.where(hg > ag, 1.0, np.where(hg == ag, 0.5, 0.0))
+            s_a_sims = 1.0 - s_h_sims
+
+            abs_gds = np.abs(hg - ag)
+            mults = np.ones(num_sims)
+            mults = np.where(abs_gds == 2, 1.5, mults)
+            mults = np.where(abs_gds == 3, 1.75, mults)
+            mults = np.where(abs_gds >= 4, 1.75 + (abs_gds - 3) / 8.0, mults)
+
+            elo_sims[:, h_idx] = h_elos + ELO_K_FACTOR * mults * (s_h_sims - e_h_sims)
+            elo_sims[:, a_idx] = a_elos + ELO_K_FACTOR * mults * (s_a_sims - e_a_sims)
+
+        if config.get('bayesian_form'):
+            boost = config.get('form_boost', 0.01)
+            form_sims[:, h_idx] = np.where(
+                hg > ag, np.minimum(1.10, h_forms + boost),
+                np.where(hg < ag, np.maximum(0.90, h_forms - boost), 0.90 * h_forms + 0.10 * 1.0)
+            )
+            form_sims[:, a_idx] = np.where(
+                hg < ag, np.minimum(1.10, a_forms + boost),
+                np.where(hg > ag, np.maximum(0.90, a_forms - boost), 0.90 * a_forms + 0.10 * 1.0)
+            )
+
+        # 6. Record Scheduled prediction & explanation
+        if save_outputs:
+            mean_h = float(blend_h.mean())
+            mean_d = float(blend_d.mean())
+            mean_a = float(blend_a.mean())
+
+            mean_score_matrix = score_matrices.mean(axis=0)
+            max_idx = np.unravel_index(np.argmax(mean_score_matrix), mean_score_matrix.shape)
+            ml_score = f"{max_idx[0]}-{max_idx[1]}"
+
+            explain_str = explain_match_prediction(
+                home, away, date.strftime('%Y-%m-%d'),
+                float(h_elos.mean()), float(a_elos.mean()),
+                squad_values.get(home, 0.0), squad_values.get(away, 0.0),
+                h_avail, a_avail,
+                h_congested, a_congested,
+                mean_h, mean_d, mean_a
+            )
+            preds_output.append({
+                'MatchDay': matchday,
+                'Date': date.strftime('%Y-%m-%d'),
+                'HomeTeam': home,
+                'AwayTeam': away,
+                'Status': 'Scheduled',
+                'ActualScore': None,
+                'HomeWin%': round(mean_h * 100, 2),
+                'Draw%': round(mean_d * 100, 2),
+                'AwayWin%': round(mean_a * 100, 2),
+                'MostLikelyScore': ml_score,
+                'Explanation': explain_str
+            })
+
     if save_outputs:
         preds_df = pd.DataFrame(preds_output)
         os.makedirs('output', exist_ok=True)
@@ -725,45 +925,55 @@ def run_feature_sweeps():
     # Configurations to evaluate
     configs = {
         '1. Baseline (v1 Model)': {
-            'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': False,
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
-        '2. Time-weighted Decay (phi=0.0002)': {
-            'decay_phi': 0.0002, 'dynamic_elo': False, 'promoted_handling': False, 
+        f'2. Time-weighted Decay (phi={DECAY_PHI})': {
+            'decay_phi': DECAY_PHI, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': False,
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
         '3. Dynamic Elo Updates ON': {
-            'decay_phi': 0.0, 'dynamic_elo': True, 'promoted_handling': False, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': True, 'promoted_handling': False,
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
         '4. Promoted Handling ON': {
-            'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': True, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': True,
             'injuries': False, 'congestion': False, 'bayesian_form': False
         },
         '5. Injury Adjustments ON': {
-            'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': False,
             'injuries': True, 'congestion': False, 'bayesian_form': False
         },
         '6. Rest Fatigue/Congestion ON': {
-            'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': False,
             'injuries': False, 'congestion': True, 'bayesian_form': False
         },
         '7. Stateful Form Correlation ON': {
-            'decay_phi': 0.0, 'dynamic_elo': False, 'promoted_handling': False, 
+            'decay_phi': 0.0, 'dc_weight': 0.5, 'calibration_temp': 1.0,
+            'dynamic_elo': False, 'promoted_handling': False,
             'injuries': False, 'congestion': False, 'bayesian_form': True, 'form_boost': 0.01
         },
-        '8. Upgraded Ensemble (All ON)': {
-            'decay_phi': 0.0002, 'dynamic_elo': True, 'promoted_handling': True, 
+        '8. Upgraded Calibrated Ensemble (All ON)': {
+            'decay_phi': DECAY_PHI, 'dc_weight': DC_WEIGHT, 'calibration_temp': CALIBRATION_TEMP,
+            'dynamic_elo': True, 'promoted_handling': True,
             'injuries': True, 'congestion': True, 'bayesian_form': True, 'form_boost': 0.01
         }
     }
     
     report_rows = []
+    ensemble_probs = None
+    ensemble_labels = None
     
     for name, cfg in configs.items():
         print(f"\nEvaluating: {name}...")
         try:
-            loss, brier, acc = run_backtest_v2(df, cfg, name)
+            loss, brier, acc, probs_out, labels_out = run_backtest_v2(df, cfg, name, return_details=True)
             print(f"Results: Log-Loss = {loss:.4f} | Brier = {brier:.4f} | Accuracy = {acc*100:.2f}%")
             report_rows.append({
                 'Configuration': name,
@@ -771,35 +981,29 @@ def run_feature_sweeps():
                 'Brier Score': round(brier, 4),
                 'Accuracy': f"{acc*100:.2f}%"
             })
+            if name.startswith('8.'):
+                ensemble_probs = probs_out
+                ensemble_labels = labels_out
         except Exception as e:
             print(f"Error evaluating {name}: {e}")
             import traceback
             traceback.print_exc()
             
-    # Add Betting Market Benchmark as reference
+    # Compare actual Upgraded Ensemble against real Betting Market Closing Odds
     test_df = df[df['Season'] == '2024-2025'].copy()
-    true_labels = np.array([0 if r['FTR'] == 'A' else (1 if r['FTR'] == 'D' else 2) for _, r in test_df.iterrows()])
-    
-    # Get model probs under ensemble
-    phi = 0.003
-    dc_model = DixonColesModel()
-    dc_model.phi = phi
-    dc_model.fit(df[df['Season'] < '2024-2025'].copy())
-    
-    # Basic prediction
-    model_probs = []
-    for idx, row in test_df.iterrows():
-        dc_pred = dc_model.predict_match_probabilities(row['HomeTeam'], row['AwayTeam'])
-        model_probs.append([dc_pred['AwayWin'], dc_pred['Draw'], dc_pred['HomeWin']])
-    model_probs = np.array(model_probs)
-    
-    market_eval = evaluate_market_benchmark(true_labels, model_probs, test_df)
+    if ensemble_labels is None:
+        ensemble_labels = np.array([0 if r['FTR'] == 'A' else (1 if r['FTR'] == 'D' else 2) for _, r in test_df.iterrows()])
+    if ensemble_probs is None:
+        ensemble_probs = np.full((len(test_df), 3), 1 / 3.0)
+
+    market_eval = evaluate_market_benchmark(ensemble_labels, ensemble_probs, test_df)
+    market_acc = accuracy_score(ensemble_labels, np.argmax(market_eval['market_probs'], axis=1))
     
     report_rows.append({
         'Configuration': '9. Betting Market Implied Odds',
         'Log-Loss': round(market_eval['market_loss'], 4),
         'Brier Score': round(market_eval['market_brier'], 4),
-        'Accuracy': '45.00%'  # market expectation baseline
+        'Accuracy': f"{market_acc*100:.2f}%"
     })
     
     report_df = pd.DataFrame(report_rows)
@@ -834,7 +1038,7 @@ This report compares the v2 feature upgrades (ON vs. OFF) against the v1 baselin
 ## 🔍 Upgrades Analysis
 
 1. **Time-Weighted Historical Decay**:
-   * Weighting matches exponentially by elapsed days (phi=0.003) improves the log-loss calibration, helping the Dixon-Coles model adapt to dynamic form changes rather than sticking to ancient historical averages.
+   * Weighting matches exponentially by elapsed days (phi={DECAY_PHI}) improves the log-loss calibration, helping the Dixon-Coles model adapt to dynamic form changes rather than sticking to ancient historical averages.
    
 2. **Dynamic In-Season Elo & Goal-Difference updates**:
    * Tracking Elo dynamically match-by-match instead of keeping it fixed pre-season improves prediction alignment, matching current form peaks.
@@ -855,7 +1059,7 @@ This report compares the v2 feature upgrades (ON vs. OFF) against the v1 baselin
         f.write(md_text)
     print("Saved evaluation report to output/evaluation_report.md")
 
-def run_v2_pipeline():
+def run_v2_pipeline(run_sweeps=True):
     print("=== STARTING UPGRADED v2 PIPELINE ===")
     matches_path = 'data/processed/matches_with_features.csv'
     fixtures_path = 'data/raw/fixtures_raw.csv'
@@ -874,7 +1078,8 @@ def run_v2_pipeline():
     final_elos = dict(zip(final_elos_df['Team'], final_elos_df['Elo']))
     
     # Run evaluation sweeps
-    run_feature_sweeps()
+    if run_sweeps:
+        run_feature_sweeps()
     
     # Run final simulation for 2026/27 with full v2 config
     v2_config = get_v2_config()
@@ -884,7 +1089,7 @@ def run_v2_pipeline():
         df_historical=df,
         config=v2_config,
         num_sims=10000,
-        dc_weight=0.5
+        dc_weight=v2_config.get('dc_weight', DC_WEIGHT)
     )
     print("=== UPGRADED v2 PIPELINE COMPLETED SUCCESSFULLY ===")
 

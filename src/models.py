@@ -200,10 +200,10 @@ class DixonColesModel:
         # Normalize matrix so probabilities sum to 1
         score_matrix /= score_matrix.sum()
         
-        # Aggregate outcomes
-        p_home_win = np.sum(np.triu(score_matrix, 1).T) # home goals > away goals (lower triangle of matrix transpose)
-        p_draw = np.sum(np.diag(score_matrix))
-        p_away_win = np.sum(np.tril(score_matrix, -1).T) # home goals < away goals
+        # Aggregate outcomes (rows x = home goals, cols y = away goals)
+        p_home_win = np.sum(np.tril(score_matrix, -1))  # x > y
+        p_draw = np.sum(np.diag(score_matrix))          # x == y
+        p_away_win = np.sum(np.triu(score_matrix, 1))   # x < y
         
         # Find most likely score
         max_idx = np.unravel_index(np.argmax(score_matrix), score_matrix.shape)
@@ -248,13 +248,18 @@ class XGBoostPredictor:
         
         print("Training XGBoost Classifier...")
         self.model = xgb.XGBClassifier(
-            max_depth=4,
+            max_depth=2,
             learning_rate=0.03,
-            n_estimators=150,
+            n_estimators=200,
+            min_child_weight=15,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            reg_lambda=10.0,
             objective='multi:softprob',
             num_class=3,
             random_state=42,
-            eval_metric='mlogloss'
+            eval_metric='mlogloss',
+            n_jobs=-1
         )
         self.model.fit(X, y)
         print("XGBoost training completed.")
@@ -293,3 +298,28 @@ def blend_predictions(dixon_coles_probs, xgboost_probs, dc_weight=0.5):
         'Draw': p_d / total,
         'AwayWin': p_a / total
     }
+
+def apply_temperature_scaling(probs, temperature=1.0):
+    """
+    Apply temperature scaling to a probability array of shape (..., 3)
+    to calibrate probability sharpness without altering argmax rankings.
+    """
+    if temperature is None or abs(temperature - 1.0) < 1e-6:
+        return probs
+    clipped = np.clip(probs, 1e-8, 1.0)
+    logits = np.log(clipped) / temperature
+    logits -= np.max(logits, axis=-1, keepdims=True)
+    scaled = np.exp(logits)
+    return scaled / np.sum(scaled, axis=-1, keepdims=True)
+
+def fit_temperature_scaler(probs, true_labels):
+    """Fit scalar temperature T minimizing log-loss on validation probabilities."""
+    from sklearn.metrics import log_loss as _log_loss
+    logits = np.log(np.clip(probs, 1e-8, 1.0))
+
+    def _nll(t_arr):
+        scaled = apply_temperature_scaling(probs, t_arr[0])
+        return _log_loss(true_labels, scaled)
+
+    res = minimize(_nll, [1.0], bounds=[(0.5, 3.0)])
+    return float(res.x[0]) if res.success else 1.0

@@ -108,9 +108,22 @@ def calculate_elo_ratings(df, k_factor=20, hfa=100, regression_pct=0.3):
     
     return df, elo, season_final_elos
 
+def _estimate_match_xg(row, side):
+    """Return actual HxG/AxG when present, else calibrated shots-based xG estimate."""
+    xg_col = 'HxG' if side == 'H' else 'AxG'
+    if xg_col in row and pd.notna(row[xg_col]):
+        return float(row[xg_col])
+    s_col, st_col, g_col = ('HS', 'HST', 'FTHG') if side == 'H' else ('AS', 'AST', 'FTAG')
+    if st_col in row and s_col in row and pd.notna(row[st_col]) and pd.notna(row[s_col]):
+        hst = float(row[st_col])
+        hs = float(row[s_col])
+        return 0.25 * hst + 0.04 * max(0.0, hs - hst)
+    return float(row[g_col])
+
+
 def calculate_rolling_features(df, rolling_window=10):
     """
-    Calculate rolling points, form, goals scored, and goals conceded.
+    Calculate rolling points, form, goals scored/conceded, and expected goals (xG/xGA).
     """
     # Sort chronologically to ensure rolling calculation is correct
     df = df.sort_values('Date').reset_index(drop=True)
@@ -137,26 +150,35 @@ def calculate_rolling_features(df, rolling_window=10):
             'HomeRollingGoalsScored': h_stats['goals_scored'],
             'HomeRollingGoalsConceded': h_stats['goals_conceded'],
             'HomeRollingPoints': h_stats['points'],
+            'HomeRollingXG': h_stats['xg'],
+            'HomeRollingXGA': h_stats['xga'],
             'AwayRollingGoalsScored': a_stats['goals_scored'],
             'AwayRollingGoalsConceded': a_stats['goals_conceded'],
-            'AwayRollingPoints': a_stats['points']
+            'AwayRollingPoints': a_stats['points'],
+            'AwayRollingXG': a_stats['xg'],
+            'AwayRollingXGA': a_stats['xga'],
         })
         
         # Update match history AFTER the match
-        # Home team update
+        h_xg = _estimate_match_xg(row, 'H')
+        a_xg = _estimate_match_xg(row, 'A')
+
         h_pts = 3 if row['FTR'] == 'H' else (1 if row['FTR'] == 'D' else 0)
         team_history[home].append({
             'goals_scored': row['FTHG'],
             'goals_conceded': row['FTAG'],
+            'xg': h_xg,
+            'xga': a_xg,
             'points': h_pts,
             'is_home': True
         })
         
-        # Away team update
         a_pts = 3 if row['FTR'] == 'A' else (1 if row['FTR'] == 'D' else 0)
         team_history[away].append({
             'goals_scored': row['FTAG'],
             'goals_conceded': row['FTHG'],
+            'xg': a_xg,
+            'xga': h_xg,
             'points': a_pts,
             'is_home': False
         })
@@ -168,69 +190,107 @@ def calculate_rolling_features(df, rolling_window=10):
 def get_rolling_stats(history, window):
     """Helper to compute average statistics over rolling window."""
     if not history:
-        return {'goals_scored': 1.3, 'goals_conceded': 1.3, 'points': 1.1} # league average defaults
+        return {'goals_scored': 1.3, 'goals_conceded': 1.3, 'xg': 1.3, 'xga': 1.3, 'points': 1.1}
         
     recent = history[-window:]
-    avg_goals_scored = np.mean([x['goals_scored'] for x in recent])
-    avg_goals_conceded = np.mean([x['goals_conceded'] for x in recent])
-    avg_points = np.mean([x['points'] for x in recent])
-    
     return {
-        'goals_scored': avg_goals_scored,
-        'goals_conceded': avg_goals_conceded,
-        'points': avg_points
+        'goals_scored': np.mean([x['goals_scored'] for x in recent]),
+        'goals_conceded': np.mean([x['goals_conceded'] for x in recent]),
+        'xg': np.mean([x['xg'] for x in recent]),
+        'xga': np.mean([x['xga'] for x in recent]),
+        'points': np.mean([x['points'] for x in recent])
     }
+
+def _compute_prior_season_percentiles(df):
+    """
+    Build zero-leakage (season, team) -> [0, 1] strength/squad-value percentiles
+    using each club's final points from season S-1 (promoted clubs map near 0.05).
+    """
+    seasons = sorted(df['Season'].unique())
+    season_points = {}
+    for s in seasons:
+        s_df = df[df['Season'] == s]
+        pts = {}
+        for _, row in s_df.iterrows():
+            h, a, ftr = row['HomeTeam'], row['AwayTeam'], row['FTR']
+            pts[h] = pts.get(h, 0) + (3 if ftr == 'H' else (1 if ftr == 'D' else 0))
+            pts[a] = pts.get(a, 0) + (3 if ftr == 'A' else (1 if ftr == 'D' else 0))
+        season_points[s] = pts
+
+    pct_map = {}
+    for idx, s in enumerate(seasons):
+        s_df = df[df['Season'] == s]
+        teams_s = set(s_df['HomeTeam']).union(set(s_df['AwayTeam']))
+        if idx == 0:
+            for t in teams_s:
+                pct_map[(s, t)] = 0.5
+            continue
+
+        prev_pts = season_points[seasons[idx - 1]]
+        returning_vals = [prev_pts[t] for t in teams_s if t in prev_pts]
+        if not returning_vals:
+            for t in teams_s:
+                pct_map[(s, t)] = 0.5
+            continue
+
+        min_ret = min(returning_vals)
+        max_ret = max(returning_vals)
+        promoted_proxy = max(0.0, min_ret - 5.0)
+        denom = max_ret - promoted_proxy
+        for t in teams_s:
+            val = prev_pts.get(t, promoted_proxy)
+            pct_map[(s, t)] = (val - promoted_proxy) / denom if denom > 0 else 0.5
+    return pct_map
+
 
 def add_market_values_and_managers(df, squad_values_path='data/raw/squad_values.csv', managers_path='data/raw/managers.csv'):
     """
     Load and map squad values and manager tenure information.
-    For historical data where exact squad values are not provided, we proxy
-    market value rank using the team's standing from the previous season.
+    For historical seasons without squad_values.csv entries, proxies squad value
+    percentile from prior-season league points (zero leakage) and uses known
+    appointment dates in managers.csv across all historical seasons.
     """
-    # Default values for historical matches if file not found
     squad_values = {}
     if os.path.exists(squad_values_path):
         squad_df = pd.read_csv(squad_values_path)
         squad_values = dict(zip(squad_df['Team'], squad_df['MarketValue_M_Euros']))
-        
-    # Calculate squad value percentiles for 2026/27 season
+
     max_val = max(squad_values.values()) if squad_values else 1000.0
     min_val = min(squad_values.values()) if squad_values else 50.0
-    
-    def get_squad_value_percentile(team, season):
-        if season == "2026-2027":
-            # Use real squad values
-            val = squad_values.get(team, 100.0)
-            return (val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
-        else:
-            # Proxy squad values rank based on previous season standing
-            # Since we don't have historical standing, we estimate based on team's overall average goals/Elo in that season
-            # Or simplified: if they are top-6, give high value; if promoted, low value.
-            return 0.5 # default intermediate value for historical XGBoost training
+    hist_pct_map = _compute_prior_season_percentiles(df)
 
-    df['HomeSquadValPercentile'] = df.apply(lambda r: get_squad_value_percentile(r['HomeTeam'], r['Season']), axis=1)
-    df['AwaySquadValPercentile'] = df.apply(lambda r: get_squad_value_percentile(r['AwayTeam'], r['Season']), axis=1)
-    
-    # Manager changes lookup
+    def get_squad_value_percentile(team, season):
+        if season == "2026-2027" and team in squad_values:
+            val = squad_values[team]
+            return (val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
+        return hist_pct_map.get((season, team), 0.5)
+
+    df['HomeSquadValPercentile'] = [get_squad_value_percentile(t, s) for t, s in zip(df['HomeTeam'], df['Season'])]
+    df['AwaySquadValPercentile'] = [get_squad_value_percentile(t, s) for t, s in zip(df['AwayTeam'], df['Season'])]
+
+    # Manager changes lookup across all seasons where appointment dates are known
     managers = {}
     if os.path.exists(managers_path):
         mgr_df = pd.read_csv(managers_path)
-        # Convert AppointedDate to datetime
         mgr_df['AppointedDate'] = pd.to_datetime(mgr_df['AppointedDate'])
         managers = dict(zip(mgr_df['Team'], mgr_df['AppointedDate']))
-        
-    # Mark if manager is new (appointed in 2026, tenure < 12 months)
-    def is_new_manager(team, date_str, season):
-        if season == "2026-2027":
-            appointed = managers.get(team)
-            if appointed:
-                match_date = pd.to_datetime(date_str)
-                tenure_days = (match_date - appointed).days
-                # Less than 6 months (180 days) is considered new manager
-                return 1 if tenure_days < 180 else 0
-            return 1 # default to new manager if unknown
-        return 0 # assume stable manager for historical training data (no high variance flag)
-        
+
+    match_dates = pd.to_datetime(df['Date'], format='mixed', dayfirst=True)
+
+    def is_new_manager(team, match_date, season):
+        appointed = managers.get(team)
+        if appointed is not None:
+            tenure_days = (match_date - appointed).days
+            if 0 <= tenure_days < 180:
+                return 1
+            if season == "2026-2027" and tenure_days < 0:
+                return 1
+            return 0
+        return 1 if season == "2026-2027" else 0
+
+    df['HomeNewManager'] = [is_new_manager(t, d, s) for t, d, s in zip(df['HomeTeam'], match_dates, df['Season'])]
+    df['AwayNewManager'] = [is_new_manager(t, d, s) for t, d, s in zip(df['AwayTeam'], match_dates, df['Season'])]
+
     # Transfer features lookup
     transfers_path = 'data/raw/transfers.csv'
     transfer_impacts = {}
@@ -240,29 +300,14 @@ def add_market_values_and_managers(df, squad_values_path='data/raw/squad_values.
         for team, group in t_df.groupby('Team'):
             ins = group[group['TransferType'] == 'In']
             outs = group[group['TransferType'] == 'Out']
-            net_spend = ins['Fee_M_Euros'].sum() - outs['Fee_M_Euros'].sum()
-            impact_score = ins['Importance'].sum() - outs['Importance'].sum()
-            net_spends[team] = net_spend
-            transfer_impacts[team] = impact_score
+            net_spends[team] = ins['Fee_M_Euros'].sum() - outs['Fee_M_Euros'].sum()
+            transfer_impacts[team] = ins['Importance'].sum() - outs['Importance'].sum()
 
-    def get_transfer_impact(team, season):
-        if season == "2026-2027":
-            return transfer_impacts.get(team, 0.0)
-        return 0.0
+    df['HomeTransferImpact'] = [transfer_impacts.get(t, 0.0) if s == "2026-2027" else 0.0 for t, s in zip(df['HomeTeam'], df['Season'])]
+    df['AwayTransferImpact'] = [transfer_impacts.get(t, 0.0) if s == "2026-2027" else 0.0 for t, s in zip(df['AwayTeam'], df['Season'])]
+    df['HomeNetSpend'] = [net_spends.get(t, 0.0) if s == "2026-2027" else 0.0 for t, s in zip(df['HomeTeam'], df['Season'])]
+    df['AwayNetSpend'] = [net_spends.get(t, 0.0) if s == "2026-2027" else 0.0 for t, s in zip(df['AwayTeam'], df['Season'])]
 
-    def get_net_spend(team, season):
-        if season == "2026-2027":
-            return net_spends.get(team, 0.0)
-        return 0.0
-
-    df['HomeTransferImpact'] = df.apply(lambda r: get_transfer_impact(r['HomeTeam'], r['Season']), axis=1)
-    df['AwayTransferImpact'] = df.apply(lambda r: get_transfer_impact(r['AwayTeam'], r['Season']), axis=1)
-    df['HomeNetSpend'] = df.apply(lambda r: get_net_spend(r['HomeTeam'], r['Season']), axis=1)
-    df['AwayNetSpend'] = df.apply(lambda r: get_net_spend(r['AwayTeam'], r['Season']), axis=1)
-
-    df['HomeNewManager'] = df.apply(lambda r: is_new_manager(r['HomeTeam'], r['Date'], r['Season']), axis=1)
-    df['AwayNewManager'] = df.apply(lambda r: is_new_manager(r['AwayTeam'], r['Date'], r['Season']), axis=1)
-    
     return df
 
 def identify_promoted_teams(df):

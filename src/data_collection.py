@@ -43,6 +43,7 @@ TEAM_NAME_MAP = {
     'Manchester City': 'Man City',
     'Manchester City FC': 'Man City',
     'Man United': 'Man United',
+    'Man Utd': 'Man United',
     'Manchester United': 'Man United',
     'Manchester United FC': 'Man United',
     'Newcastle': 'Newcastle',
@@ -51,8 +52,10 @@ TEAM_NAME_MAP = {
     'Nottingham Forest': 'Nott\'m Forest',
     'Nottingham Forest FC': 'Nott\'m Forest',
     'Nott\'m Forest': 'Nott\'m Forest',
+    'Nottm Forest': 'Nott\'m Forest',
     'Sunderland': 'Sunderland',
     'Sunderland AFC': 'Sunderland',
+    'Spurs': 'Tottenham',
     'Tottenham': 'Tottenham',
     'Tottenham Hotspur': 'Tottenham',
     'Tottenham Hotspur FC': 'Tottenham',
@@ -814,9 +817,127 @@ def save_managers(raw_dir='data/raw'):
     df.to_csv(path, index=False)
     print(f"Saved manager metadata to {path}")
 
-def parse_completed_fixtures_from_raw(raw_dir='data/raw'):
+def download_current_season_results(raw_dir='data/raw/historical'):
     """
-    Parse completed match results from fixtures_raw.csv (where Summary contains score in 'Home - Away (H-A)' format).
+    Download 2026/27 match results and stats (shots, shots on target, red cards, HxG/AxG)
+    from football-data.co.uk. Falls back cleanly to cached E0_2627.csv if offline.
+    """
+    os.makedirs(raw_dir, exist_ok=True)
+    url = "https://www.football-data.co.uk/mmz4281/2627/E0.csv"
+    dest_path = os.path.join(raw_dir, "E0_2627.csv")
+
+    try:
+        resp = requests.get(url, timeout=15)
+        if resp.status_code == 200 and len(resp.content) > 100:
+            with open(dest_path, 'wb') as f:
+                f.write(resp.content)
+            print(f"Downloaded live 2026/27 stats feed to {dest_path}")
+    except Exception as e:
+        print(f"Warning: could not reach football-data.co.uk ({e}); using local cache if present.")
+
+    if not os.path.exists(dest_path):
+        return pd.DataFrame()
+
+    df = pd.read_csv(dest_path, on_bad_lines='skip').dropna(subset=['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']).copy()
+    df['HomeTeam'] = df['HomeTeam'].apply(clean_team_name)
+    df['AwayTeam'] = df['AwayTeam'].apply(clean_team_name)
+    return df
+
+
+def sync_live_fixtures_and_results(raw_dir='data/raw', hist_dir='data/raw/historical'):
+    """
+    Synchronize 2026/27 fixtures, explicit official MatchDay numbers, and live scorelines
+    from the Fantasy Premier League API + football-data.co.uk E0_2627.csv.
+    Falls back cleanly to existing fixtures_raw.csv (ensuring MatchDay exists) if offline.
+    """
+    os.makedirs(raw_dir, exist_ok=True)
+    fixtures_csv_path = os.path.join(raw_dir, "fixtures_raw.csv")
+
+    e0_df = download_current_season_results(raw_dir=hist_dir)
+    e0_scores = {}
+    if not e0_df.empty:
+        for _, r in e0_df.iterrows():
+            e0_scores[(r['HomeTeam'], r['AwayTeam'])] = (int(r['FTHG']), int(r['FTAG']))
+
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        boot = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/", timeout=15, headers=headers)
+        fixt = requests.get("https://fantasy.premierleague.com/api/fixtures/", timeout=15, headers=headers)
+        if boot.status_code == 200 and fixt.status_code == 200:
+            teams_raw = boot.json().get('teams', [])
+            id_to_canonical = {t['id']: clean_team_name(t['name']) for t in teams_raw}
+            id_to_full = {t['id']: t['name'] for t in teams_raw}
+
+            # Preserve existing full display names if already present in fixtures_raw.csv
+            existing_summaries = {}
+            if os.path.exists(fixtures_csv_path):
+                old_df = pd.read_csv(fixtures_csv_path)
+                for _, orow in old_df.iterrows():
+                    base_sum = re.sub(r'\s*\(\d+-\d+\)', '', str(orow.get('Summary', ''))).strip()
+                    existing_summaries[(orow['HomeTeam'], orow['AwayTeam'])] = base_sum
+
+            rows = []
+            fpl_fixtures = fixt.json()
+            for idx, item in enumerate(fpl_fixtures):
+                h_id, a_id = item.get('team_h'), item.get('team_a')
+                home = id_to_canonical.get(h_id, str(h_id))
+                away = id_to_canonical.get(a_id, str(a_id))
+
+                kickoff = item.get('kickoff_time')
+                date_str = str(kickoff)[:10] if kickoff else '2027-05-30'
+                event_num = item.get('event')
+                matchday = int(event_num) if event_num is not None else (idx // 10 + 1)
+
+                base_sum = existing_summaries.get(
+                    (home, away),
+                    f"{id_to_full.get(h_id, home)} - {id_to_full.get(a_id, away)}"
+                )
+
+                if item.get('finished') and item.get('team_h_score') is not None and item.get('team_a_score') is not None:
+                    hg, ag = int(item['team_h_score']), int(item['team_a_score'])
+                    summary = f"{base_sum} ({hg}-{ag})"
+                elif (home, away) in e0_scores:
+                    hg, ag = e0_scores[(home, away)]
+                    summary = f"{base_sum} ({hg}-{ag})"
+                else:
+                    summary = base_sum
+
+                rows.append({
+                    'MatchDay': matchday,
+                    'Date': date_str,
+                    'HomeTeam': home,
+                    'AwayTeam': away,
+                    'Summary': summary
+                })
+
+            fixtures_df = pd.DataFrame(rows).sort_values(['MatchDay', 'Date', 'HomeTeam']).reset_index(drop=True)
+            fixtures_df.to_csv(fixtures_csv_path, index=False)
+            print(f"Synced {len(fixtures_df)} fixtures (with explicit MatchDay) from FPL API to {fixtures_csv_path}")
+            return fixtures_df
+    except Exception as e:
+        print(f"Warning: FPL API sync skipped ({e}); keeping local {fixtures_csv_path}.")
+
+    # Offline fallback: ensure MatchDay column exists and apply any scores from cached E0_2627.csv
+    if os.path.exists(fixtures_csv_path):
+        fixtures_df = pd.read_csv(fixtures_csv_path)
+        if 'MatchDay' not in fixtures_df.columns:
+            fixtures_df.insert(0, 'MatchDay', (fixtures_df.index // 10) + 1)
+        if e0_scores:
+            for idx, r in fixtures_df.iterrows():
+                key = (r['HomeTeam'], r['AwayTeam'])
+                if key in e0_scores and not re.search(r'\(\d+-\d+\)', str(r.get('Summary', ''))):
+                    hg, ag = e0_scores[key]
+                    base = re.sub(r'\s*\(\d+-\d+\)', '', str(r['Summary'])).strip()
+                    fixtures_df.at[idx, 'Summary'] = f"{base} ({hg}-{ag})"
+        fixtures_df.to_csv(fixtures_csv_path, index=False)
+        return fixtures_df
+    return pd.DataFrame()
+
+
+def parse_completed_fixtures_from_raw(raw_dir='data/raw', hist_dir='data/raw/historical'):
+    """
+    Parse completed match results from fixtures_raw.csv (where Summary contains score in 'Home - Away (H-A)' format),
+    enriching each completed match with real stats (HST, AST, HR, AR, HxG, AxG) from E0_2627.csv when available.
     Returns (completed_df, unplayed_fixtures_df).
     """
     fixtures_csv_path = os.path.join(raw_dir, "fixtures_raw.csv")
@@ -824,6 +945,19 @@ def parse_completed_fixtures_from_raw(raw_dir='data/raw'):
         return pd.DataFrame(), pd.DataFrame()
         
     fixtures_df = pd.read_csv(fixtures_csv_path)
+
+    # Load real 2026/27 match stats from E0_2627.csv if available
+    e0_stats = {}
+    e0_path = os.path.join(hist_dir, "E0_2627.csv")
+    if os.path.exists(e0_path):
+        try:
+            e0_df = pd.read_csv(e0_path, on_bad_lines='skip').dropna(subset=['HomeTeam', 'AwayTeam'])
+            e0_df['HomeTeam'] = e0_df['HomeTeam'].apply(clean_team_name)
+            e0_df['AwayTeam'] = e0_df['AwayTeam'].apply(clean_team_name)
+            for _, erow in e0_df.iterrows():
+                e0_stats[(erow['HomeTeam'], erow['AwayTeam'])] = erow
+        except Exception as e:
+            print(f"Warning: could not parse {e0_path} for match stats: {e}")
     
     completed_matches = []
     unplayed_fixtures = []
@@ -837,31 +971,40 @@ def parse_completed_fixtures_from_raw(raw_dir='data/raw'):
             hg = int(score_match.group(1))
             ag = int(score_match.group(2))
             ftr = 'H' if hg > ag else ('A' if ag > hg else 'D')
-            
-            # Format match record
+            home = clean_team_name(row['HomeTeam'])
+            away = clean_team_name(row['AwayTeam'])
+            stats_row = e0_stats.get((home, away))
+
+            def _stat(col, default, cast=int):
+                if stats_row is not None and col in stats_row and pd.notna(stats_row[col]):
+                    return cast(stats_row[col])
+                return default
+
             match_rec = {
                 'Season': '2026-2027',
                 'Date': str(row['Date']),
-                'HomeTeam': clean_team_name(row['HomeTeam']),
-                'AwayTeam': clean_team_name(row['AwayTeam']),
+                'HomeTeam': home,
+                'AwayTeam': away,
                 'FTHG': hg,
                 'FTAG': ag,
                 'FTR': ftr,
-                'HTHG': 0,
-                'HTAG': 0,
-                'HTR': 'D',
-                'HS': 12,
-                'AS': 10,
-                'HST': 4,
-                'AST': 3,
-                'HF': 11,
-                'AF': 11,
-                'HC': 5,
-                'AC': 4,
-                'HY': 2,
-                'AY': 2,
-                'HR': 0,
-                'AR': 0
+                'HTHG': _stat('HTHG', 0),
+                'HTAG': _stat('HTAG', 0),
+                'HTR': str(stats_row['HTR']) if (stats_row is not None and 'HTR' in stats_row and pd.notna(stats_row['HTR'])) else 'D',
+                'HS': _stat('HS', 12),
+                'AS': _stat('AS', 10),
+                'HST': _stat('HST', 4),
+                'AST': _stat('AST', 3),
+                'HF': _stat('HF', 11),
+                'AF': _stat('AF', 11),
+                'HC': _stat('HC', 5),
+                'AC': _stat('AC', 4),
+                'HY': _stat('HY', 2),
+                'AY': _stat('AY', 2),
+                'HR': _stat('HR', 0),
+                'AR': _stat('AR', 0),
+                'HxG': _stat('HxG', float('nan'), float),
+                'AxG': _stat('AxG', float('nan'), float),
             }
             completed_matches.append(match_rec)
         else:
@@ -876,7 +1019,7 @@ def parse_completed_fixtures_from_raw(raw_dir='data/raw'):
 def run_collection_pipeline():
     print("=== STARTING DATA COLLECTION PIPELINE ===")
     download_historical_data()
-    download_and_parse_fixtures()
+    sync_live_fixtures_and_results()
     save_squad_values()
     save_transfers()
     save_managers()

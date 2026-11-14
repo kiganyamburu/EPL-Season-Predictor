@@ -1040,7 +1040,7 @@ with tab5:
                     df_historical=df_hist.copy(),
                     config=sandbox_config,
                     num_sims=num_sandbox_sims,
-                    dc_weight=0.5,
+                    dc_weight=sandbox_config.get('dc_weight', 0.35),
                     custom_injured_players=custom_injured,
                     custom_managers=custom_managers,
                     save_outputs=False

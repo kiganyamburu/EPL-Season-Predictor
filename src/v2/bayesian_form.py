@@ -42,4 +42,4 @@ def adjust_goals_with_form(lmbda, mu, home_form, away_form, dampening=0.20):
     ratio = np.clip(h_factor / a_factor, 0.94, 1.06)
     lmbda_adj = lmbda * ratio
     mu_adj = mu / ratio
-    return max(0.01, lmbda_adj), max(0.01, mu_adj)
+    return np.maximum(0.01, lmbda_adj), np.maximum(0.01, mu_adj)

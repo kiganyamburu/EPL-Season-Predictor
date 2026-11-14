@@ -1,24 +1,31 @@
 Team,Player,Position,Importance,StartDate,EndDate
-Arsenal,Bukayo Saka,Forward,0.15,2026-09-01,2026-10-15
-Arsenal,Martin Odegaard,Midfielder,0.15,2026-11-10,2026-12-25
-Arsenal,William Saliba,Defender,0.12,2027-02-01,2027-03-10
-Man City,Erling Haaland,Forward,0.20,2026-10-01,2026-11-15
-Man City,Kevin De Bruyne,Midfielder,0.15,2026-08-15,2026-09-30
-Man City,Rodri,Midfielder,0.18,2026-11-01,2027-03-01
-Liverpool,Jeremy Jacquet,Defender,0.12,2026-12-01,2027-01-15
-Liverpool,Virgil van Dijk,Defender,0.18,2026-10-10,2026-11-20
-Man United,Bruno Fernandes,Midfielder,0.15,2026-09-15,2026-10-20
-Man United,Rasmus Hojlund,Forward,0.10,2026-08-15,2026-09-15
-Aston Villa,Ollie Watkins,Forward,0.15,2026-12-10,2027-01-20
-Aston Villa,Johan Manzambi,Forward,0.12,2026-09-10,2026-10-15
-Chelsea,Cole Palmer,Midfielder,0.18,2026-10-05,2026-11-10
-Chelsea,Morgan Rogers,Forward,0.15,2026-11-15,2026-12-20
-Man City,Elliot Anderson,Midfielder,0.14,2026-12-01,2027-01-10
-Tottenham,James Maddison,Midfielder,0.12,2026-11-01,2026-12-10
-Brighton,Kaoru Mitoma,Forward,0.12,2026-12-15,2027-01-30
-Newcastle,Alexander Isak,Forward,0.15,2026-09-01,2026-10-10
-Bournemouth,Antoine Semenyo,Forward,0.10,2026-11-15,2026-12-20
-Brentford,Bryan Mbeumo,Forward,0.12,2026-10-10,2026-11-15
-Nott'm Forest,Morgan Gibbs-White,Midfielder,0.12,2026-09-20,2026-10-25
-Everton,Jordan Pickford,Goalkeeper,0.12,2026-12-01,2026-12-25
-Crystal Palace,Eberechi Eze,Midfielder,0.15,2026-10-01,2026-11-10
+Arsenal,Bukayo Saka,Forward,0.15,2026-10-25,2026-11-29
+Aston Villa,Amadou Onana,Midfielder,0.14,2026-08-01,2027-05-30
+Aston Villa,Matteo Ruggeri,Defender,0.08,2026-11-01,2026-11-28
+Bournemouth,Alex Toth,Midfielder,0.08,2026-10-15,2027-02-15
+Bournemouth,Julian Araujo,Defender,0.07,2026-11-01,2026-11-28
+Brentford,Rico Henry,Defender,0.08,2026-10-20,2026-11-28
+Brentford,Fabio Carvalho,Midfielder,0.07,2026-11-01,2026-11-25
+Brighton,Kaoru Mitoma,Forward,0.12,2026-10-25,2026-11-22
+Brighton,Stefanos Tzimas,Forward,0.07,2026-08-15,2026-12-01
+Brighton,Evan Ferguson,Forward,0.08,2026-11-01,2026-11-29
+Chelsea,Joao Pedro,Forward,0.14,2026-10-25,2026-11-21
+Chelsea,Reece James,Defender,0.12,2026-10-20,2026-12-10
+Chelsea,Maxence Lacroix,Defender,0.10,2026-11-01,2026-11-28
+Crystal Palace,Jean-Philippe Mateta,Forward,0.14,2026-11-01,2026-11-29
+Crystal Palace,Dean Henderson,Goalkeeper,0.10,2026-11-01,2026-11-28
+Crystal Palace,Chadi Riad,Defender,0.08,2026-10-15,2026-12-05
+Crystal Palace,Takehiro Tomiyasu,Defender,0.08,2026-11-01,2026-11-28
+Crystal Palace,Axel Disasi,Defender,0.09,2026-11-08,2026-11-22
+Leeds,Mateo Joseph,Forward,0.09,2026-10-01,2027-01-15
+Liverpool,Jeremie Frimpong,Defender,0.12,2026-11-01,2026-11-22
+Liverpool,Conor Bradley,Defender,0.08,2026-08-15,2027-01-15
+Liverpool,Hugo Ekitike,Forward,0.11,2026-08-15,2027-02-15
+Liverpool,Giovanni Leoni,Defender,0.07,2026-08-15,2027-02-15
+Man City,Antoine Semenyo,Forward,0.13,2026-11-01,2026-12-15
+Man City,Marc Guehi,Defender,0.11,2026-11-07,2026-11-21
+Man United,Luke Shaw,Defender,0.09,2026-10-10,2026-11-22
+Sunderland,Brian Brobbey,Forward,0.12,2026-11-08,2026-12-05
+Sunderland,Granit Xhaka,Midfielder,0.10,2026-11-08,2026-11-21
+Tottenham,Xavi Simons,Midfielder,0.14,2026-09-15,2027-02-15
+Tottenham,Wilson Odobert,Forward,0.08,2026-10-01,2027-01-05
