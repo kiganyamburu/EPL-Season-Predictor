@@ -609,8 +609,8 @@ with tab_h2h:
         rho = -0.015
         for x in range(max_g + 1):
             for y in range(max_g + 1):
-                px = poisson.pmf(x, home_exp_g)
-                py = poisson.pmf(y, away_exp_g)
+                p_x = poisson.pmf(x, home_exp_g)
+                p_y = poisson.pmf(y, away_exp_g)
                 adj = 1.0
                 if x == 0 and y == 0:
                     adj = 1.0 - home_exp_g * away_exp_g * rho
@@ -621,13 +621,13 @@ with tab_h2h:
                 elif x == 1 and y == 1:
                     adj = 1.0 - rho
                 adj = max(0.01, adj)
-                score_matrix[x, y] = px * py * adj
+                score_matrix[x, y] = p_x * p_y * adj
         score_matrix /= score_matrix.sum()
         
-        # Calculate outcome probabilities
-        p_home_win = np.sum(np.triu(score_matrix, 1).T)
+        # Calculate outcome probabilities (rows x = home goals, cols y = away goals)
+        p_home_win = np.sum(np.tril(score_matrix, -1))
         p_draw = np.sum(np.diag(score_matrix))
-        p_away_win = np.sum(np.tril(score_matrix, -1).T)
+        p_away_win = np.sum(np.triu(score_matrix, 1))
         
         # Align with precomputed ensemble predictions if available
         if match_pred is not None:
