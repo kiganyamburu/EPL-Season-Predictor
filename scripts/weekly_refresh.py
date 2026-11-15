@@ -79,6 +79,23 @@ def weekly_refresh(gameweek=None, real_mode=True, sync_live=True, run_sweeps=Fal
         print("Re-running predictive pipeline to update season simulations...")
         from src.pipeline_v2 import run_v2_pipeline
         run_v2_pipeline(run_sweeps=run_sweeps)
+
+        # Archive latest standings projection snapshot for Title Win % trajectory tracking
+        proj_path = 'output/final_table_projection.csv'
+        standings_hist_path = 'output/standings_history.csv'
+        if os.path.exists(proj_path):
+            proj_snap = pd.read_csv(proj_path)
+            proj_snap['SnapshotDate'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            proj_snap['CompletedMatchesCount'] = len(completed_df)
+            if os.path.exists(standings_hist_path):
+                s_hist = pd.read_csv(standings_hist_path)
+                s_hist = s_hist[s_hist['CompletedMatchesCount'] != len(completed_df)]
+                s_hist = pd.concat([s_hist, proj_snap], ignore_index=True)
+            else:
+                s_hist = proj_snap
+            s_hist.to_csv(standings_hist_path, index=False)
+            print(f"Saved standings snapshot to {standings_hist_path}.")
+
         print("=== WEEKLY REFRESH COMPLETED SUCCESSFULLY ===")
         return
 

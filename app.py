@@ -200,13 +200,14 @@ with col3:
 st.write("")
 
 # Tabs Setup
-tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab_h2h, tab_transfers, tab4, tab_calib, tab5 = st.tabs([
     " Standings (Live & Projected)", 
     " Standing Distributions", 
     " Match Predictions", 
     " Head-to-Head Simulator",
     " Squad Transfers & Signings",
     "Narrative Insights",
+    "Model Calibration & Accuracy",
     "What-If Sandbox"
 ])
 
@@ -931,6 +932,190 @@ with tab4:
                 st.write("No major underachievers projected.")
     else:
         st.info("Upload/save squad market values to activate financial efficiency metrics.")
+
+# ------------------------------------------------------------------------------
+# TAB CALIBRATION: MODEL CALIBRATION & ACCURACY TRACKER
+# ------------------------------------------------------------------------------
+@st.cache_data
+def load_calibration_artifacts(_completed_df):
+    from src.v2.calibration import (
+        build_prematch_calibration_df,
+        compute_calibration_curve,
+        compute_snapshot_title_trajectories,
+    )
+
+    hist_path = 'output/predictions_history.csv'
+    eval_path = 'output/evaluation_report.csv'
+    standings_hist_path = 'output/standings_history.csv'
+
+    use_cols = [
+        'MatchDay', 'Date', 'HomeTeam', 'AwayTeam', 'HomeWin%', 'Draw%', 'AwayWin%',
+        'MostLikelyScore', 'SnapshotDate', 'CompletedMatchesCount', 'Status', 'ActualScore'
+    ]
+    history_df = None
+    if os.path.exists(hist_path):
+        avail_cols = pd.read_csv(hist_path, nrows=0).columns.tolist()
+        history_df = pd.read_csv(hist_path, usecols=[c for c in use_cols if c in avail_cols])
+
+    calib_df = build_prematch_calibration_df(history_df, _completed_df)
+    curve_df = compute_calibration_curve(calib_df)
+    traj_df = compute_snapshot_title_trajectories(history_df, _completed_df, num_sims=2000)
+
+    if os.path.exists(standings_hist_path) and not traj_df.empty:
+        s_hist = pd.read_csv(standings_hist_path)
+        for _, sr in s_hist.iterrows():
+            mask = (traj_df['CompletedMatchesCount'] == sr['CompletedMatchesCount']) & (traj_df['Team'] == sr['Team'])
+            if mask.any():
+                traj_df.loc[mask, 'TitleWin%'] = sr['TitleWin%']
+                traj_df.loc[mask, 'ExpectedPoints'] = sr['ExpectedPoints']
+
+    eval_df = pd.read_csv(eval_path) if os.path.exists(eval_path) else None
+    return calib_df, curve_df, traj_df, eval_df
+
+
+with tab_calib:
+    st.subheader("Model Calibration, Accuracy & Title Odds Trajectory")
+    st.write("Evaluating archived pre-match predictions from `output/predictions_history.csv` against actual 2026/27 Premier League results.")
+
+    calib_df, curve_df, traj_df, eval_df = load_calibration_artifacts(completed_df)
+
+    if calib_df.empty:
+        st.info("No archived pre-match snapshots available yet in `output/predictions_history.csv`. Run `scripts/weekly_refresh.py` after gameweeks complete to populate calibration metrics.")
+    else:
+        n_eval = len(calib_df)
+        acc_pct = calib_df['Correct'].mean() * 100.0
+        mean_brier = calib_df['Brier'].mean()
+        mean_logloss = calib_df['LogLoss'].mean()
+        n_snaps = traj_df['CompletedMatchesCount'].nunique() if not traj_df.empty else 0
+
+        ck1, ck2, ck3, ck4 = st.columns(4)
+        with ck1:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px;">
+                <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;">{acc_pct:.1f}%</div>
+                <div class="kpi-label">Pre-Match Accuracy ({n_eval} Matches)</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with ck2:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px;">
+                <div style="font-size: 1.8rem; font-weight: 800; color: #00f2fe;">{mean_brier:.4f}</div>
+                <div class="kpi-label">Mean Brier Score (Lower = Better)</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with ck3:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px;">
+                <div style="font-size: 1.8rem; font-weight: 800; color: #38bdf8;">{mean_logloss:.4f}</div>
+                <div class="kpi-label">Mean Log-Loss</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with ck4:
+            st.markdown(f"""
+            <div class="kpi-card" style="padding: 16px;">
+                <div style="font-size: 1.8rem; font-weight: 800; color: #a855f7;">{n_snaps}</div>
+                <div class="kpi-label">Archived Season Snapshots</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.write("")
+        gw_metrics = (
+            calib_df.groupby('MatchDay')
+            .agg(
+                Matches=('Correct', 'count'),
+                Accuracy=('Correct', lambda s: round(s.mean() * 100, 1)),
+                Brier=('Brier', lambda s: round(s.mean(), 4)),
+                LogLoss=('LogLoss', lambda s: round(s.mean(), 4)),
+            )
+            .reset_index()
+        )
+
+        col_c1, col_c2 = st.columns(2)
+        with col_c1:
+            fig_brier = go.Figure()
+            fig_brier.add_trace(go.Scatter(
+                x=gw_metrics['MatchDay'], y=gw_metrics['Brier'],
+                mode='lines+markers', name='Brier Score',
+                line=dict(color='#00f2fe', width=3)
+            ))
+            fig_brier.add_hline(y=0.2222, line_dash='dash', line_color='#ef4444', annotation_text='Uniform Baseline (0.2222)')
+            fig_brier.update_layout(
+                title="Pre-Match Brier Score by Gameweek",
+                xaxis_title="Gameweek", yaxis_title="Brier Score",
+                template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=380
+            )
+            st.plotly_chart(fig_brier, use_container_width=True)
+
+        with col_c2:
+            fig_acc = px.bar(
+                gw_metrics, x='MatchDay', y='Accuracy',
+                text='Accuracy', title="Pre-Match Outcome Accuracy (%) by Gameweek",
+                color='Accuracy', color_continuous_scale='Tealgrn'
+            )
+            fig_acc.add_hline(y=acc_pct, line_dash='dash', line_color='#10b981', annotation_text=f'Season Avg ({acc_pct:.1f}%)')
+            fig_acc.update_traces(texttemplate='%{text:.0f}%', textposition='outside')
+            fig_acc.update_layout(
+                xaxis_title="Gameweek", yaxis_title="Accuracy %", yaxis=dict(range=[0, 100]),
+                template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                coloraxis_showscale=False, height=380
+            )
+            st.plotly_chart(fig_acc, use_container_width=True)
+
+        st.write("---")
+        col_rel, col_traj = st.columns([1, 1.3])
+        with col_rel:
+            if not curve_df.empty:
+                fig_rel = go.Figure()
+                fig_rel.add_trace(go.Scatter(
+                    x=[0, 100], y=[0, 100], mode='lines',
+                    line=dict(dash='dash', color='#94a3b8'), name='Perfect Calibration'
+                ))
+                fig_rel.add_trace(go.Scatter(
+                    x=curve_df['MeanPredictedPct'], y=curve_df['ObservedFreqPct'],
+                    mode='lines+markers+text', text=curve_df['Count'],
+                    textposition='top center', name='Model Observed',
+                    line=dict(color='#38bdf8', width=3), marker=dict(size=10)
+                ))
+                fig_rel.update_layout(
+                    title="Reliability Curve (Predicted % vs. Actual Win Rate)",
+                    xaxis_title="Mean Predicted Probability (%)", yaxis_title="Observed Outcome Rate (%)",
+                    xaxis=dict(range=[0, 95]), yaxis=dict(range=[0, 105]),
+                    template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=420
+                )
+                st.plotly_chart(fig_rel, use_container_width=True)
+
+        with col_traj:
+            if not traj_df.empty:
+                top_defaults = standings_df.sort_values('TitleWin%', ascending=False)['Team'].head(5).tolist()
+                traj_teams = st.multiselect(
+                    "Teams to Track Across Snapshots:",
+                    sorted(traj_df['Team'].unique().tolist()),
+                    default=top_defaults,
+                    key="calib_traj_teams"
+                )
+                ordered_labels = (
+                    traj_df[['CompletedMatchesCount', 'SnapshotLabel']]
+                    .drop_duplicates()
+                    .sort_values('CompletedMatchesCount')['SnapshotLabel']
+                    .tolist()
+                )
+                if traj_teams:
+                    sub_traj = traj_df[traj_df['Team'].isin(traj_teams)].sort_values('CompletedMatchesCount')
+                    fig_traj = px.line(
+                        sub_traj, x='SnapshotLabel', y='TitleWin%', color='Team', markers=True,
+                        category_orders={'SnapshotLabel': ordered_labels},
+                        title="Title Win % Trajectory Across Archived Snapshots"
+                    )
+                    fig_traj.update_layout(
+                        xaxis_title="Season Snapshot", yaxis_title="Title Win %",
+                        template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=360
+                    )
+                    st.plotly_chart(fig_traj, use_container_width=True)
+
+        if eval_df is not None and not eval_df.empty:
+            st.write("---")
+            st.markdown("### 2024/25 Backtest Ablation vs. Real Market Closing Odds")
+            st.dataframe(eval_df, use_container_width=True, hide_index=True)
 
 # Helper to load historical data and configs for Sandbox
 @st.cache_resource

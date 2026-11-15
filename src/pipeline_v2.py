@@ -1094,4 +1094,8 @@ def run_v2_pipeline(run_sweeps=True):
     print("=== UPGRADED v2 PIPELINE COMPLETED SUCCESSFULLY ===")
 
 if __name__ == "__main__":
-    run_v2_pipeline()
+    import argparse
+    parser = argparse.ArgumentParser(description="EPL Season Predictor v2 Pipeline")
+    parser.add_argument('--skip-sweeps', action='store_true', help="Skip 2024/25 backtest sweeps and run 10,000 simulations directly")
+    args = parser.parse_args()
+    run_v2_pipeline(run_sweeps=not args.skip_sweeps)
