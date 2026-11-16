@@ -636,9 +636,9 @@ with tab_h2h:
             p_away_win = match_pred['AwayWin%'] / 100.0
             
             # Rescale quadrants of score matrix to perfectly match blended ensemble
-            sum_h = np.sum(np.triu(score_matrix, 1).T)
+            sum_h = np.sum(np.tril(score_matrix, -1))
             sum_d = np.sum(np.diag(score_matrix))
-            sum_a = np.sum(np.tril(score_matrix, -1).T)
+            sum_a = np.sum(np.triu(score_matrix, 1))
             for x in range(max_g + 1):
                 for y in range(max_g + 1):
                     if x > y and sum_h > 0:
