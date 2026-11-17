@@ -1192,15 +1192,15 @@ with tab5:
                 custom_injured.append({'Team': selected_injury_team, 'Importance': injury_loss})
                 
             if selected_mgr_team != "None":
-                scenarios.append(f" **{selected_mgr_team}**: Appointed a new manager today (triggers new manager bounce)")
-                # Set appointment date to the start of the season so it qualifies as new manager
-                custom_managers[selected_mgr_team] = '2026-08-01'
+                today_str = pd.Timestamp.today().normalize().strftime('%Y-%m-%d')
+                scenarios.append(f" **{selected_mgr_team}**: Appointed a new manager today ({today_str}, triggers 180-day new manager window)")
+                custom_managers[selected_mgr_team] = today_str
                 
             if scenarios:
                 for sc in scenarios:
                     st.markdown(sc)
             else:
-                st.write("No active overlays. The simulator will match the pre-season default predictions.")
+                st.write("No active overlays. The simulator will match the current live baseline projections.")
                 
             num_sandbox_sims = st.number_input("Number of Simulations", min_value=100, max_value=2000, value=500, step=100)
             run_sim = st.button(" Run Sandbox Simulation")
