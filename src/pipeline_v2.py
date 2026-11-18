@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import numpy as np
@@ -7,7 +8,10 @@ from scipy.stats import poisson
 from scipy.special import gammaln
 
 # Import v2 modules
-from src.v2.config import get_v2_config, DECAY_PHI, DC_WEIGHT, CALIBRATION_TEMP, ELO_K_FACTOR, ELO_HFA, MOCK_INJURY_PATH
+from src.v2.config import (
+    get_v2_config, DECAY_PHI, DC_WEIGHT, DC_XG_WEIGHT, CALIBRATION_TEMP,
+    ELO_K_FACTOR, ELO_HFA, MOCK_INJURY_PATH, CALIBRATION_PARAMS_PATH
+)
 from src.v2.injuries import InjuryTracker
 from src.v2.congestion import calculate_rest_days, add_congestion_features
 from src.v2.promoted import get_promoted_teams, blend_promoted_predictions
@@ -15,7 +19,10 @@ from src.v2.elo_dynamic import update_elos, get_expected_scores
 from src.v2.market import evaluate_market_benchmark, extract_market_probs
 from src.v2.bayesian_form import initialize_form, update_form_state, adjust_goals_with_form
 from src.v2.explain import explain_match_prediction
-from src.models import DixonColesModel, XGBoostPredictor, blend_predictions, apply_temperature_scaling
+from src.models import (
+    DixonColesModel, XGBoostPredictor, blend_predictions,
+    apply_temperature_scaling, fit_temperature_scaler
+)
 
 def compute_brier_score(true_labels, probs):
     """
@@ -27,22 +34,65 @@ def compute_brier_score(true_labels, probs):
     true_one_hot[np.arange(N), true_labels] = 1.0
     return np.mean(np.sum((probs - true_one_hot)**2, axis=1)) / 3.0
 
-def run_backtest_v2(df, config, config_name="Model", return_details=False):
+def _build_xgb_features(df, config):
+    """Build ordered XGBoost feature list matching available historical columns and config toggles."""
+    features = [
+        'EloDiff',
+        'HomeRollingGoalsScored', 'HomeRollingGoalsConceded', 'HomeRollingPoints',
+        'AwayRollingGoalsScored', 'AwayRollingGoalsConceded', 'AwayRollingPoints',
+        'HomeSquadValPercentile', 'AwaySquadValPercentile',
+        'HomeNewManager', 'AwayNewManager',
+    ]
+    if 'HomeRollingXG' in df.columns:
+        features.extend(['HomeRollingXG', 'HomeRollingXGA', 'AwayRollingXG', 'AwayRollingXGA'])
+    if 'HomeRollingSOTFor' in df.columns:
+        features.extend([
+            'HomeRollingSOTFor', 'HomeRollingSOTAgainst', 'HomeRollingRedCards',
+            'AwayRollingSOTFor', 'AwayRollingSOTAgainst', 'AwayRollingRedCards',
+        ])
+    if 'HomeTransferImpact' in df.columns:
+        features.extend(['HomeTransferImpact', 'AwayTransferImpact', 'HomeNetSpend', 'AwayNetSpend'])
+    if config.get('promoted_handling'):
+        features.extend(['HomePromoted', 'AwayPromoted'])
+    if config.get('congestion'):
+        features.extend(['HomeCongested', 'AwayCongested', 'HomeDaysSinceLast', 'AwayDaysSinceLast'])
+    if config.get('injuries'):
+        features.extend(['HomeAvailability', 'AwayAvailability'])
+    return features
+
+
+def _load_transfer_lookup(transfers_path='data/raw/transfers.csv'):
+    """Load per-team net transfer impact and net spend (EUR M) from transfers.csv."""
+    impacts, net_spends = {}, {}
+    if os.path.exists(transfers_path):
+        t_df = pd.read_csv(transfers_path)
+        for team, group in t_df.groupby('Team'):
+            ins = group[group['TransferType'] == 'In']
+            outs = group[group['TransferType'] == 'Out']
+            net_spends[team] = float(ins['Fee_M_Euros'].sum() - outs['Fee_M_Euros'].sum())
+            impacts[team] = float(ins['Importance'].sum() - outs['Importance'].sum())
+    return impacts, net_spends
+
+
+def run_backtest_v2(df, config, config_name="Model", return_details=False, test_season='2024-2025'):
     """
-    Perform v2 backtest on the 2024/25 season with a specific config dictionary.
+    Perform v2 walk-forward backtest on `test_season`, training strictly on earlier seasons.
     """
+    if config.get('congestion') and 'HomeCongested' not in df.columns:
+        df = add_congestion_features(df)
+
     # Split training and testing sets
-    train_df = df[df['Season'] < '2024-2025'].copy()
-    test_df = df[df['Season'] == '2024-2025'].copy()
+    train_df = df[df['Season'] < test_season].copy()
+    test_df = df[df['Season'] == test_season].copy()
     
-    if len(test_df) == 0:
+    if len(test_df) == 0 or len(train_df) == 0:
         return None
         
     # Apply time-decay to training if enabled
     phi = config.get('decay_phi', 0.0)
     
     # 1. Fit Dixon-Coles model on training data
-    dc_model = DixonColesModel()
+    dc_model = DixonColesModel(xg_weight=config.get('dc_xg_weight', 0.0))
     # Pass decay rate phi
     dc_model.phi = phi
     dc_model.fit(train_df)
@@ -59,21 +109,7 @@ def run_backtest_v2(df, config, config_name="Model", return_details=False):
     test_df['AwayAvailability'] = test_df.apply(lambda r: injury_tracker.get_availability(r['AwayTeam'], r['Date']) if config.get('injuries') else 1.0, axis=1)
     
     # Define features based on config
-    xgb_features = [
-        'EloDiff', 
-        'HomeRollingGoalsScored', 'HomeRollingGoalsConceded', 'HomeRollingPoints',
-        'AwayRollingGoalsScored', 'AwayRollingGoalsConceded', 'AwayRollingPoints',
-        'HomeSquadValPercentile', 'AwaySquadValPercentile',
-        'HomeNewManager', 'AwayNewManager'
-    ]
-    if 'HomeRollingXG' in df.columns:
-        xgb_features.extend(['HomeRollingXG', 'HomeRollingXGA', 'AwayRollingXG', 'AwayRollingXGA'])
-    if config.get('promoted_handling'):
-        xgb_features.extend(['HomePromoted', 'AwayPromoted'])
-    if config.get('congestion'):
-        xgb_features.extend(['HomeCongested', 'AwayCongested', 'HomeDaysSinceLast', 'AwayDaysSinceLast'])
-    if config.get('injuries'):
-        xgb_features.extend(['HomeAvailability', 'AwayAvailability'])
+    xgb_features = _build_xgb_features(df, config)
         
     # Fit XGBoost Classifier
     xgb_predictor = XGBoostPredictor()
@@ -110,8 +146,8 @@ def run_backtest_v2(df, config, config_name="Model", return_details=False):
     for team in current_elos:
         current_elos[team] = 0.7 * current_elos[team] + 0.3 * 1500.0
         
-    # Detect promoted teams of 2024/25
-    promoted_teams = get_promoted_teams(df, '2024-2025')
+    # Detect promoted teams of test_season
+    promoted_teams = get_promoted_teams(df, test_season)
     for team in promoted_teams:
         current_elos[team] = 1420.0 # Promoted baseline
         
@@ -226,6 +262,18 @@ def run_backtest_v2(df, config, config_name="Model", return_details=False):
             feat_dict['HomeRollingXGA'] = row['HomeRollingXGA']
             feat_dict['AwayRollingXG'] = row['AwayRollingXG']
             feat_dict['AwayRollingXGA'] = row['AwayRollingXGA']
+        if 'HomeRollingSOTFor' in df.columns:
+            feat_dict['HomeRollingSOTFor'] = row['HomeRollingSOTFor']
+            feat_dict['HomeRollingSOTAgainst'] = row['HomeRollingSOTAgainst']
+            feat_dict['HomeRollingRedCards'] = row['HomeRollingRedCards']
+            feat_dict['AwayRollingSOTFor'] = row['AwayRollingSOTFor']
+            feat_dict['AwayRollingSOTAgainst'] = row['AwayRollingSOTAgainst']
+            feat_dict['AwayRollingRedCards'] = row['AwayRollingRedCards']
+        if 'HomeTransferImpact' in df.columns:
+            feat_dict['HomeTransferImpact'] = row['HomeTransferImpact']
+            feat_dict['AwayTransferImpact'] = row['AwayTransferImpact']
+            feat_dict['HomeNetSpend'] = row['HomeNetSpend']
+            feat_dict['AwayNetSpend'] = row['AwayNetSpend']
         if config.get('promoted_handling'):
             feat_dict['HomePromoted'] = 1 if home in promoted_teams else 0
             feat_dict['AwayPromoted'] = 1 if away in promoted_teams else 0
@@ -275,6 +323,87 @@ def run_backtest_v2(df, config, config_name="Model", return_details=False):
         return loss, brier, acc, model_probs, true_labels
     return loss, brier, acc
 
+
+def _infer_target_season(fixtures_df, df_historical=None):
+    """Infer target EPL season string (e.g. '2026-2027') from fixture dates."""
+    if fixtures_df is not None and not fixtures_df.empty and 'Date' in fixtures_df.columns:
+        dates = pd.to_datetime(fixtures_df['Date'], errors='coerce').dropna()
+        if not dates.empty:
+            start_dt = dates.min()
+            start_year = start_dt.year if start_dt.month >= 7 else start_dt.year - 1
+            return f"{start_year}-{start_year + 1}"
+    if df_historical is not None and not df_historical.empty and 'Season' in df_historical.columns:
+        return str(df_historical['Season'].max())
+    return '2026-2027'
+
+
+def fit_dynamic_temperature(df, config, target_season='2026-2027', min_val_matches=190):
+    """
+    Dynamically fit scalar temperature T out-of-sample on the most recent completed
+    validation season strictly prior to target_season.
+    """
+    fallback_temp = float(config.get('calibration_temp', CALIBRATION_TEMP))
+    seasons_sorted = sorted(s for s in df['Season'].dropna().unique() if str(s) < str(target_season))
+
+    val_season = None
+    for s in reversed(seasons_sorted):
+        if (df['Season'] == s).sum() >= min_val_matches and (df['Season'] < s).any():
+            val_season = s
+            break
+
+    if val_season is None:
+        print(
+            f"Dynamic calibration skipped (no prior validation season >= {min_val_matches} "
+            f"matches before {target_season}); using fallback T={fallback_temp:.3f}."
+        )
+        return {
+            'calibration_temp': round(fallback_temp, 4),
+            'validation_season': None,
+            'pre_cal_logloss': None,
+            'post_cal_logloss': None,
+            'n_matches': 0,
+        }
+
+    eval_df = df.copy()
+    if config.get('congestion') and 'HomeCongested' not in eval_df.columns:
+        eval_df = add_congestion_features(eval_df)
+
+    val_cfg = config.copy()
+    val_cfg['calibration_temp'] = 1.0
+
+    bt_res = run_backtest_v2(
+        eval_df,
+        val_cfg,
+        config_name=f"Temperature Calibration Validation ({val_season})",
+        return_details=True,
+        test_season=val_season,
+    )
+    if bt_res is None:
+        return {
+            'calibration_temp': round(fallback_temp, 4),
+            'validation_season': str(val_season),
+            'pre_cal_logloss': None,
+            'post_cal_logloss': None,
+            'n_matches': 0,
+        }
+
+    pre_loss, _, _, val_probs, val_labels = bt_res
+    fitted_temp = fit_temperature_scaler(val_probs, val_labels)
+    cal_probs = apply_temperature_scaling(val_probs, fitted_temp)
+    post_loss = float(log_loss(val_labels, cal_probs, labels=[0, 1, 2]))
+
+    print(
+        f"Dynamic Temperature Calibration ({val_season}, n={len(val_labels)}): "
+        f"T={fitted_temp:.4f} | Log-Loss {pre_loss:.4f} -> {post_loss:.4f}"
+    )
+    return {
+        'calibration_temp': round(float(fitted_temp), 4),
+        'validation_season': str(val_season),
+        'pre_cal_logloss': round(float(pre_loss), 4),
+        'post_cal_logloss': round(float(post_loss), 4),
+        'n_matches': int(len(val_labels)),
+    }
+
 def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, num_sims=10000, dc_weight=0.5, custom_injured_players=None, custom_managers=None, save_outputs=True):
     """
     Stateful Monte Carlo simulator running simulations of 2026/27.
@@ -283,7 +412,7 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
     print(f"\n=== INITIALIZING v2 MONTE CARLO SIMULATOR ({num_sims} RUNS) ===")
     
     # Fit the Dixon-Coles model on the full historical dataset
-    dc_model = DixonColesModel()
+    dc_model = DixonColesModel(xg_weight=config.get('dc_xg_weight', DC_XG_WEIGHT))
     dc_model.phi = config.get('decay_phi', 0.0)
     dc_model.fit(df_historical)
     
@@ -295,21 +424,7 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
     df_historical['AwayAvailability'] = df_historical.apply(lambda r: injury_tracker.get_availability(r['AwayTeam'], r['Date']) if config.get('injuries') else 1.0, axis=1)
     
     # Define features based on config
-    xgb_features = [
-        'EloDiff', 
-        'HomeRollingGoalsScored', 'HomeRollingGoalsConceded', 'HomeRollingPoints',
-        'AwayRollingGoalsScored', 'AwayRollingGoalsConceded', 'AwayRollingPoints',
-        'HomeSquadValPercentile', 'AwaySquadValPercentile',
-        'HomeNewManager', 'AwayNewManager'
-    ]
-    if 'HomeRollingXG' in df_historical.columns:
-        xgb_features.extend(['HomeRollingXG', 'HomeRollingXGA', 'AwayRollingXG', 'AwayRollingXGA'])
-    if config.get('promoted_handling'):
-        xgb_features.extend(['HomePromoted', 'AwayPromoted'])
-    if config.get('congestion'):
-        xgb_features.extend(['HomeCongested', 'AwayCongested', 'HomeDaysSinceLast', 'AwayDaysSinceLast'])
-    if config.get('injuries'):
-        xgb_features.extend(['HomeAvailability', 'AwayAvailability'])
+    xgb_features = _build_xgb_features(df_historical, config)
         
     xgb_predictor = XGBoostPredictor()
     xgb_predictor.features = xgb_features
@@ -320,6 +435,7 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
     squad_values = dict(zip(squad_df['Team'], squad_df['MarketValue_M_Euros']))
     max_val = max(squad_values.values())
     min_val = min(squad_values.values())
+    transfer_impacts, net_spends = _load_transfer_lookup()
     
     mgr_df = pd.read_csv('data/raw/managers.csv')
     mgr_df['AppointedDate'] = pd.to_datetime(mgr_df['AppointedDate'])
@@ -387,6 +503,9 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
     roll_ga = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
     roll_xg = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
     roll_xga = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_sot_for = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_sot_against = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
+    roll_red = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
     roll_pts = np.zeros((num_sims, num_teams, ROLL_WIN), dtype=np.float32)
     roll_len = np.zeros(num_teams, dtype=int)
     roll_pos = np.zeros(num_teams, dtype=int)
@@ -397,7 +516,7 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         tm = df_sorted[(df_sorted['HomeTeam'] == team) | (df_sorted['AwayTeam'] == team)].tail(ROLL_WIN)
         k = len(tm)
         if k > 0:
-            gfs, gas, xgs, xgas, ptss = [], [], [], [], []
+            gfs, gas, xgs, xgas, sots_for, sots_against, reds, ptss = [], [], [], [], [], [], [], []
             for _, mr in tm.iterrows():
                 has_xg = 'HxG' in mr and 'AxG' in mr and pd.notna(mr['HxG']) and pd.notna(mr['AxG'])
                 if has_xg:
@@ -408,23 +527,36 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
                 else:
                     h_xg_m, a_xg_m = float(mr['FTHG']), float(mr['FTAG'])
 
+                h_sot_m = float(mr['HST']) if ('HST' in mr and pd.notna(mr['HST'])) else 4.4
+                a_sot_m = float(mr['AST']) if ('AST' in mr and pd.notna(mr['AST'])) else 4.4
+                h_red_m = float(mr['HR']) if ('HR' in mr and pd.notna(mr['HR'])) else 0.0
+                a_red_m = float(mr['AR']) if ('AR' in mr and pd.notna(mr['AR'])) else 0.0
+
                 if mr['HomeTeam'] == team:
                     hg_m, ag_m = float(mr['FTHG']), float(mr['FTAG'])
                     xg_m, xga_m = h_xg_m, a_xg_m
+                    sf_m, sa_m, rd_m = h_sot_m, a_sot_m, h_red_m
                     p_m = 3.0 if mr['FTR'] == 'H' else (1.0 if mr['FTR'] == 'D' else 0.0)
                 else:
                     hg_m, ag_m = float(mr['FTAG']), float(mr['FTHG'])
                     xg_m, xga_m = a_xg_m, h_xg_m
+                    sf_m, sa_m, rd_m = a_sot_m, h_sot_m, a_red_m
                     p_m = 3.0 if mr['FTR'] == 'A' else (1.0 if mr['FTR'] == 'D' else 0.0)
                 gfs.append(hg_m)
                 gas.append(ag_m)
                 xgs.append(xg_m)
                 xgas.append(xga_m)
+                sots_for.append(sf_m)
+                sots_against.append(sa_m)
+                reds.append(rd_m)
                 ptss.append(p_m)
             roll_gf[:, t_idx, :k] = np.array(gfs, dtype=np.float32)
             roll_ga[:, t_idx, :k] = np.array(gas, dtype=np.float32)
             roll_xg[:, t_idx, :k] = np.array(xgs, dtype=np.float32)
             roll_xga[:, t_idx, :k] = np.array(xgas, dtype=np.float32)
+            roll_sot_for[:, t_idx, :k] = np.array(sots_for, dtype=np.float32)
+            roll_sot_against[:, t_idx, :k] = np.array(sots_against, dtype=np.float32)
+            roll_red[:, t_idx, :k] = np.array(reds, dtype=np.float32)
             roll_pts[:, t_idx, :k] = np.array(ptss, dtype=np.float32)
             roll_len[t_idx] = k
             roll_pos[t_idx] = k % ROLL_WIN
@@ -452,7 +584,7 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
 
     preds_output = []
 
-    print("Running modular stateful Monte Carlo simulations...")
+    print(f"Running modular stateful Monte Carlo simulations (T={cal_temp:.4f})...")
 
     # Loop chronologically through matches
     for idx, row in fixtures_df.iterrows():
@@ -495,6 +627,10 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         h_val_pct = (h_val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
         a_val = squad_values.get(away, 100.0)
         a_val_pct = (a_val - min_val) / (max_val - min_val) if max_val > min_val else 0.5
+        h_t_imp = transfer_impacts.get(home, 1.14)
+        a_t_imp = transfer_impacts.get(away, 1.14)
+        h_t_ns = net_spends.get(home, 174.0)
+        a_t_ns = net_spends.get(away, 174.0)
 
         h_appointed = managers.get(home)
         h_tenure = (date - h_appointed).days if h_appointed else 365
@@ -550,13 +686,23 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
                         'HomeRollingPoints': float(hist_row['HomeRollingPoints']),
                         'HomeRollingXG': float(hist_row.get('HomeRollingXG', hist_row['HomeRollingGoalsScored'])),
                         'HomeRollingXGA': float(hist_row.get('HomeRollingXGA', hist_row['HomeRollingGoalsConceded'])),
+                        'HomeRollingSOTFor': float(hist_row.get('HomeRollingSOTFor', 4.4)),
+                        'HomeRollingSOTAgainst': float(hist_row.get('HomeRollingSOTAgainst', 4.4)),
+                        'HomeRollingRedCards': float(hist_row.get('HomeRollingRedCards', 0.06)),
                         'AwayRollingGoalsScored': float(hist_row['AwayRollingGoalsScored']),
                         'AwayRollingGoalsConceded': float(hist_row['AwayRollingGoalsConceded']),
                         'AwayRollingPoints': float(hist_row['AwayRollingPoints']),
                         'AwayRollingXG': float(hist_row.get('AwayRollingXG', hist_row['AwayRollingGoalsScored'])),
                         'AwayRollingXGA': float(hist_row.get('AwayRollingXGA', hist_row['AwayRollingGoalsConceded'])),
+                        'AwayRollingSOTFor': float(hist_row.get('AwayRollingSOTFor', 4.4)),
+                        'AwayRollingSOTAgainst': float(hist_row.get('AwayRollingSOTAgainst', 4.4)),
+                        'AwayRollingRedCards': float(hist_row.get('AwayRollingRedCards', 0.06)),
                         'HomeSquadValPercentile': h_val_pct,
                         'AwaySquadValPercentile': a_val_pct,
+                        'HomeTransferImpact': float(hist_row.get('HomeTransferImpact', h_t_imp)),
+                        'AwayTransferImpact': float(hist_row.get('AwayTransferImpact', a_t_imp)),
+                        'HomeNetSpend': float(hist_row.get('HomeNetSpend', h_t_ns)),
+                        'AwayNetSpend': float(hist_row.get('AwayNetSpend', a_t_ns)),
                         'HomeNewManager': h_new_mgr,
                         'AwayNewManager': a_new_mgr,
                         'HomePromoted': 1 if home in promoted_teams else 0,
@@ -578,13 +724,23 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
                         'HomeRollingPoints': 1.3,
                         'HomeRollingXG': lmbda_base,
                         'HomeRollingXGA': mu_base,
+                        'HomeRollingSOTFor': 4.4,
+                        'HomeRollingSOTAgainst': 4.4,
+                        'HomeRollingRedCards': 0.06,
                         'AwayRollingGoalsScored': mu_base,
                         'AwayRollingGoalsConceded': lmbda_base,
                         'AwayRollingPoints': 1.1,
                         'AwayRollingXG': mu_base,
                         'AwayRollingXGA': lmbda_base,
+                        'AwayRollingSOTFor': 4.4,
+                        'AwayRollingSOTAgainst': 4.4,
+                        'AwayRollingRedCards': 0.06,
                         'HomeSquadValPercentile': h_val_pct,
                         'AwaySquadValPercentile': a_val_pct,
+                        'HomeTransferImpact': h_t_imp,
+                        'AwayTransferImpact': a_t_imp,
+                        'HomeNetSpend': h_t_ns,
+                        'AwayNetSpend': a_t_ns,
                         'HomeNewManager': h_new_mgr,
                         'AwayNewManager': a_new_mgr,
                         'HomePromoted': 1 if home in promoted_teams else 0,
@@ -641,11 +797,17 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         h_r_ga = roll_ga[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
         h_r_xg = roll_xg[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
         h_r_xga = roll_xga[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        h_r_sf = roll_sot_for[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 4.4, dtype=np.float32)
+        h_r_sa = roll_sot_against[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 4.4, dtype=np.float32)
+        h_r_rd = roll_red[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 0.06, dtype=np.float32)
         h_r_pts = roll_pts[:, h_idx, :nh].mean(axis=1) if nh > 0 else np.full(num_sims, 1.1, dtype=np.float32)
         a_r_gf = roll_gf[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
         a_r_ga = roll_ga[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
         a_r_xg = roll_xg[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
         a_r_xga = roll_xga[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.3, dtype=np.float32)
+        a_r_sf = roll_sot_for[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 4.4, dtype=np.float32)
+        a_r_sa = roll_sot_against[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 4.4, dtype=np.float32)
+        a_r_rd = roll_red[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 0.06, dtype=np.float32)
         a_r_pts = roll_pts[:, a_idx, :na].mean(axis=1) if na > 0 else np.full(num_sims, 1.1, dtype=np.float32)
 
         col_map = {
@@ -655,13 +817,23 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
             'HomeRollingPoints': h_r_pts,
             'HomeRollingXG': h_r_xg,
             'HomeRollingXGA': h_r_xga,
+            'HomeRollingSOTFor': h_r_sf,
+            'HomeRollingSOTAgainst': h_r_sa,
+            'HomeRollingRedCards': h_r_rd,
             'AwayRollingGoalsScored': a_r_gf,
             'AwayRollingGoalsConceded': a_r_ga,
             'AwayRollingPoints': a_r_pts,
             'AwayRollingXG': a_r_xg,
             'AwayRollingXGA': a_r_xga,
+            'AwayRollingSOTFor': a_r_sf,
+            'AwayRollingSOTAgainst': a_r_sa,
+            'AwayRollingRedCards': a_r_rd,
             'HomeSquadValPercentile': np.full(num_sims, h_val_pct, dtype=np.float32),
             'AwaySquadValPercentile': np.full(num_sims, a_val_pct, dtype=np.float32),
+            'HomeTransferImpact': np.full(num_sims, h_t_imp, dtype=np.float32),
+            'AwayTransferImpact': np.full(num_sims, a_t_imp, dtype=np.float32),
+            'HomeNetSpend': np.full(num_sims, h_t_ns, dtype=np.float32),
+            'AwayNetSpend': np.full(num_sims, a_t_ns, dtype=np.float32),
             'HomeNewManager': np.full(num_sims, h_new_mgr, dtype=np.float32),
             'AwayNewManager': np.full(num_sims, a_new_mgr, dtype=np.float32),
             'HomePromoted': np.full(num_sims, 1 if home in promoted_teams else 0, dtype=np.float32),
@@ -761,12 +933,20 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         gd_sims[:, a_idx] += ag - hg
 
         # Update dynamic rolling circular buffers for both teams
+        sim_h_sot = np.clip(1.4 + 1.4 * lmbdas + 0.6 * hg, 1.0, 12.0).astype(np.float32)
+        sim_a_sot = np.clip(1.4 + 1.4 * mus + 0.6 * ag, 1.0, 12.0).astype(np.float32)
+        sim_h_red = (np.random.rand(num_sims) < 0.06).astype(np.float32)
+        sim_a_red = (np.random.rand(num_sims) < 0.06).astype(np.float32)
+
         hp_pos = int(roll_pos[h_idx])
         ap_pos = int(roll_pos[a_idx])
         roll_gf[:, h_idx, hp_pos] = hg.astype(np.float32)
         roll_ga[:, h_idx, hp_pos] = ag.astype(np.float32)
         roll_xg[:, h_idx, hp_pos] = lmbdas.astype(np.float32)
         roll_xga[:, h_idx, hp_pos] = mus.astype(np.float32)
+        roll_sot_for[:, h_idx, hp_pos] = sim_h_sot
+        roll_sot_against[:, h_idx, hp_pos] = sim_a_sot
+        roll_red[:, h_idx, hp_pos] = sim_h_red
         roll_pts[:, h_idx, hp_pos] = h_pts.astype(np.float32)
         roll_pos[h_idx] = (hp_pos + 1) % ROLL_WIN
         roll_len[h_idx] = min(ROLL_WIN, int(roll_len[h_idx]) + 1)
@@ -775,6 +955,9 @@ def run_season_simulations_v2(fixtures_df, final_elos, df_historical, config, nu
         roll_ga[:, a_idx, ap_pos] = hg.astype(np.float32)
         roll_xg[:, a_idx, ap_pos] = mus.astype(np.float32)
         roll_xga[:, a_idx, ap_pos] = lmbdas.astype(np.float32)
+        roll_sot_for[:, a_idx, ap_pos] = sim_a_sot
+        roll_sot_against[:, a_idx, ap_pos] = sim_h_sot
+        roll_red[:, a_idx, ap_pos] = sim_a_red
         roll_pts[:, a_idx, ap_pos] = a_pts.astype(np.float32)
         roll_pos[a_idx] = (ap_pos + 1) % ROLL_WIN
         roll_len[a_idx] = min(ROLL_WIN, int(roll_len[a_idx]) + 1)
@@ -922,6 +1105,15 @@ def run_feature_sweeps():
     print("Precomputing fixture rest days...")
     df = add_congestion_features(df)
     
+    ensemble_cfg = {
+        'decay_phi': DECAY_PHI, 'dc_weight': DC_WEIGHT, 'dc_xg_weight': DC_XG_WEIGHT,
+        'calibration_temp': CALIBRATION_TEMP,
+        'dynamic_elo': True, 'promoted_handling': True,
+        'injuries': True, 'congestion': True, 'bayesian_form': True, 'form_boost': 0.01
+    }
+    sweep_cal = fit_dynamic_temperature(df, ensemble_cfg, target_season='2024-2025')
+    ensemble_cfg['calibration_temp'] = sweep_cal['calibration_temp']
+
     # Configurations to evaluate
     configs = {
         '1. Baseline (v1 Model)': {
@@ -959,11 +1151,7 @@ def run_feature_sweeps():
             'dynamic_elo': False, 'promoted_handling': False,
             'injuries': False, 'congestion': False, 'bayesian_form': True, 'form_boost': 0.01
         },
-        '8. Upgraded Calibrated Ensemble (All ON)': {
-            'decay_phi': DECAY_PHI, 'dc_weight': DC_WEIGHT, 'calibration_temp': CALIBRATION_TEMP,
-            'dynamic_elo': True, 'promoted_handling': True,
-            'injuries': True, 'congestion': True, 'bayesian_form': True, 'form_boost': 0.01
-        }
+        '8. Upgraded Calibrated Ensemble (All ON)': ensemble_cfg
     }
     
     report_rows = []
@@ -1081,8 +1269,18 @@ def run_v2_pipeline(run_sweeps=True):
     if run_sweeps:
         run_feature_sweeps()
     
-    # Run final simulation for 2026/27 with full v2 config
-    v2_config = get_v2_config()
+    # Dynamically fit temperature scaling out-of-sample on the prior completed validation season
+    v2_config = get_v2_config(use_saved_calibration=False)
+    target_season = _infer_target_season(fixtures_df, df)
+    if v2_config.get('dynamic_calibration', True):
+        cal_info = fit_dynamic_temperature(df, v2_config, target_season=target_season)
+        v2_config['calibration_temp'] = cal_info['calibration_temp']
+        os.makedirs(os.path.dirname(CALIBRATION_PARAMS_PATH), exist_ok=True)
+        with open(CALIBRATION_PARAMS_PATH, 'w', encoding='utf-8') as f:
+            json.dump({**cal_info, 'target_season': target_season}, f, indent=2)
+        print(f"Saved dynamic calibration params to {CALIBRATION_PARAMS_PATH}")
+
+    # Run final simulation for target season with full v2 config
     run_season_simulations_v2(
         fixtures_df=fixtures_df,
         final_elos=final_elos,

@@ -1,0 +1,8 @@
+{
+  "calibration_temp": 1.3952,
+  "validation_season": "2025-2026",
+  "pre_cal_logloss": 1.0421,
+  "post_cal_logloss": 1.0325,
+  "n_matches": 380,
+  "target_season": "2026-2027"
+}

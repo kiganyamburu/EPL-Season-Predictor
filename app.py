@@ -242,7 +242,7 @@ with tab1:
             'Top 4 %': '{:.2f}%',
             'Relegation %': '{:.2f}%'
         })
-        st.dataframe(styler, use_container_width=True, height=730)
+        st.dataframe(styler, width='stretch', height=730)
         
     elif table_mode == "Current Live Standings (Played So Far)":
         if live_df is not None and not live_df.empty:
@@ -290,7 +290,7 @@ with tab1:
             styler_live = display_live.style.background_gradient(
                 subset=['Pts', 'GD'], cmap='Blues'
             )
-            st.dataframe(styler_live, use_container_width=True, height=730, hide_index=True)
+            st.dataframe(styler_live, width='stretch', height=730, hide_index=True)
         else:
             st.info("No completed match results recorded in the fixtures feed yet.")
             
@@ -337,7 +337,7 @@ with tab1:
                     'Top4%': '{:.1f}%',
                     'Relegated%': '{:.1f}%'
                 }),
-                use_container_width=True,
+                width='stretch',
                 height=730,
                 hide_index=True
             )
@@ -368,7 +368,7 @@ with tab1:
                 height=550,
                 margin=dict(l=40, r=40, t=20, b=20)
             )
-            st.plotly_chart(fig_comp, use_container_width=True)
+            st.plotly_chart(fig_comp, width='stretch')
 
 # ------------------------------------------------------------------------------
 # TAB 2: STANDING DISTRIBUTIONS (CHARTS)
@@ -422,7 +422,7 @@ with tab2:
             height=500,
             margin=dict(l=40, r=40, t=20, b=20)
         )
-        st.plotly_chart(fig_pts, use_container_width=True)
+        st.plotly_chart(fig_pts, width='stretch')
         
     with col_chart2:
         st.subheader("Title Win Probability (%)")
@@ -449,7 +449,7 @@ with tab2:
             height=500,
             margin=dict(l=40, r=40, t=20, b=20)
         )
-        st.plotly_chart(fig_title, use_container_width=True)
+        st.plotly_chart(fig_title, width='stretch')
 
 # ------------------------------------------------------------------------------
 # TAB 3: MATCH PREDICTIONS
@@ -515,7 +515,7 @@ with tab3:
                 'Away Win %': '{:.1f}%',
                 'Actual Score': lambda v: '-' if pd.isna(v) or v is None else str(v)
             }), 
-            use_container_width=True, 
+            width='stretch', 
             height=430,
             hide_index=True
         )
@@ -713,7 +713,7 @@ with tab_h2h:
                 height=420,
                 margin=dict(l=40, r=40, t=10, b=10)
             )
-            st.plotly_chart(fig_heat, use_container_width=True)
+            st.plotly_chart(fig_heat, width='stretch')
             
         with col_mkts:
             st.markdown("###  Derived Goal & Betting Markets")
@@ -747,7 +747,7 @@ with tab_h2h:
                 {"Market": f"{h2h_home} Clean Sheet", "Probability": f"{p_cs_home*100:.1f}%", "Fair Odds": f"{1/max(0.001, p_cs_home):.2f}", "Alternative": f"{h2h_away} Clean Sheet", "Alt Prob": f"{p_cs_away*100:.1f}%", "Alt Odds": f"{1/max(0.001, p_cs_away):.2f}"},
                 {"Market": "Double Chance (1X)", "Probability": f"{p_1x*100:.1f}%", "Fair Odds": f"{1/p_1x:.2f}", "Alternative": "Double Chance (X2)", "Alt Prob": f"{p_x2*100:.1f}%", "Alt Odds": f"{1/p_x2:.2f}"}
             ]
-            st.dataframe(pd.DataFrame(mkt_data), use_container_width=True, height=270, hide_index=True)
+            st.dataframe(pd.DataFrame(mkt_data), width='stretch', height=270, hide_index=True)
             
             if match_pred is not None and 'Explanation' in match_pred and pd.notna(match_pred['Explanation']):
                 st.info(f" **Model Contributing Factors**:\n\n{match_pred['Explanation']}")
@@ -792,7 +792,7 @@ with tab_h2h:
                         'Away': r['AwayTeam'],
                         'Outcome': f"{r['HomeTeam']} Win" if r['FTR'] == 'H' else (f"{r['AwayTeam']} Win" if r['FTR'] == 'A' else 'Draw')
                     })
-                st.dataframe(pd.DataFrame(recent_display), use_container_width=True, hide_index=True)
+                st.dataframe(pd.DataFrame(recent_display), width='stretch', hide_index=True)
         else:
             st.info("Historical match database not loaded.")
 
@@ -865,7 +865,7 @@ with tab_transfers:
                 'OtherClub': 'Former Club',
                 'Fee_M_Euros': 'Fee (€M)'
             }),
-            use_container_width=True,
+            width='stretch',
             hide_index=True
         )
 
@@ -1044,7 +1044,7 @@ with tab_calib:
                 xaxis_title="Gameweek", yaxis_title="Brier Score",
                 template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=380
             )
-            st.plotly_chart(fig_brier, use_container_width=True)
+            st.plotly_chart(fig_brier, width='stretch')
 
         with col_c2:
             fig_acc = px.bar(
@@ -1059,7 +1059,7 @@ with tab_calib:
                 template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                 coloraxis_showscale=False, height=380
             )
-            st.plotly_chart(fig_acc, use_container_width=True)
+            st.plotly_chart(fig_acc, width='stretch')
 
         st.write("---")
         col_rel, col_traj = st.columns([1, 1.3])
@@ -1082,7 +1082,7 @@ with tab_calib:
                     xaxis=dict(range=[0, 95]), yaxis=dict(range=[0, 105]),
                     template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=420
                 )
-                st.plotly_chart(fig_rel, use_container_width=True)
+                st.plotly_chart(fig_rel, width='stretch')
 
         with col_traj:
             if not traj_df.empty:
@@ -1110,12 +1110,12 @@ with tab_calib:
                         xaxis_title="Season Snapshot", yaxis_title="Title Win %",
                         template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', height=360
                     )
-                    st.plotly_chart(fig_traj, use_container_width=True)
+                    st.plotly_chart(fig_traj, width='stretch')
 
         if eval_df is not None and not eval_df.empty:
             st.write("---")
             st.markdown("### 2024/25 Backtest Ablation vs. Real Market Closing Odds")
-            st.dataframe(eval_df, use_container_width=True, hide_index=True)
+            st.dataframe(eval_df, width='stretch', hide_index=True)
 
 # Helper to load historical data and configs for Sandbox
 @st.cache_resource
@@ -1259,6 +1259,6 @@ with tab5:
                         'Relegated%_Baseline': '{:.1f}%',
                         'Relegated%_WhatIf': '{:.1f}%'
                     }).background_gradient(subset=['Points Shift'], cmap='RdYlGn'),
-                    use_container_width=True,
+                    width='stretch',
                     height=600
                 )

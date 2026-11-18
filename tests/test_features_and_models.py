@@ -6,13 +6,18 @@ import pytest
 from src.feature_engineering import (
     calculate_elo_ratings,
     calculate_rolling_features,
+    add_market_values_and_managers,
     _compute_prior_season_percentiles,
 )
 from src.models import (
     DixonColesModel,
+    XGBoostPredictor,
     blend_predictions,
     apply_temperature_scaling,
+    fit_temperature_scaler,
 )
+from src.pipeline_v2 import _infer_target_season, fit_dynamic_temperature
+from src.v2.config import get_v2_config, load_calibrated_temperature, CALIBRATION_TEMP
 from src.v2.calibration import (
     build_prematch_calibration_df,
     compute_calibration_curve,
@@ -161,4 +166,137 @@ def test_calibration_utilities_smoke():
     assert not curve.empty
     traj = compute_snapshot_title_trajectories(hist, completed, num_sims=50)
     assert not traj.empty
+
+
+def test_fit_temperature_scaler_detects_over_and_under_confidence():
+    # Overconfident predictions (extreme confidence despite errors) -> T > 1.0 lowers NLL
+    overconf = np.array([
+        [0.01, 0.04, 0.95],
+        [0.95, 0.04, 0.01],
+        [0.02, 0.03, 0.95],
+        [0.95, 0.03, 0.02],
+        [0.01, 0.04, 0.95],
+        [0.95, 0.04, 0.01],
+    ])
+    y_over = np.array([2, 0, 1, 2, 0, 1])
+    t_over = fit_temperature_scaler(overconf, y_over)
+    assert t_over > 1.2
+    cal_over = apply_temperature_scaling(overconf, t_over)
+    nll_before = -np.mean(np.log(overconf[np.arange(len(y_over)), y_over]))
+    nll_after = -np.mean(np.log(cal_over[np.arange(len(y_over)), y_over]))
+    assert nll_after < nll_before
+
+    # Underconfident predictions (true outcomes consistently match argmax, probabilities overly flat) -> T < 1.0
+    underconf = np.array([
+        [0.30, 0.30, 0.40],
+        [0.42, 0.30, 0.28],
+        [0.25, 0.45, 0.30],
+        [0.28, 0.31, 0.41],
+        [0.44, 0.28, 0.28],
+        [0.27, 0.46, 0.27],
+    ])
+    y_under = np.array([2, 0, 1, 2, 0, 1])
+    t_under = fit_temperature_scaler(underconf, y_under)
+    assert t_under < 0.85
+    cal_under = apply_temperature_scaling(underconf, t_under)
+    nll_u_before = -np.mean(np.log(underconf[np.arange(len(y_under)), y_under]))
+    nll_u_after = -np.mean(np.log(cal_under[np.arange(len(y_under)), y_under]))
+    assert nll_u_after < nll_u_before
+
+    # Uniform predictions should remain at T = 1.0
+    uniform = np.full((6, 3), 1.0 / 3.0)
+    assert fit_temperature_scaler(uniform, y_over) == pytest.approx(1.0)
+
+
+def test_dynamic_calibration_config_and_target_season_inference(tmp_path):
+    fixtures = pd.DataFrame([
+        {"Date": "2026-08-21", "HomeTeam": "Arsenal", "AwayTeam": "Leeds"},
+        {"Date": "2027-05-23", "HomeTeam": "Chelsea", "AwayTeam": "Arsenal"},
+    ])
+    assert _infer_target_season(fixtures) == "2026-2027"
+
+    # When no prior validation season meets min_val_matches, fallback temperature is preserved
+    small_hist = _make_synthetic_matches()
+    cfg = get_v2_config(use_saved_calibration=False)
+    cal = fit_dynamic_temperature(small_hist, cfg, target_season="2025-2026", min_val_matches=50)
+    assert cal["validation_season"] is None
+    assert cal["calibration_temp"] == pytest.approx(CALIBRATION_TEMP)
+
+    # Reading persisted calibration params JSON works cleanly and ignores invalid files
+    cal_file = tmp_path / "cal.json"
+    cal_file.write_text('{"calibration_temp": 1.24}', encoding="utf-8")
+    assert load_calibrated_temperature(path=str(cal_file)) == pytest.approx(1.24)
+    cal_file.write_text('{"calibration_temp": 99.0}', encoding="utf-8")
+    assert load_calibrated_temperature(path=str(cal_file)) == pytest.approx(CALIBRATION_TEMP)
+
+
+def test_rolling_sot_and_red_cards_zero_leakage():
+    df = _make_synthetic_matches().copy()
+    df["HR"] = [0, 1, 0, 0]
+    df["AR"] = [0, 0, 1, 0]
+    out = calculate_rolling_features(df, rolling_window=10)
+
+    # Match 1 sees neutral defaults
+    assert out.loc[0, "HomeRollingSOTFor"] == pytest.approx(4.4)
+    assert out.loc[0, "HomeRollingRedCards"] == pytest.approx(0.06)
+
+    # Match 3 (HST=12) sees only Matches 1-2: SOTFor=(6+4)/2=5.0, SOTAgainst=(2+4)/2=3.0, RedCards=(0+1)/2=0.5
+    assert out.loc[2, "HomeRollingSOTFor"] == pytest.approx(5.0)
+    assert out.loc[2, "HomeRollingSOTAgainst"] == pytest.approx(3.0)
+    assert out.loc[2, "HomeRollingRedCards"] == pytest.approx(0.5)
+
+    # Match 4 sees Matches 1-3: SOTFor=(6+4+12)/3=22/3, RedCards=(0+1+0)/3=1/3
+    assert out.loc[3, "HomeRollingSOTFor"] == pytest.approx(22.0 / 3.0)
+    assert out.loc[3, "HomeRollingRedCards"] == pytest.approx(1.0 / 3.0)
+
+
+def test_historical_manager_multi_spell_and_transfer_proxies(tmp_path):
+    mgr_csv = tmp_path / "hist_mgr.csv"
+    mgr_csv.write_text(
+        "Team,Manager,AppointedDate\n"
+        "Chelsea,Antonio Conte,2016-07-01\n"
+        "Chelsea,Thomas Tuchel,2021-01-26\n",
+        encoding="utf-8",
+    )
+    matches = pd.DataFrame([
+        {"Season": "2016-2017", "Date": "2016-08-20", "HomeTeam": "Chelsea", "AwayTeam": "Arsenal", "FTR": "H"},
+        {"Season": "2017-2018", "Date": "2018-03-01", "HomeTeam": "Chelsea", "AwayTeam": "Arsenal", "FTR": "D"},
+        {"Season": "2020-2021", "Date": "2021-02-15", "HomeTeam": "Chelsea", "AwayTeam": "Arsenal", "FTR": "H"},
+    ])
+    enriched = add_market_values_and_managers(
+        matches,
+        squad_values_path=str(tmp_path / "missing_squads.csv"),
+        managers_path=str(mgr_csv),
+        historical_managers_path=None,
+    )
+    # 50 days into Conte spell -> 1; >600 days -> 0; 20 days into Tuchel spell -> 1
+    assert list(enriched["HomeNewManager"]) == [1, 0, 1]
+    assert set(XGBoostPredictor().features).issuperset({
+        "HomeTransferImpact", "AwayTransferImpact", "HomeNetSpend", "AwayNetSpend"
+    })
+    # Season 2017-2018 Chelsea finished ahead of Arsenal in synthetic 2016-2017 -> higher NetSpend proxy
+    assert enriched.loc[1, "HomeNetSpend"] > enriched.loc[1, "AwayNetSpend"]
+
+
+def test_dixon_coles_xg_blend_uses_xg_signal():
+    # Three clubs with identical 1-1 integer goals, where TeamA creates high xG vs peers
+    rows = []
+    for dt in ["2024-08-17", "2024-08-24", "2024-08-31", "2024-09-14", "2024-09-21"]:
+        rows.extend([
+            {"Date": dt, "HomeTeam": "TeamA", "AwayTeam": "TeamB", "FTHG": 1, "FTAG": 1, "HxG": 3.2, "AxG": 0.3},
+            {"Date": dt, "HomeTeam": "TeamC", "AwayTeam": "TeamA", "FTHG": 1, "FTAG": 1, "HxG": 0.3, "AxG": 3.2},
+            {"Date": dt, "HomeTeam": "TeamB", "AwayTeam": "TeamC", "FTHG": 1, "FTAG": 1, "HxG": 1.1, "AxG": 1.1},
+        ])
+    df = pd.DataFrame(rows)
+
+    dc_goals = DixonColesModel(time_decay_phi=0.0, xg_weight=0.0)
+    dc_goals.fit(df)
+    a_idx, b_idx = dc_goals.team_indices["TeamA"], dc_goals.team_indices["TeamB"]
+    assert dc_goals.attack_params[a_idx] == pytest.approx(dc_goals.attack_params[b_idx], abs=1e-2)
+
+    dc_xg = DixonColesModel(time_decay_phi=0.0, xg_weight=0.4)
+    dc_xg.fit(df)
+    ax, bx = dc_xg.team_indices["TeamA"], dc_xg.team_indices["TeamB"]
+    assert dc_xg.attack_params[ax] > dc_xg.attack_params[bx] * 1.5
+
 

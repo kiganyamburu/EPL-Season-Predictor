@@ -10,8 +10,9 @@ from sklearn.preprocessing import LabelEncoder
 # ==============================================================================
 
 class DixonColesModel:
-    def __init__(self, time_decay_phi=0.003):
+    def __init__(self, time_decay_phi=0.003, xg_weight=0.4):
         self.phi = time_decay_phi
+        self.xg_weight = xg_weight
         self.teams = []
         self.team_indices = {}
         self.attack_params = None
@@ -32,10 +33,27 @@ class DixonColesModel:
         else:
             return 1.0
 
-    def fit(self, df):
+    @staticmethod
+    def _extract_effective_xg(df, side):
+        """Return actual HxG/AxG when present, else calibrated shots-xG, else raw goals."""
+        xg_col = 'HxG' if side == 'H' else 'AxG'
+        s_col, st_col, g_col = ('HS', 'HST', 'FTHG') if side == 'H' else ('AS', 'AST', 'FTAG')
+        out = df[g_col].astype(float).copy()
+        if st_col in df.columns and s_col in df.columns:
+            has_shots = df[st_col].notna() & df[s_col].notna()
+            sot = df.loc[has_shots, st_col].astype(float)
+            off_target = np.maximum(0.0, df.loc[has_shots, s_col].astype(float) - sot)
+            out.loc[has_shots] = 0.25 * sot + 0.04 * off_target
+        if xg_col in df.columns:
+            has_xg = df[xg_col].notna()
+            out.loc[has_xg] = df.loc[has_xg, xg_col].astype(float)
+        return np.clip(out.to_numpy(dtype=float), 0.0, None)
+
+    def fit(self, df, xg_weight=None):
         """
         Fit Dixon-Coles parameters: attack, defense, home advantage, and rho.
-        df contains: HomeTeam, AwayTeam, FTHG, FTAG, Date (or days elapsed).
+        Blends actual goals (FTHG/FTAG) with HxG/AxG (or shots-based xG) for rate
+        estimation while preserving integer scorelines for low-score rho correlation.
         """
         # Get unique list of teams
         self.teams = sorted(list(set(df['HomeTeam']).union(set(df['AwayTeam']))))
@@ -55,12 +73,18 @@ class DixonColesModel:
         away_idx = df['AwayTeam'].map(self.team_indices).values
         home_goals = df['FTHG'].values.astype(int)
         away_goals = df['FTAG'].values.astype(int)
+
+        w_xg = self.xg_weight if xg_weight is None else float(xg_weight)
+        h_xg = self._extract_effective_xg(df, 'H')
+        a_xg = self._extract_effective_xg(df, 'A')
+        target_home = np.clip((1.0 - w_xg) * home_goals + w_xg * h_xg, 0.0, None)
+        target_away = np.clip((1.0 - w_xg) * away_goals + w_xg * a_xg, 0.0, None)
         weights = df['Weight'].values
         
-        # Precompute log-factorials for Poisson log-probability calculations
+        # Precompute log-gamma for continuous/integer Poisson log-probability calculations
         from scipy.special import gammaln
-        log_fact_home = gammaln(home_goals + 1)
-        log_fact_away = gammaln(away_goals + 1)
+        log_fact_home = gammaln(target_home + 1)
+        log_fact_away = gammaln(target_away + 1)
         
         # Initial parameters: 
         # attack parameters (first num_teams params, default 1.0)
@@ -92,7 +116,7 @@ class DixonColesModel:
             lmbda = np.clip(lmbda, 1e-6, None)
             mu = np.clip(mu, 1e-6, None)
             
-            # Compute adjustment factor for low scoring matches (vectorized)
+            # Compute adjustment factor for integer low scoring matches (vectorized)
             adj = np.ones_like(home_goals, dtype=float)
             
             # Mask for (0, 0)
@@ -114,9 +138,9 @@ class DixonColesModel:
             # Clip adjustment factor to prevent flat gradients or negative values
             adj = np.clip(adj, 0.01, 10.0)
             
-            # Compute Poisson log-likelihoods: log_pmf = -mu + k * log(mu) - log(k!)
-            log_p_home = -lmbda + home_goals * np.log(lmbda) - log_fact_home
-            log_p_away = -mu + away_goals * np.log(mu) - log_fact_away
+            # Compute Poisson log-likelihoods using goals/xG blended targets
+            log_p_home = -lmbda + target_home * np.log(lmbda) - log_fact_home
+            log_p_away = -mu + target_away * np.log(mu) - log_fact_away
             log_adj = np.log(adj)
             
             log_probs = log_p_home + log_p_away + log_adj
@@ -136,9 +160,15 @@ class DixonColesModel:
         # rho bounds
         bounds.append((-0.3, 0.3))
         
-        # Perform optimization
+        # Perform optimization with tight ftol so small and large datasets alike converge beyond the mean-penalty direction
         print("Optimizing Dixon-Coles parameters...")
-        res = minimize(negative_log_likelihood, init_params, bounds=bounds, method='L-BFGS-B', tol=1e-3)
+        res = minimize(
+            negative_log_likelihood,
+            init_params,
+            bounds=bounds,
+            method='L-BFGS-B',
+            options={'ftol': 1e-7, 'gtol': 1e-4},
+        )
         
         if res.success:
             print("Optimization successful!")
@@ -233,6 +263,8 @@ class XGBoostPredictor:
             'HomeRollingGoalsScored', 'HomeRollingGoalsConceded', 'HomeRollingPoints',
             'AwayRollingGoalsScored', 'AwayRollingGoalsConceded', 'AwayRollingPoints',
             'HomeSquadValPercentile', 'AwaySquadValPercentile',
+            'HomeTransferImpact', 'AwayTransferImpact',
+            'HomeNetSpend', 'AwayNetSpend',
             'HomeNewManager', 'AwayNewManager',
             'HomePromoted', 'AwayPromoted'
         ]
@@ -312,14 +344,28 @@ def apply_temperature_scaling(probs, temperature=1.0):
     scaled = np.exp(logits)
     return scaled / np.sum(scaled, axis=-1, keepdims=True)
 
-def fit_temperature_scaler(probs, true_labels):
+def fit_temperature_scaler(probs, true_labels, bounds=(0.5, 3.0)):
     """Fit scalar temperature T minimizing log-loss on validation probabilities."""
-    from sklearn.metrics import log_loss as _log_loss
-    logits = np.log(np.clip(probs, 1e-8, 1.0))
+    from scipy.optimize import minimize_scalar
 
-    def _nll(t_arr):
-        scaled = apply_temperature_scaling(probs, t_arr[0])
-        return _log_loss(true_labels, scaled)
+    probs_arr = np.asarray(probs, dtype=float)
+    labels_arr = np.asarray(true_labels, dtype=int)
+    if probs_arr.ndim != 2 or len(labels_arr) == 0 or probs_arr.shape[0] != len(labels_arr):
+        return 1.0
 
-    res = minimize(_nll, [1.0], bounds=[(0.5, 3.0)])
-    return float(res.x[0]) if res.success else 1.0
+    # Precompute log-probabilities directly so T=1.0 short-circuiting cannot flatten gradients
+    logits = np.log(np.clip(probs_arr, 1e-8, 1.0))
+    row_idx = np.arange(len(labels_arr))
+
+    def _nll(temp):
+        scaled_logits = logits / float(temp)
+        scaled_logits -= np.max(scaled_logits, axis=-1, keepdims=True)
+        exp_logits = np.exp(scaled_logits)
+        scaled = exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
+        p_true = np.clip(scaled[row_idx, labels_arr], 1e-12, 1.0)
+        return float(-np.mean(np.log(p_true)))
+
+    res = minimize_scalar(_nll, bounds=bounds, method='bounded')
+    if not res.success or _nll(res.x) >= _nll(1.0) - 1e-9:
+        return 1.0
+    return float(res.x)

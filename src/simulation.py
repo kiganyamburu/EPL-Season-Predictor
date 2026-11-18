@@ -30,6 +30,9 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
     mgr_df = pd.read_csv(managers_path)
     mgr_df['AppointedDate'] = pd.to_datetime(mgr_df['AppointedDate'])
     managers = dict(zip(mgr_df['Team'], mgr_df['AppointedDate']))
+
+    from src.pipeline_v2 import _load_transfer_lookup
+    transfer_impacts, net_spends = _load_transfer_lookup()
     
     # Match dates logic to compute manager tenure
     fixtures_df['Date'] = pd.to_datetime(fixtures_df['Date'])
@@ -141,6 +144,10 @@ def run_season_simulations(fixtures_df, final_elos, df_historical, managers_path
             'AwayRollingPoints': 1.4 if a_elo > 1550 else (0.9 if a_elo < 1450 else 1.1),
             'HomeSquadValPercentile': h_val_pct,
             'AwaySquadValPercentile': a_val_pct,
+            'HomeTransferImpact': transfer_impacts.get(home, 1.14),
+            'AwayTransferImpact': transfer_impacts.get(away, 1.14),
+            'HomeNetSpend': net_spends.get(home, 174.0),
+            'AwayNetSpend': net_spends.get(away, 174.0),
             'HomeNewManager': h_new_mgr,
             'AwayNewManager': a_new_mgr,
             'HomePromoted': h_promoted,

@@ -83,3 +83,15 @@ def test_reference_metadata_files_canonical_and_valid():
     assert (start_dates <= end_dates).all()
     assert ((injuries["Importance"] > 0) & (injuries["Importance"] < 1)).all()
 
+
+def test_historical_managers_schema_and_coverage():
+    path = "data/raw/historical_managers.csv"
+    assert os.path.exists(path), f"Missing {path}"
+    hist_mgr = pd.read_csv(path)
+    assert {"Team", "Manager", "AppointedDate"}.issubset(hist_mgr.columns)
+    assert len(hist_mgr) >= 150
+    assert hist_mgr["Team"].nunique() >= 35
+    pd.to_datetime(hist_mgr["AppointedDate"], format="%Y-%m-%d", errors="raise")
+    for team in hist_mgr["Team"]:
+        assert clean_team_name(team) == team
+
