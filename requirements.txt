@@ -7,3 +7,4 @@ streamlit>=1.22.0
 requests>=2.28.0
 plotly>=5.14.0
 matplotlib>=3.7.0
+pytest>=8.0.0

@@ -23,9 +23,9 @@ def _get_gameweek_mask(fixtures_df, gameweek):
 def weekly_refresh(gameweek=None, real_mode=True, sync_live=True, run_sweeps=False):
     """
     Weekly refresh pipeline:
-    1. If real_mode is True: optionally syncs live fixtures, MatchDays, scores, and stats (xG, HST, HR)
-       from FPL API + football-data.co.uk, updates historical results, recalculates Elo/xG rolling stats,
-       and re-runs season simulations.
+    1. If real_mode is True: optionally syncs live fixtures, MatchDays, scores, stats (xG, HST, HR),
+       and live injury/suspension availability from FPL API + football-data.co.uk, updates historical
+       results, recalculates Elo/xG rolling stats, and re-runs season simulations.
     2. If real_mode is False: emulates completing a specific gameweek with mock scores.
     """
     print(f"=== RUNNING WEEKLY REFRESH (REAL MODE: {real_mode}) ===")
@@ -33,7 +33,7 @@ def weekly_refresh(gameweek=None, real_mode=True, sync_live=True, run_sweeps=Fal
     if real_mode:
         if sync_live:
             from src.data_collection import sync_live_fixtures_and_results
-            sync_live_fixtures_and_results()
+            sync_live_fixtures_and_results(sync_injuries=True)
 
         if gameweek is not None:
             fixtures_path = 'data/raw/fixtures_raw.csv'

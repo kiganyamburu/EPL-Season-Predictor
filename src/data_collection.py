@@ -844,10 +844,129 @@ def download_current_season_results(raw_dir='data/raw/historical'):
     return df
 
 
-def sync_live_fixtures_and_results(raw_dir='data/raw', hist_dir='data/raw/historical'):
+def _parse_fpl_return_date(news, start_dt, status):
+    """Estimate injury end date from FPL player news string, anchored to season calendar."""
+    season_end_year = start_dt.year + 1 if start_dt.month >= 7 else start_dt.year
+    season_end = pd.Timestamp(year=season_end_year, month=5, day=30)
+    news_str = str(news or '')
+    m = re.search(r'(\d{1,2}\s+[A-Za-z]{3})', news_str)
+    if m:
+        for year in (start_dt.year, start_dt.year + 1):
+            parsed = pd.to_datetime(f"{m.group(1)} {year}", format="%d %b %Y", errors="coerce")
+            if pd.notna(parsed) and parsed >= start_dt - pd.Timedelta(days=14):
+                return max(start_dt, min(parsed, season_end))
+
+    news_low = news_str.lower()
+    if 'end of season' in news_low or 'rest of the season' in news_low:
+        return max(start_dt, season_end)
+    if 'unknown return' in news_low:
+        return min(season_end, start_dt + pd.Timedelta(days=45))
+    if status == 'd':
+        return min(season_end, start_dt + pd.Timedelta(days=10))
+    if status == 's':
+        return min(season_end, start_dt + pd.Timedelta(days=14))
+    return min(season_end, start_dt + pd.Timedelta(days=28))
+
+
+def sync_live_injuries(raw_dir='data/raw', bootstrap_json=None, ref_date=None):
     """
-    Synchronize 2026/27 fixtures, explicit official MatchDay numbers, and live scorelines
-    from the Fantasy Premier League API + football-data.co.uk E0_2627.csv.
+    Sync live Premier League injuries & suspensions from the FPL bootstrap-static API
+    into data/raw/injuries_mock.csv. Falls back to keeping existing CSV when offline.
+    """
+    os.makedirs(raw_dir, exist_ok=True)
+    injuries_path = os.path.join(raw_dir, "injuries_mock.csv")
+
+    if bootstrap_json is None:
+        try:
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            resp = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/", timeout=15, headers=headers)
+            if resp.status_code != 200:
+                print(f"Warning: FPL injury sync received HTTP {resp.status_code}; keeping existing {injuries_path}.")
+                return pd.read_csv(injuries_path) if os.path.exists(injuries_path) else pd.DataFrame()
+            bootstrap_json = resp.json()
+        except Exception as e:
+            print(f"Warning: FPL injury sync skipped ({e}); keeping existing {injuries_path}.")
+            return pd.read_csv(injuries_path) if os.path.exists(injuries_path) else pd.DataFrame()
+
+    teams_raw = bootstrap_json.get('teams', [])
+    elements = bootstrap_json.get('elements', [])
+    if not teams_raw or not elements:
+        print(f"Warning: FPL bootstrap payload empty; keeping existing {injuries_path}.")
+        return pd.read_csv(injuries_path) if os.path.exists(injuries_path) else pd.DataFrame()
+
+    id_to_team = {t['id']: clean_team_name(t['name']) for t in teams_raw}
+    pos_map = {1: 'Goalkeeper', 2: 'Defender', 3: 'Midfielder', 4: 'Forward'}
+    ref_dt = pd.Timestamp(ref_date).normalize() if ref_date is not None else pd.Timestamp.today().normalize()
+
+    # Compute per-team max minutes so player Importance reflects actual squad role
+    team_max_mins = {}
+    for el in elements:
+        tid = el.get('team')
+        mins = float(el.get('minutes') or 0)
+        if mins > team_max_mins.get(tid, 0.0):
+            team_max_mins[tid] = mins
+
+    rows = []
+    for el in elements:
+        status = el.get('status', 'a')
+        chance = el.get('chance_of_playing_next_round')
+        news = str(el.get('news') or '').strip()
+        is_flagged = status in {'i', 'd', 's'} or (status != 'u' and chance == 0 and bool(news))
+        if not is_flagged:
+            continue
+
+        minutes = float(el.get('minutes') or 0)
+        total_pts = float(el.get('total_points') or 0)
+        selected = float(el.get('selected_by_percent') or 0)
+        now_cost = float(el.get('now_cost') or 0)
+        # Filter out non-playing academy fringe players without meaningful first-team minutes
+        if minutes < 60 and selected < 0.5 and now_cost < 50:
+            continue
+
+        tid = el.get('team')
+        team_name = id_to_team.get(tid)
+        if not team_name:
+            continue
+
+        max_m = max(team_max_mins.get(tid, 900.0), 180.0)
+        base_imp = 0.05 + 0.08 * min(1.0, minutes / max_m) + 0.03 * min(1.0, total_pts / 50.0)
+        if status == 'd' and chance in (25, 50, 75):
+            base_imp *= (1.0 - float(chance) / 100.0)
+        importance = round(max(0.04, min(0.18, base_imp)), 2)
+
+        news_added = el.get('news_added')
+        parsed_start = pd.to_datetime(str(news_added)[:10], errors='coerce') if news_added else pd.NaT
+        start_dt = parsed_start.normalize() if pd.notna(parsed_start) else ref_dt
+        if start_dt > ref_dt:
+            start_dt = ref_dt
+        end_dt = _parse_fpl_return_date(news, ref_dt, status)
+        if end_dt < start_dt:
+            end_dt = start_dt
+
+        full_name = f"{el.get('first_name', '')} {el.get('second_name', '')}".strip() or str(el.get('web_name', 'Unknown'))
+        rows.append({
+            'Team': team_name,
+            'Player': full_name,
+            'Position': pos_map.get(el.get('element_type'), 'Midfielder'),
+            'Importance': importance,
+            'StartDate': start_dt.strftime('%Y-%m-%d'),
+            'EndDate': end_dt.strftime('%Y-%m-%d'),
+        })
+
+    if not rows:
+        print(f"Warning: No active first-team injuries parsed from FPL feed; keeping existing {injuries_path}.")
+        return pd.read_csv(injuries_path) if os.path.exists(injuries_path) else pd.DataFrame()
+
+    inj_df = pd.DataFrame(rows).sort_values(['Team', 'Importance', 'Player'], ascending=[True, False, True]).reset_index(drop=True)
+    inj_df.to_csv(injuries_path, index=False)
+    print(f"Synced {len(inj_df)} live EPL injury/suspension records from FPL API to {injuries_path}")
+    return inj_df
+
+
+def sync_live_fixtures_and_results(raw_dir='data/raw', hist_dir='data/raw/historical', sync_injuries=True):
+    """
+    Synchronize 2026/27 fixtures, explicit official MatchDay numbers, live scorelines,
+    and optionally live injury/suspension availability from the FPL API + football-data.co.uk E0_2627.csv.
     Falls back cleanly to existing fixtures_raw.csv (ensuring MatchDay exists) if offline.
     """
     os.makedirs(raw_dir, exist_ok=True)
@@ -862,9 +981,13 @@ def sync_live_fixtures_and_results(raw_dir='data/raw', hist_dir='data/raw/histor
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
         boot = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/", timeout=15, headers=headers)
+        boot_data = boot.json() if boot.status_code == 200 else None
+        if sync_injuries and boot_data is not None:
+            sync_live_injuries(raw_dir=raw_dir, bootstrap_json=boot_data)
+
         fixt = requests.get("https://fantasy.premierleague.com/api/fixtures/", timeout=15, headers=headers)
-        if boot.status_code == 200 and fixt.status_code == 200:
-            teams_raw = boot.json().get('teams', [])
+        if boot_data is not None and fixt.status_code == 200:
+            teams_raw = boot_data.get('teams', [])
             id_to_canonical = {t['id']: clean_team_name(t['name']) for t in teams_raw}
             id_to_full = {t['id']: t['name'] for t in teams_raw}
 

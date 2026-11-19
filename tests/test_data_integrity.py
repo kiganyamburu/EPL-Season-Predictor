@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import pytest
 
-from src.data_collection import clean_team_name, TEAM_NAME_MAP
+from src.data_collection import clean_team_name, sync_live_injuries, TEAM_NAME_MAP
 
 
 @pytest.mark.parametrize(
@@ -94,4 +94,69 @@ def test_historical_managers_schema_and_coverage():
     pd.to_datetime(hist_mgr["AppointedDate"], format="%Y-%m-%d", errors="raise")
     for team in hist_mgr["Team"]:
         assert clean_team_name(team) == team
+
+
+def test_sync_live_injuries_from_fpl_bootstrap(tmp_path):
+    mock_boot = {
+        "teams": [
+            {"id": 1, "name": "Arsenal"},
+            {"id": 2, "name": "Man Utd"},
+            {"id": 3, "name": "Nott'm Forest"},
+        ],
+        "elements": [
+            {
+                "id": 10, "first_name": "Bukayo", "second_name": "Saka", "web_name": "Saka",
+                "team": 1, "element_type": 4, "status": "i", "chance_of_playing_next_round": 0,
+                "news": "Hamstring injury - Expected back 29 Nov", "news_added": "2026-10-25T10:00:00Z",
+                "minutes": 900, "total_points": 65, "selected_by_percent": "25.0", "now_cost": 100,
+            },
+            {
+                "id": 11, "first_name": "Luke", "second_name": "Shaw", "web_name": "Shaw",
+                "team": 2, "element_type": 2, "status": "d", "chance_of_playing_next_round": 50,
+                "news": "Calf injury - 50% chance of playing", "news_added": "2026-11-05T10:00:00Z",
+                "minutes": 450, "total_points": 20, "selected_by_percent": "5.0", "now_cost": 50,
+            },
+            {
+                # Non-playing youth academy player should be filtered out
+                "id": 12, "first_name": "Academy", "second_name": "Player", "web_name": "Youth",
+                "team": 3, "element_type": 3, "status": "i", "chance_of_playing_next_round": 0,
+                "news": "Knock - Unknown return date", "news_added": "2026-11-01T10:00:00Z",
+                "minutes": 0, "total_points": 0, "selected_by_percent": "0.1", "now_cost": 45,
+            },
+            {
+                # On-loan / unavailable transfer out should be ignored
+                "id": 13, "first_name": "Loaned", "second_name": "Out", "web_name": "Loanee",
+                "team": 1, "element_type": 3, "status": "u", "chance_of_playing_next_round": 0,
+                "news": "Joined another club on loan", "news_added": "2026-09-01T10:00:00Z",
+                "minutes": 0, "total_points": 0, "selected_by_percent": "0.1", "now_cost": 50,
+            },
+        ],
+    }
+    inj_df = sync_live_injuries(raw_dir=str(tmp_path), bootstrap_json=mock_boot, ref_date="2026-11-11")
+    out_csv = tmp_path / "injuries_mock.csv"
+    assert out_csv.exists()
+    assert len(inj_df) == 2
+    assert set(inj_df["Team"]) == {"Arsenal", "Man United"}
+    assert ((inj_df["Importance"] > 0) & (inj_df["Importance"] < 1)).all()
+    assert (pd.to_datetime(inj_df["StartDate"]) <= pd.to_datetime(inj_df["EndDate"])).all()
+    saka = inj_df[inj_df["Player"] == "Bukayo Saka"].iloc[0]
+    shaw = inj_df[inj_df["Player"] == "Luke Shaw"].iloc[0]
+    assert saka["EndDate"] == "2026-11-29"
+    assert saka["Importance"] > shaw["Importance"]
+
+
+def test_requirements_and_automation_files_present():
+    with open("requirements.txt", "r", encoding="utf-8") as f:
+        reqs = f.read().lower()
+    assert "pytest" in reqs
+
+    expected_files = [
+        ".github/workflows/ci.yml",
+        ".github/workflows/weekly_refresh.yml",
+        "scripts/run_weekly_job.ps1",
+        "scripts/register_weekly_task.ps1",
+    ]
+    for path in expected_files:
+        assert os.path.exists(path), f"Missing automation artifact: {path}"
+
 

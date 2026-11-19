@@ -6,9 +6,11 @@ import pytest
 from src.feature_engineering import (
     calculate_elo_ratings,
     calculate_rolling_features,
+    identify_promoted_teams,
     add_market_values_and_managers,
     _compute_prior_season_percentiles,
 )
+from src.simulation import run_season_simulations
 from src.models import (
     DixonColesModel,
     XGBoostPredictor,
@@ -298,5 +300,35 @@ def test_dixon_coles_xg_blend_uses_xg_signal():
     dc_xg.fit(df)
     ax, bx = dc_xg.team_indices["TeamA"], dc_xg.team_indices["TeamB"]
     assert dc_xg.attack_params[ax] > dc_xg.attack_params[bx] * 1.5
+
+
+def test_v1_simulation_post_gw10_state_and_matchday_integrity():
+    # Minimal 2-season dataset with H/D/A outcomes and completed + scheduled 2026/27 fixtures
+    rows = [
+        {"Season": "2025-2026", "Date": "2025-08-16", "HomeTeam": "Arsenal", "AwayTeam": "Chelsea", "FTHG": 2, "FTAG": 0, "FTR": "H", "HS": 15, "AS": 7, "HST": 6, "AST": 2, "HR": 0, "AR": 0},
+        {"Season": "2025-2026", "Date": "2025-08-23", "HomeTeam": "Chelsea", "AwayTeam": "Liverpool", "FTHG": 1, "FTAG": 1, "FTR": "D", "HS": 10, "AS": 10, "HST": 4, "AST": 4, "HR": 0, "AR": 0},
+        {"Season": "2025-2026", "Date": "2025-08-30", "HomeTeam": "Liverpool", "AwayTeam": "Arsenal", "FTHG": 0, "FTAG": 2, "FTR": "A", "HS": 8, "AS": 14, "HST": 3, "AST": 6, "HR": 0, "AR": 0},
+        {"Season": "2026-2027", "Date": "2026-08-22", "HomeTeam": "Arsenal", "AwayTeam": "Coventry", "FTHG": 3, "FTAG": 0, "FTR": "H", "HS": 18, "AS": 4, "HST": 8, "AST": 1, "HR": 0, "AR": 0, "HxG": 2.8, "AxG": 0.4},
+        {"Season": "2026-2027", "Date": "2026-08-29", "HomeTeam": "Chelsea", "AwayTeam": "Liverpool", "FTHG": 1, "FTAG": 2, "FTR": "A", "HS": 9, "AS": 13, "HST": 3, "AST": 5, "HR": 0, "AR": 0, "HxG": 0.9, "AxG": 2.1},
+    ]
+    df = pd.DataFrame(rows)
+    df["Date"] = pd.to_datetime(df["Date"])
+    df, final_elos, _ = calculate_elo_ratings(df)
+    df = calculate_rolling_features(df)
+    df = identify_promoted_teams(df)
+    df = add_market_values_and_managers(df)
+
+    fixtures = pd.DataFrame([
+        {"MatchDay": 1, "Date": "2026-08-22", "HomeTeam": "Arsenal", "AwayTeam": "Coventry", "Summary": "Arsenal - Coventry (3-0)"},
+        {"MatchDay": 2, "Date": "2026-08-29", "HomeTeam": "Chelsea", "AwayTeam": "Liverpool", "Summary": "Chelsea - Liverpool (1-2)"},
+        {"MatchDay": 11, "Date": "2026-11-21", "HomeTeam": "Coventry", "AwayTeam": "Chelsea", "Summary": "Coventry - Chelsea"},
+    ])
+    summary = run_season_simulations(fixtures, final_elos, df, num_sims=20, save_outputs=False)
+    assert set(summary["Team"]) == {"Arsenal", "Chelsea", "Liverpool", "Coventry"}
+    # Arsenal & Liverpool already have 3 guaranteed points from completed GW1/GW2; Chelsea played 2 matches
+    pts_map = dict(zip(summary["Team"], summary["ExpectedPoints"]))
+    assert pts_map["Arsenal"] == pytest.approx(3.0)
+    assert pts_map["Liverpool"] == pytest.approx(3.0)
+
 
 
