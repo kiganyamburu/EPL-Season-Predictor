@@ -1,69 +1,65 @@
 Team,Player,Position,Importance,StartDate,EndDate
-Arsenal,Bukayo Saka,Midfielder,0.13,2026-10-21,2027-01-01
-Arsenal,Max Dowman,Midfielder,0.05,2026-10-27,2026-11-29
-Arsenal,Martín Zubimendi Ibáñez,Midfielder,0.04,2026-11-16,2026-11-27
+Arsenal,Bukayo Saka,Midfielder,0.12,2026-10-21,2026-12-20
+Arsenal,David Raya Martín,Goalkeeper,0.08,2026-11-21,2026-12-04
+Arsenal,Martín Zubimendi Ibáñez,Midfielder,0.06,2026-11-16,2027-01-08
 Aston Villa,Matteo Ruggeri,Defender,0.07,2026-10-10,2027-01-02
-Aston Villa,Aaron Wan-Bissaka,Defender,0.04,2026-10-17,2026-11-27
-Aston Villa,Johan Manzambi,Midfielder,0.04,2026-11-12,2026-11-27
-Aston Villa,Matty Cash,Defender,0.04,2026-11-15,2026-11-27
-Brentford,Igor Thiago Nascimento Rodrigues,Forward,0.14,2026-11-08,2026-12-05
-Brentford,Antoni Milambo,Midfielder,0.05,2026-07-23,2027-01-01
-Brentford,Fábio Freitas Gouveia Carvalho,Midfielder,0.05,2026-10-30,2026-11-23
-Brentford,Kaye Furo,Forward,0.05,2026-09-14,2027-01-01
-Brentford,Aaron Hickey,Defender,0.04,2026-11-17,2026-11-27
-Brentford,Nathan Collins,Defender,0.04,2026-11-16,2026-11-27
-Brighton,Pascal Struijk,Defender,0.07,2026-10-16,2026-11-17
-Brighton,Femi Azeez,Midfielder,0.05,2026-09-04,2026-11-17
-Brighton,Mitoma Kaoru,Midfielder,0.05,2026-07-24,2026-11-22
-Brighton,Stefanos Tzimas,Forward,0.05,2026-07-23,2027-01-01
-Brighton,José María Andrés Baixauli,Midfielder,0.04,2026-11-14,2026-11-27
-Chelsea,João Pedro Junqueira de Jesus,Forward,0.13,2026-10-24,2027-01-01
-Chelsea,Maxence Lacroix,Defender,0.12,2026-10-28,2027-01-01
-Chelsea,Jorrel Hato,Defender,0.1,2026-10-29,2027-01-01
-Chelsea,Reece James,Defender,0.08,2026-10-10,2027-01-01
-Chelsea,Jamie Bynoe-Gittens,Midfielder,0.05,2026-09-26,2027-01-01
-Chelsea,Emiliano Martínez Romero,Goalkeeper,0.04,2026-10-17,2026-11-27
-Chelsea,Josh Acheampong,Defender,0.04,2026-11-08,2026-11-27
-Coventry,Aurèle Amenda,Defender,0.08,2026-09-17,2027-01-01
-Coventry,Bobby Thomas,Defender,0.06,2026-10-24,2026-11-27
-Coventry,Frank Onyeka,Midfielder,0.05,2026-11-05,2026-11-27
-Coventry,Haji Wright,Forward,0.05,2026-08-14,2027-01-01
+Aston Villa,Matty Cash,Defender,0.04,2026-11-15,2026-12-04
+Brentford,Igor Thiago Nascimento Rodrigues,Forward,0.13,2026-11-08,2026-12-05
+Brentford,Aaron Hickey,Defender,0.08,2026-11-17,2026-12-02
+Brentford,Nathan Collins,Defender,0.08,2026-11-16,2026-12-02
+Brentford,Antoni Milambo,Midfielder,0.05,2026-07-23,2027-01-08
+Brentford,Kaye Furo,Forward,0.05,2026-09-14,2027-01-08
+Brighton,João Pedro Loureiro da Costa,Defender,0.1,2026-11-22,2026-12-02
+Brighton,Malick Yalcouyé,Midfielder,0.09,2026-11-23,2027-01-08
+Brighton,Mitoma Kaoru,Midfielder,0.05,2026-07-24,2026-12-02
+Brighton,Stefanos Tzimas,Forward,0.05,2026-07-23,2027-01-08
+Chelsea,João Pedro Junqueira de Jesus,Forward,0.12,2026-10-24,2027-01-08
+Chelsea,Maxence Lacroix,Defender,0.12,2026-10-28,2027-01-08
+Chelsea,Jorrel Hato,Defender,0.1,2026-10-29,2027-01-08
+Chelsea,Reece James,Defender,0.08,2026-10-10,2027-01-08
+Chelsea,Jamie Bynoe-Gittens,Midfielder,0.05,2026-09-26,2027-01-08
+Chelsea,Moisés Caicedo Corozo,Midfielder,0.04,2026-11-21,2026-12-04
+Coventry,Aurèle Amenda,Defender,0.08,2026-09-17,2027-01-08
+Coventry,Haji Wright,Forward,0.05,2026-08-14,2027-01-08
+Coventry,Caleb Yirenkyi,Midfielder,0.04,2026-11-19,2026-12-04
+Coventry,Ephron Mason-Clark,Midfielder,0.04,2026-11-19,2026-12-04
+Coventry,Taiwo Awoniyi,Forward,0.04,2026-11-21,2026-12-04
+Crystal Palace,Yéremy Pino Santos,Midfielder,0.14,2026-11-21,2026-12-02
 Crystal Palace,Jean-Philippe Mateta,Forward,0.07,2026-10-31,2026-12-02
-Crystal Palace,Takehiro Tomiyasu,Defender,0.07,2026-09-21,2026-11-21
-Crystal Palace,Chadi Riad Dnanou,Defender,0.06,2026-08-22,2027-01-01
-Crystal Palace,Ismaïla Sarr,Midfielder,0.05,2026-10-27,2026-11-21
-Crystal Palace,Jørgen Strand Larsen,Forward,0.04,2026-11-11,2026-11-27
-Hull,Hidemasa Morita,Midfielder,0.06,2026-11-05,2027-01-01
-Hull,Matt Targett,Defender,0.05,2026-09-17,2027-01-01
-Hull,Mohamed Belloumi,Midfielder,0.04,2026-11-10,2026-11-27
-Hull,Nobel Mendy,Defender,0.04,2026-11-16,2026-11-27
-Leeds,Anton Stach,Midfielder,0.06,2026-11-05,2026-11-27
-Leeds,Gabriel Gudmundsson,Defender,0.04,2026-11-08,2026-11-27
-Liverpool,Jeremie Frimpong,Defender,0.07,2026-10-17,2027-01-01
-Liverpool,Hugo Ekitiké,Forward,0.05,2026-07-23,2027-01-01
-Liverpool,Ryan Gravenberch,Midfielder,0.04,2026-11-03,2026-11-27
-Liverpool,Virgil van Dijk,Defender,0.04,2026-11-09,2026-11-27
-Man City,Antoine Semenyo,Midfielder,0.12,2026-10-17,2027-01-01
-Man City,Joško Gvardiol,Defender,0.04,2026-11-07,2026-11-27
-Man City,Marc Guéhi,Defender,0.04,2026-11-07,2026-11-27
-Man United,Luke Shaw,Defender,0.09,2026-10-12,2027-01-01
-Man United,Marcus Rashford,Midfielder,0.09,2026-10-20,2027-01-01
-Man United,Carlos Baleba,Midfielder,0.08,2026-11-03,2027-01-01
-Man United,Benjamin Sesko,Forward,0.06,2026-09-20,2027-01-01
-Man United,Manuel Ugarte Ribeiro,Midfielder,0.05,2026-07-23,2027-01-01
-Man United,Harry Maguire,Defender,0.04,2026-11-11,2026-11-27
-Man United,Patrick Dorgu,Midfielder,0.04,2026-11-14,2026-11-27
-Newcastle,Joelinton Cássio Apolinário de Lira,Midfielder,0.08,2026-11-05,2027-01-01
+Crystal Palace,Takehiro Tomiyasu,Defender,0.07,2026-09-21,2026-11-29
+Crystal Palace,Chadi Riad Dnanou,Defender,0.06,2026-08-22,2027-01-08
+Crystal Palace,Ismaïla Sarr,Midfielder,0.05,2026-10-27,2026-11-29
+Crystal Palace,Oscar Mingueza,Defender,0.04,2026-11-21,2026-12-04
+Everton,James Tarkowski,Defender,0.16,2026-11-23,2026-12-13
+Fulham,Emile Smith Rowe,Midfielder,0.06,2026-11-20,2026-11-29
+Fulham,Benjamin Lecomte,Goalkeeper,0.05,2026-11-20,2027-01-08
+Hull,Tim Iroegbunam,Midfielder,0.1,2026-11-22,2027-01-08
+Hull,Joe Gelhardt,Midfielder,0.07,2026-11-23,2027-01-08
+Hull,Hidemasa Morita,Midfielder,0.06,2026-11-05,2027-01-08
+Hull,Matt Targett,Defender,0.05,2026-09-17,2027-01-08
+Ipswich,Leif Davis,Defender,0.04,2026-11-21,2026-12-04
+Liverpool,Hugo Ekitiké,Forward,0.05,2026-07-23,2027-01-08
+Liverpool,Cody Gakpo,Midfielder,0.04,2026-11-22,2026-12-04
+Liverpool,Ryan Gravenberch,Midfielder,0.04,2026-11-03,2026-12-04
+Man City,Antoine Semenyo,Midfielder,0.12,2026-10-17,2027-01-08
+Man United,Leny Yoro,Defender,0.09,2026-11-22,2026-12-02
+Man United,Marcus Rashford,Midfielder,0.09,2026-10-20,2027-01-08
+Man United,Carlos Baleba,Midfielder,0.07,2026-11-03,2027-01-08
+Man United,Benjamin Sesko,Forward,0.06,2026-09-20,2027-01-08
+Man United,Manuel Ugarte Ribeiro,Midfielder,0.05,2026-07-23,2027-01-08
+Man United,Luke Shaw,Defender,0.04,2026-10-12,2026-12-04
+Newcastle,Joelinton Cássio Apolinário de Lira,Midfielder,0.08,2026-11-05,2027-01-08
+Newcastle,Lewis Hall,Defender,0.04,2026-11-21,2026-12-04
+Nott'm Forest,Callum Hudson-Odoi,Midfielder,0.06,2026-11-19,2027-01-08
 Nott'm Forest,Nicolás Domínguez,Midfielder,0.06,2026-10-24,2026-12-30
-Nott'm Forest,Neco Williams,Defender,0.04,2026-11-16,2026-11-27
-Nott'm Forest,Xaver Schlager,Midfielder,0.04,2026-11-15,2026-11-27
-Sunderland,Daniel Ballard,Defender,0.1,2026-09-25,2027-01-01
-Sunderland,Habib Diarra,Midfielder,0.06,2026-11-01,2027-01-01
-Sunderland,Brian Brobbey,Forward,0.04,2026-11-10,2026-11-27
-Sunderland,Granit Xhaka,Midfielder,0.04,2026-11-08,2026-11-27
-Tottenham,Sávio Moreira de Oliveira,Midfielder,0.09,2026-10-18,2026-11-21
-Tottenham,Lucas Bergvall,Midfielder,0.07,2026-10-18,2027-01-01
-Tottenham,Mykhailo Mudryk,Midfielder,0.05,2026-09-11,2027-01-01
-Tottenham,Wilson Odobert,Midfielder,0.05,2026-07-23,2027-01-01
-Tottenham,Xavi Simons,Midfielder,0.05,2026-07-23,2027-01-01
-Tottenham,Mathys Tel,Midfielder,0.04,2026-11-07,2026-11-27
+Sunderland,Granit Xhaka,Midfielder,0.14,2026-11-08,2027-01-08
+Sunderland,Brian Brobbey,Forward,0.12,2026-11-10,2027-01-08
+Sunderland,Daniel Ballard,Defender,0.09,2026-09-25,2027-01-08
+Sunderland,Kevin Danso,Defender,0.08,2026-11-21,2026-12-02
+Sunderland,Habib Diarra,Midfielder,0.06,2026-11-01,2027-01-08
+Tottenham,Mathys Tel,Midfielder,0.1,2026-11-07,2026-12-06
+Tottenham,Tosin Adarabioyo,Defender,0.06,2026-11-20,2026-11-29
+Tottenham,Mykhailo Mudryk,Midfielder,0.05,2026-09-11,2027-01-08
+Tottenham,Wilson Odobert,Midfielder,0.05,2026-07-23,2027-01-08
+Tottenham,Xavi Simons,Midfielder,0.05,2026-07-23,2027-01-08
+Tottenham,Sávio Moreira de Oliveira,Midfielder,0.04,2026-11-21,2026-12-04

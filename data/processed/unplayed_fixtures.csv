@@ -1,5 +1,4 @@
 MatchDay,Date,HomeTeam,AwayTeam,Summary
-11,2026-11-23,Brentford,Everton,Brentford FC - Everton
 12,2026-11-27,Nott'm Forest,Chelsea,Nottingham Forest - Chelsea
 12,2026-11-28,Ipswich,Aston Villa,Ipswich Town - Aston Villa
 12,2026-11-28,Leeds,Coventry,Leeds United - Coventry City
@@ -91,35 +90,35 @@ MatchDay,Date,HomeTeam,AwayTeam,Summary
 20,2027-01-06,Leeds,Man City,Leeds United - Manchester City
 20,2027-01-07,Man United,Newcastle,Manchester United - Newcastle United
 21,2027-01-16,Aston Villa,Man United,Aston Villa - Manchester United
-21,2027-01-16,Bournemouth,Ipswich,AFC Bournemouth - Ipswich Town
-21,2027-01-16,Brentford,Brighton,Brentford FC - Brighton & Hove Albion FC
 21,2027-01-16,Chelsea,Sunderland,Chelsea - Sunderland
 21,2027-01-16,Coventry,Everton,Coventry City - Everton
 21,2027-01-16,Hull,Arsenal,Hull City - Arsenal
 21,2027-01-16,Liverpool,Crystal Palace,Liverpool - Crystal Palace
 21,2027-01-16,Man City,Nott'm Forest,Manchester City - Nottingham Forest
 21,2027-01-16,Newcastle,Fulham,Newcastle United - Fulham
-21,2027-01-16,Tottenham,Leeds,Tottenham Hotspur - Leeds United
+21,2027-01-17,Bournemouth,Ipswich,AFC Bournemouth - Ipswich Town
+21,2027-01-17,Tottenham,Leeds,Tottenham Hotspur - Leeds United
+21,2027-01-18,Brentford,Brighton,Brentford FC - Brighton & Hove Albion FC
 22,2027-01-23,Arsenal,Newcastle,Arsenal - Newcastle United
 22,2027-01-23,Brighton,Man City,Brighton & Hove Albion FC - Manchester City
-22,2027-01-23,Crystal Palace,Tottenham,Crystal Palace - Tottenham Hotspur
-22,2027-01-23,Everton,Brentford,Everton - Brentford FC
 22,2027-01-23,Fulham,Aston Villa,Fulham - Aston Villa
 22,2027-01-23,Ipswich,Hull,Ipswich Town - Hull City
-22,2027-01-23,Leeds,Chelsea,Leeds United - Chelsea
-22,2027-01-23,Man United,Liverpool,Manchester United - Liverpool
-22,2027-01-23,Nott'm Forest,Bournemouth,Nottingham Forest - AFC Bournemouth
-22,2027-01-23,Sunderland,Coventry,Sunderland - Coventry City
+22,2027-01-24,Crystal Palace,Tottenham,Crystal Palace - Tottenham Hotspur
+22,2027-01-24,Everton,Brentford,Everton - Brentford FC
+22,2027-01-24,Man United,Liverpool,Manchester United - Liverpool
+22,2027-01-24,Nott'm Forest,Bournemouth,Nottingham Forest - AFC Bournemouth
+22,2027-01-24,Sunderland,Coventry,Sunderland - Coventry City
+22,2027-01-25,Leeds,Chelsea,Leeds United - Chelsea
 23,2027-01-30,Aston Villa,Ipswich,Aston Villa - Ipswich Town
-23,2027-01-30,Bournemouth,Fulham,AFC Bournemouth - Fulham
-23,2027-01-30,Brentford,Man United,Brentford FC - Manchester United
 23,2027-01-30,Chelsea,Nott'm Forest,Chelsea - Nottingham Forest
-23,2027-01-30,Coventry,Leeds,Coventry City - Leeds United
-23,2027-01-30,Hull,Crystal Palace,Hull City - Crystal Palace
 23,2027-01-30,Liverpool,Everton,Liverpool - Everton
-23,2027-01-30,Man City,Arsenal,Manchester City - Arsenal
 23,2027-01-30,Newcastle,Brighton,Newcastle United - Brighton & Hove Albion FC
-23,2027-01-30,Tottenham,Sunderland,Tottenham Hotspur - Sunderland
+23,2027-01-31,Bournemouth,Fulham,AFC Bournemouth - Fulham
+23,2027-01-31,Coventry,Leeds,Coventry City - Leeds United
+23,2027-01-31,Hull,Crystal Palace,Hull City - Crystal Palace
+23,2027-01-31,Man City,Arsenal,Manchester City - Arsenal
+23,2027-01-31,Tottenham,Sunderland,Tottenham Hotspur - Sunderland
+23,2027-02-01,Brentford,Man United,Brentford FC - Manchester United
 24,2027-02-06,Arsenal,Liverpool,Arsenal - Liverpool
 24,2027-02-06,Brighton,Hull,Brighton & Hove Albion FC - Hull City
 24,2027-02-06,Crystal Palace,Coventry,Crystal Palace - Coventry City
