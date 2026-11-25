@@ -448,4 +448,4 @@ For local Windows servers or workstations, automated scheduling scripts are prov
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details..
